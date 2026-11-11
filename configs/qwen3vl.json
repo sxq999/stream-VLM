@@ -1,0 +1,11 @@
+{
+  "manifest":"../examples/events.jsonl",
+  "mode":"realtime",
+  "concurrency":2,
+  "pending_capacity":16,
+  "frame_policy":"full",
+  "max_frames":8,
+  "media_prepare":false,
+  "backend":{"type":"openai_http","base_url":"http://127.0.0.1:8100/v1","model":"Qwen/Qwen3-VL-8B-Instruct","max_tokens":64,"timeout_s":120},
+  "serve_command":["vllm","serve","Qwen/Qwen3-VL-8B-Instruct","--host","127.0.0.1","--port","8100","--dtype","bfloat16","--max-model-len","4096","--max-num-seqs","4","--limit-mm-per-prompt","{\"image\":8}","--gpu-memory-utilization","0.90","--enforce-eager"]
+}

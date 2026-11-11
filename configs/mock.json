@@ -1,0 +1,1 @@
+{"manifest":"../examples/events.jsonl","mode":"fastest","concurrency":2,"pending_capacity":4,"max_frames":16,"frame_policy":"full","backend":{"type":"mock"}}

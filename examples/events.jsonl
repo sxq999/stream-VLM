@@ -1,0 +1,2 @@
+{"schema_version":1,"kind":"query","session_id":"a","event_id":"a-q1","ready_ms":0,"evidence_cutoff_ms":0,"prompt":"Describe the scene."}
+{"schema_version":1,"kind":"query","session_id":"b","event_id":"b-q1","ready_ms":0,"evidence_cutoff_ms":0,"prompt":"Describe the scene."}
