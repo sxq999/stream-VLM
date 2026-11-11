@@ -1,0 +1,4 @@
+# First isolated Qwen3-VL compatibility candidate, not yet a validated lock.
+# A successful environment is frozen separately with pip freeze and GPU smoke evidence.
+vllm==0.11.0
+transformers==4.57.1

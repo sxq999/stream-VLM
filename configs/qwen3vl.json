@@ -1,5 +1,5 @@
 {
-  "manifest":"../examples/events.jsonl",
+  "manifest":"../examples/visual/events.jsonl",
   "mode":"realtime",
   "concurrency":2,
   "pending_capacity":16,

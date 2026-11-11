@@ -18,6 +18,9 @@ for name in models:
             info={"http_status":response.status_code}
             if response.ok:
                 data=response.json()
+                if service=="modelscope" and (data.get("Code")!=200 or not data.get("Success")):
+                    item[service]={"http_status":response.status_code,"api_success":False}
+                    continue
                 (out/(name.replace("/","__")+"_"+service+".json")).write_text(json.dumps(data,indent=2),encoding="utf-8")
                 info["metadata_saved"]=True
                 if service=="huggingface":info["revision"]=data.get("sha")

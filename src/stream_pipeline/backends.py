@@ -128,4 +128,7 @@ def create_backend(cfg):
         return MockBackend()
     if cfg["type"] == "openai_http":
         return OpenAIBackend(cfg)
+    if cfg["type"] == "transformers_reference":
+        from .native import NativeReference
+        return NativeReference(cfg)
     raise ValueError("unsupported backend; native duplex and PD need their own verified adapters")
