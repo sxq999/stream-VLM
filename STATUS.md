@@ -3,7 +3,7 @@
 | Milestone | Status | Evidence |
 |---|---|---|
 | M1 hardware / dependency locks | In progress | Server reachable; exact engine compatibility remains under validation |
-| M2 causal events / sessions | Partial implementation | 12 tests pass on Windows and lab Linux: causal snapshot, fractional boundary, retention, isolation, rejection, cancel, real local HTTP/SSE completion and truncation |
+| M2 causal events / sessions | Partial implementation | 13 tests on Windows; server run recorded below. Covers causal snapshot, fractional boundary, retention, cross-session rejection, cancel, HTTP/SSE completion/truncation and lazy native-reference health |
 | M3 three model adapters | Planned | No target model deployed in this repository yet |
 | M4 deployment / PD | Planned | No PD validation yet |
 | M5 metrics / profiling | Planned | No trace from this repository yet |
@@ -16,3 +16,5 @@ Current code includes mock and text/image OpenAI-compatible HTTP backends, a JSO
 Remaining required capabilities include actual vision workload examples, native reference adapters, native audio/duplex, verified backend cancellation, PD transfer, real profiling, model/environment locks and the complete acceptance matrix. CI wiring is committed; its cloud result must be observed separately before claiming CI passed.
 
 Update: original visual fixtures and an optional Transformers reference adapter are now implemented (target-model execution pending). A two-session mock CLI run also completed. All three model metadata endpoints were reachable through ModelScope; Hugging Face access from the server timed out. Qwen3-VL weights are downloading from a captured per-file revision/SHA256 listing into an isolated model directory, with bounded retries and resume. Runtime dependency download is slow; no target model load, native audio/duplex or PD success is claimed. Package mirror probes are diagnostic scripts, not a change to the server's global package configuration.
+
+Latest setup observation: Qwen3-VL acquisition completed with `MODEL_DOWNLOAD_VERIFIED`; all four weight shards and required configuration/tokenizer files passed their captured SHA256 checks. The vLLM wheel download finished and the isolated environment is downloading PyTorch 2.8.0. No target GPU model load has occurred. Transformers 4.57.1 remains a candidate pin to apply after the initial installation; current dependency resolution is not a validated lock. Do not launch the model until the candidate pins, imports and CUDA smoke have passed.

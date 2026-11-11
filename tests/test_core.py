@@ -38,6 +38,7 @@ class EventTests(unittest.TestCase):
     def test_sequence_and_closed(self):
         s = Session("s")
         with self.assertRaises(ValueError):s.append(frame(2))
+        with self.assertRaises(ValueError):s.snapshot(query(session="other"))
         s.closed = True
         with self.assertRaises(ValueError):s.snapshot(query())
     def test_manifest_fractional_and_future_rejection(self):
@@ -61,6 +62,13 @@ class EventTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as d:
             path=Path(d)/"c.json";path.write_text(json.dumps(dict(manifest="m",backend={"api_key":"secret"})))
             with self.assertRaises(ValueError):read_config(path)
+    def test_reference_health_is_lazy(self):
+        from unittest.mock import patch
+        from stream_pipeline.backends import create_backend
+        with patch.dict('os.environ',{'VLM_MODEL_DIR':''}):
+            backend=create_backend({'type':'transformers_reference'})
+            self.assertFalse(backend.health()['ok'])
+            self.assertFalse(backend.capabilities()['first_token_timing'])
     def test_mock_run_and_immutable_out(self):
         with tempfile.TemporaryDirectory() as d:
             root=Path(d);p=root/"e.jsonl";p.write_text(json.dumps(query()))

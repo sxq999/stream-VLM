@@ -58,7 +58,7 @@ class Session:
         return dropped
 
     def snapshot(self, query):
-        if self.closed:
-            raise ValueError("query on closed session")
+        if self.closed or query["session_id"] != self.name:
+            raise ValueError("query on closed or wrong session")
         cutoff = query["evidence_cutoff_ms"]
         return tuple(dict(f) for f in self.frames if f["capture_end_ms"] <= cutoff and f["ready_ms"] <= query["ready_ms"])
