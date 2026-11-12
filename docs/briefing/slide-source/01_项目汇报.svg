@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" font-family="Arial, Microsoft YaHei, sans-serif" data-pptx-page-role="cover">
+<rect id="bg" data-pptx-role="background" width="1280" height="720" fill="#16324F"/>
+<g id="cover-title" data-pptx-bounds="64 150 1152 235" fill="#F8FAFC"><text x="64" y="207" font-size="24" fill="#CBD5DF">研究基础设施汇报</text><text x="64" y="300" font-size="64" font-weight="bold">面向 StreamVLM 的实验管线</text><text x="64" y="365" font-size="30">Qwen3-VL 基座与后续 GPU 架构研究接口</text></g>
+<g id="cover-purpose" data-pptx-bounds="64 425 1152 112" fill="#F8FAFC"><text x="64" y="465" font-size="26">管线设计、真机验证与优化接入</text><text x="64" y="519" font-size="24" fill="#CBD5DF">本轮交付：为后续实现比较建立可执行实验底座</text></g>
+<g id="cover-footer" data-pptx-role="footer" data-pptx-bounds="64 644 1152 50" fill="#CBD5DF" font-size="18"><text x="64" y="679">2026 年 11 月 12 日</text><text x="790" y="679">github.com/sxq999/stream-VLM</text></g>
+</svg>

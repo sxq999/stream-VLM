@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" font-family="Arial, Microsoft YaHei, sans-serif" data-pptx-page-role="content">
+<rect id="bg" data-pptx-role="background" width="1280" height="720" fill="#F8FAFC"/>
+<g id="header" data-pptx-bounds="64 18 1152 148"><text x="64" y="42" font-size="18" fill="#087F8C">07 研究对接</text><text x="64" y="102" font-size="42" fill="#16324F" font-weight="bold">后续 GPU 改进如何接入</text><text x="64" y="150" font-size="24" fill="#566879">保留同一 workload 与测量协议，替换被测实现</text></g>
+<g id="baseline-environment" data-pptx-bounds="64 200 540 135"><text x="64" y="240" font-size="30" fill="#16324F" font-weight="bold">基线环境</text><text x="64" y="300" font-size="26" fill="#203448">原版引擎与可追溯源码身份</text></g>
+<g id="candidate-environment" data-pptx-bounds="664 200 552 135"><text x="664" y="240" font-size="30" fill="#087F8C" font-weight="bold">候选环境</text><text x="664" y="300" font-size="26" fill="#203448">修改版 vLLM 或 CUDA / Triton</text></g>
+<g id="matched-conditions" data-pptx-bounds="64 360 1152 85"><rect x="64" y="365" width="1152" height="75" fill="#E8F1F5"/><text x="90" y="411" font-size="26" fill="#16324F">匹配模型、帧、预处理、资源、输出预算与缓存条件</text></g>
+<g id="comparison-procedure" data-pptx-bounds="64 470 1152 80"><text x="64" y="515" font-size="26" fill="#203448">确认改动生效 → 正确性检查 → 独立诊断 → 普通运行的性能比较</text></g>
+<g id="scope" data-pptx-bounds="64 585 1152 60"><text x="64" y="624" font-size="24" fill="#B76B23">管线提供证据，不自动保证候选更快；数值错误不能支持有效加速结论</text></g>
+<g id="footer" data-pptx-role="footer" data-pptx-bounds="64 662 1152 42" fill="#566879" font-size="18"><text x="64" y="688">来源：RUNBOOK.md；这是后续使用流程，本轮未实现优化候选</text><text x="1170" y="688">21</text></g>
+</svg>

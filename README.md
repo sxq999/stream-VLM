@@ -39,3 +39,7 @@ Outputs: frozen config, input/source/implementation identity, capabilities, mono
 The `transformers_reference` adapter (`configs/qwen3vl-native.json`, set `QWEN3VL_MODEL_DIR`) produces complete responses/token IDs, not native first-token timing. Qwen3-VL execution and actual GPU traces have been verified. Measured versions and acceptance evidence are recorded in `docs/validation-architecture.json`; large artifacts stay outside Git.
 
 Prefer `experiment` for owned server lifecycle, `suite` for matrices, and a separate `profile` run for GPU traces. The [runbook](docs/RUNBOOK.md) explains variant identity, warmups, workload replication and measurement boundaries.
+
+## Design briefing
+
+The [Chinese design briefing](docs/briefing/README.md) contains a detailed report, a 24-slide editable PowerPoint with speaker notes, and a matching script. It explains the Qwen3-VL compute path, streaming input protocol, deployment lifecycle, metrics, verified capabilities and future GPU implementation interfaces.

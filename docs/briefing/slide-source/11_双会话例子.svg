@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" font-family="Arial, Microsoft YaHei, sans-serif" data-pptx-page-role="content">
+<rect id="bg" data-pptx-role="background" width="1280" height="720" fill="#F8FAFC"/>
+<g id="header" data-pptx-bounds="64 18 1152 148"><text x="64" y="42" font-size="18" fill="#087F8C">04 流式输入与控制</text><text x="64" y="102" font-size="42" fill="#16324F" font-weight="bold">一个已执行的双会话例子</text><text x="64" y="150" font-size="24" fill="#566879">程序生成的方块图用于检查因果、隔离与历史输入</text></g>
+<g id="session-a" data-pptx-bounds="64 200 1152 150"><text x="64" y="240" font-size="30" fill="#16324F" font-weight="bold">会话 A</text><rect x="275" y="213" width="40" height="40" fill="#D1495B"/><text x="338" y="243" font-size="26" fill="#203448">1.000 s 红图就绪，问当前颜色</text><rect x="275" y="288" width="40" height="40" fill="#208B5A"/><text x="338" y="318" font-size="26" fill="#203448">2.040 s 绿图到达，问第一个颜色</text></g>
+<g id="session-b" data-pptx-bounds="64 375 1152 75"><text x="64" y="416" font-size="30" fill="#16324F" font-weight="bold">会话 B</text><rect x="275" y="386" width="40" height="40" fill="#3A6FC5"/><text x="338" y="416" font-size="26" fill="#203448">1.000 s 蓝图就绪，独立提问</text></g>
+<g id="snapshot-result" data-pptx-bounds="64 475 1152 80"><text x="64" y="517" font-size="26" fill="#087F8C">A 新查询包含红 + 绿；B 不混入 A；旧查询快照保持不变</text></g>
+<g id="scope" data-pptx-bounds="64 575 1152 78" fill="#B76B23" font-size="24"><text x="64" y="605">历史由 prefix replay 重发，不证明持续 KV 或视觉记忆</text><text x="64" y="642">合成图像验收不代表真实视频 benchmark</text></g>
+<g id="footer" data-pptx-role="footer" data-pptx-bounds="64 664 1152 40" fill="#566879" font-size="18"><text x="64" y="688">来源：examples/visual/events.jsonl 与真实推理验收</text><text x="1170" y="688">11</text></g>
+</svg>

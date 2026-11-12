@@ -1,0 +1,256 @@
+[
+  {
+    "title":"面向 StreamVLM 的实验管线",
+    "subtitle":"Qwen3-VL 基座与后续 GPU 架构研究接口",
+    "kind":"cover",
+    "section":"研究基础设施汇报",
+    "items":["管线设计 · 真机验证 · 优化接入","2026 年 11 月 12 日"],
+    "source":"项目代码与验证记录，截至 2026-11-12",
+    "notes":"师兄好，这次汇报的是为后续 StreamVLM GPU 架构研究准备的实验管线。我会先说明当前使用的 Qwen3-VL 基座有哪些计算阶段，再介绍我们如何把持续到达的视频帧和问题变成可复现的实验，以及管线如何调用真实 GPU、记录结果。最后说明目前已经验证到什么程度，以及以后修改 vLLM 或算子时如何接入。本轮完成的是实验工具，没有提出新的优化算法，也没有形成加速结论。"
+  },
+  {
+    "title":"本轮交付与研究目标",
+    "subtitle":"统一控制输入、运行实现与测量条件，为后续比较建立基线",
+    "kind":"split",
+    "section":"01 项目定位",
+    "left_title":"本轮已经搭建",
+    "left":["按时间开放帧与查询的 Python 管线","真实模型部署、请求回放与服务清理","指标、GPU trace 和实现版本归档"],
+    "right_title":"后续研究使用它回答",
+    "right":["视觉与语言阶段的瓶颈在哪里？","调度、KV 管理或算子改动是否有效？","相同输入与资源下，收益是否仍成立？"],
+    "callout":"当前验收基座：Qwen3-VL-8B-Instruct",
+    "source":"仓库 STATUS.md、RUNBOOK.md",
+    "notes":"项目落脚于 StreamVLM 的持续输入与交互场景。我们当前负责把实验条件写清楚，并把它执行到真实 GPU 上。左边是本轮交付，右边是后续研究要借助这套工具回答的问题。Qwen 和 vLLM 都是已有的软件，我们做的是连接和控制它们。模型下载、部署和 GPU 运行是验证管线的步骤，不能算成我们又做了一个模型。现在也不能说已经找到了瓶颈或者获得了性能提升。"
+  },
+  {
+    "title":"StreamVLM 实验的特殊约束",
+    "subtitle":"持续输入和中途提问，会同时改变证据范围与计算负载",
+    "kind":"list",
+    "section":"01 项目定位",
+    "items":[["因果可见性","问题出现时，只能使用已经到达且满足截止时间的帧"],["历史增长","历史帧改变视觉输入量、prefill 长度与 KV 需求"],["到达与并发","多会话、错开与突发输入会改变排队和批处理"],["公平比较","减少帧、缩短输出或改变缓存状态都可能影响结果"]],
+    "callout":"一次 model.generate() 只能证明能推理，尚不能固定上述实验条件",
+    "source":"项目设计约束与 events.py / runner.py",
+    "notes":"流式 VLM 的难点不仅是让视频模型回答一次问题。问题可能在视频播放中途出现，因此首先要约束此时到底能看到哪些帧。其次，随着历史增长，视觉处理和语言上下文的计算量都会变化。多个会话又会改变排队与引擎批处理。如果比较两种实现时少看了帧、缩短了输出，或者缓存状态不同，就不能把延迟差全部归因于 GPU 优化。所以我们要把这些因素做成输入和配置，而不是靠手动操作控制。"
+  },
+  {
+    "title":"当前学习与验证对象：Qwen3-VL-8B",
+    "subtitle":"限定到 dense 检查点，按真实模型配置理解计算结构",
+    "kind":"split",
+    "section":"02 Qwen 计算路径",
+    "left_title":"视觉部分",
+    "left":["27 层 ViT，hidden size 1152","patch 16，spatial merge 2","DeepStack 特征索引 8 / 16 / 24","视觉输出对接 4096 维语言表示"],
+    "right_title":"语言部分",
+    "right":["36 层，hidden size 4096","32 个 query heads，8 个 KV heads","head dimension 128，使用 GQA","interleaved MRoPE 位置编码"],
+    "callout":"其他 Qwen 分支的 GDN / QSA 不能直接套用到当前基座",
+    "source":"官方 Qwen3-VL-8B-Instruct config.json；详见报告 S1",
+    "notes":"师兄让我学习 Qwen 架构，我先把对象限定到当前实际部署的 Qwen3-VL-8B-Instruct dense 检查点。视觉部分是二十七层 ViT，经过空间合并，并通过 DeepStack 提供多层视觉特征。语言部分是三十六层，查询头三十二个，KV 头八个，属于分组查询注意力。这里列出的数字来自官方配置。需要特别区分，其他 Qwen 系列提到的 GDN、QSA 或 MoE 不能直接当作当前检查点结构。后续若更换模型，需要重新核对计算路径。"
+  },
+  {
+    "title":"Qwen3-VL 的计算流程",
+    "subtitle":"视觉编码、上下文 prefill 和逐步 decode 是不同的执行阶段",
+    "kind":"model_flow",
+    "section":"02 Qwen 计算路径",
+    "items":["图片与文字预处理","视觉编码与特征合并","语言 prefill","逐步 decode"],
+    "callout":"DeepStack 多层特征参与语言计算；当前部署上下文预算为 4096",
+    "source":"官方配置与 Transformers v4.57.1 实现；报告 S1–S3",
+    "notes":"一次实际推理可以沿这条路径理解。CPU 先准备图像和文字，图像张量进入视觉编码器，产生供语言模型使用的特征。DeepStack 会把多层视觉特征接入语言网络。prefill 处理当前请求的输入上下文，随后 decode 逐步生成回答。视觉计算、prefill 和 decode 的形状、状态和访存特点不同，所以需要分别观察。当前部署设置四千零九十六的上下文预算是小规模验收配置，不代表官方模型能力上限。另外，适配器会给每帧插入 source PTS 文本标签，让模型收到来源时间文字，但图片列表加自定义标签仍不等于官方完整的原生视频输入路径。"
+  },
+  {
+    "title":"历史长度与 KV 体积的量级",
+    "subtitle":"按当前检查点配置推导，建立显存需求的直觉",
+    "kind":"kv",
+    "section":"02 Qwen 计算路径",
+    "items":["2 × 36 × 8 × 128 × 2 bytes","每 token 理论 KV：144 KiB","4096 tokens 理论原始 KV：576 MiB"],
+    "callout":"假设 BF16、单份缓存、单 GPU，忽略分页/对齐；这是推导量，不是实测显存",
+    "source":"按官方 text_config 推导；不含权重、视觉特征和运行时开销",
+    "notes":"为了把架构学习与 GPU 问题联系起来，这里做一个存储量推导。K 和 V 两份，乘三十六层、八个 KV 头、每头一百二十八维，再乘 BF16 的两个字节，得到每个上下文 token 一百四十四 KiB。四千零九十六个 token 大约五百七十六 MiB。它不是实测显存，也不是整个请求的显存，因为没有计算权重、视觉特征、临时张量和分页冗余。这个推导说明，历史长度与并发会话会让 KV 管理成为值得观察的对象，但还不能据此宣称 KV 已经是瓶颈。"
+  },
+  {
+    "title":"管线与被测推理实现的边界",
+    "subtitle":"Python 管线控制实验，被测引擎组织模型与 GPU 执行",
+    "kind":"stack",
+    "section":"03 管线总体设计",
+    "items":["配置、JSONL 事件、帧文件","Python 管线与后端适配器","vLLM 服务 / Transformers 参考路径","PyTorch、自定义 CUDA、Triton、CUDA 库","真实 GPU"],
+    "callout":"vLLM 可以修改源码并重新安装；HTTP 只是进程接口",
+    "source":"cli.py、backends.py、native.py；图为职责关系",
+    "notes":"这张图解释我们写的代码在哪里。最上面是实验输入，管线在 CPU 上维护时间、会话和请求。HTTP 后端调用本机 vLLM，native 后端直接调用 Transformers。推理实现再通过 PyTorch、自定义 CUDA、Triton 或 CUDA 库执行到 GPU。这里是职责关系，不是每个算子都必须经过图中的所有节点。vLLM 本身包含调度、缓存和模型执行逻辑，并不是语言翻译脚本。通过 HTTP 调用也不妨碍我们修改服务端源码，只需让管线启动对应的环境。"
+  },
+  {
+    "title":"六个模块组成一轮可复现实验",
+    "subtitle":"输入控制、真实执行与证据归档在同一套流程中闭环",
+    "kind":"architecture",
+    "section":"03 管线总体设计",
+    "items":["事件与会话","回放与提交","后端适配","部署生命周期","负载与实验套件","测量与实现身份"],
+    "callout":"接口兼容的候选引擎可以替换，事件语义与测量逻辑继续复用",
+    "source":"events / runner / backends / deployment / suite / identity / report",
+    "notes":"从代码组织看，可以分成六个职责。事件与会话模块保证输入可见性，回放模块按时间提交查询，后端适配器屏蔽接口差异。部署模块管理自己的服务进程，负载与实验套件模块安排成组运行，最后测量和身份模块把结果与实现关联起来。它们不是六个独立产品，而是一轮实验的不同部分。这样以后替换一个接口兼容的候选引擎时，原则上不需要重写输入控制和统计主逻辑。若模型需要持续状态或音频接口，再扩展相应适配器。"
+  },
+  {
+    "title":"输入协议：JSONL 事件与图像",
+    "subtitle":"将来源时间、可用时间与查询证据截止时间分开记录",
+    "kind":"protocol",
+    "section":"04 流式输入与控制",
+    "items":["frame：图像、来源序号、capture / PTS、ready","query：文字 prompt、ready、evidence_cutoff","cancel：目标 query_id 与会话","close：会话结束与清理"],
+    "callout":"唯一 event_id；按 ready 排序；图像路径受限；source_seq 连续",
+    "source":"events.py；examples/visual/events.jsonl",
+    "notes":"实际输入不是让模型直接读取一个完整视频文件，而是事件清单和图像。每行 JSON 表示一个 frame、query、cancel 或 close。frame 中的 capture 和 PTS 表达来源视频时间，ready 表达这次实验中何时可用。query 另有 evidence cutoff，控制允许使用的来源证据范围。全局唯一事件 ID 和连续来源序号方便追踪，路径检查避免引用清单目录以外的图片。语音目前没有原生接入，问题以预写文字和出现时间建模。"
+  },
+  {
+    "title":"完整视频如何模拟流式可见性",
+    "subtitle":"时间与交互由软件回放，推理在真实 GPU 上执行",
+    "kind":"causal",
+    "section":"04 流式输入与控制",
+    "items":["离线准备：视频抽帧并生成清单","运行时：只放行已到达的帧","接纳查询：固定同会话帧快照","之后到达的帧：不补入旧查询"],
+    "callout":"capture_end ≤ cutoff，且 frame.ready ≤ query.ready",
+    "source":"Session.snapshot() 与 runner.py；视频抽帧属于输入准备步骤",
+    "notes":"如果硬盘中有完整视频，我们可以提前抽帧和写好清单，但执行时只按时间放行图片。查询接纳时，从同一会话中取采集结束不晚于证据截止、就绪时间不晚于查询的帧，并固定成快照。这样查询即使在队列里等了一会儿，也不会看到等待期间新到的帧。这个保证有前提：视频到清单的准备不能先引入未来内容。当前 runner 的接口是帧和清单，还没有自动完成任意视频的解码与语音准备。"
+  },
+  {
+    "title":"一个已执行的双会话例子",
+    "subtitle":"程序生成的方块图用于检查因果、隔离与历史输入",
+    "kind":"example",
+    "section":"04 流式输入与控制",
+    "items":["1.000 s：A 红图，B 蓝图，各问当前颜色","2.040 s：A 绿图到达，A 问第一个颜色","A 的新查询看到红 + 绿，B 不会混入 A","旧查询的快照不因新帧到达而改变"],
+    "callout":"历史通过 prefix replay 重发；不能据此宣称持续 KV 或视觉记忆",
+    "source":"examples/visual/events.jsonl；验收为合成输入，非真实视频 benchmark",
+    "notes":"这里用实际验收输入解释。第一秒，A 收到红图，B 收到蓝图，各自问颜色。两点零四秒，A 收到绿图，再问第一个方块是什么颜色。full 策略下，新查询提交 A 的红绿两张图，B 会话的图不会混进来，旧查询也不会变。这个例子可以检查隔离、历史和真实推理路径。但它使用程序生成的简单图像，不是代表性视频基准。回答第一个颜色依赖我们重新发送历史图片，不能用它证明引擎已经维护了跨查询连续 KV。"
+  },
+  {
+    "title":"两个后端承担不同的实验任务",
+    "subtitle":"保留 serving 入口，同时提供容易观察模型阶段的参考路径",
+    "kind":"split",
+    "section":"04 流式输入与控制",
+    "left_title":"HTTP / vLLM",
+    "left":["本机 /v1/chat/completions 接口","SSE 文本流与完成状态检查","当前使用历史图片前缀重放","面向引擎、调度与缓存研究"],
+    "right_title":"Native / Transformers",
+    "right":["直接加载本地权重并 generate","串行保护，返回完整回答","请求与模型模块的 profiler 标签","面向计算路径与算子诊断"],
+    "callout":"两条路径执行策略不同，延迟差不能直接归因于某个算子",
+    "source":"backends.py、native.py、stages.py",
+    "notes":"HTTP 路径把图片和文字发给 vLLM，读取流式输出，并检查流是否真正完成。它适合研究 serving 整体行为。Native 路径直接执行 Transformers 模型，方便给请求、视觉和语言模块加 profiler 范围，但当前串行保护模型调用，而且返回完整回答，所以没有 native 首 token 指标。两者服务的观察目标不同，不应该把 native 与 vLLM 的时间差当作某个算子的收益。mock 则仅用于检查控制逻辑，不运行真实模型。"
+  },
+  {
+    "title":"配置如何控制一次实验",
+    "subtitle":"客户端负载预算与引擎内部调度是两组独立参数",
+    "kind":"list",
+    "section":"04 流式输入与控制",
+    "items":[["回放模式","realtime 按时放行；fastest 尽快回归，不计算名义实时延迟"],["客户端预算","concurrency 控制线程；pending_capacity 限制排队与在途总量"],["历史策略","full 超限报错；recent 丢弃旧帧并记录 ID"],["引擎参数","模型、GPU、max-model-len、max-num-seqs、预处理与输出预算"]],
+    "callout":"减少历史或输出会改变工作负载；必须与实现优化区分",
+    "source":"read_config()、Session、runner.py；实际参数以当次 config 为准",
+    "notes":"管线不是一份永远固定的配置。realtime 用于按时到达实验，fastest 用于快速功能回归，后者不能按原名义时间解释延迟。客户端 concurrency 是线程数，pending capacity 是已接纳但未释放的总请求上限，达到上限会显式失败。full 保留历史到预算，recent 明确丢弃旧帧并记账。引擎中的 max num seqs 等又是另一组参数。以后比较优化时，这些条件必须保持匹配，尤其不能把少看历史导致的加速误报成实现收益。"
+  },
+  {
+    "title":"真实 GPU 实验的生命周期",
+    "subtitle":"experiment 命令管理自己启动的服务与测量过程",
+    "kind":"lifecycle",
+    "section":"05 执行与测量",
+    "items":["检查 GPU / 端点","启动私有服务","等待模型就绪","回放并测量","归档并结束服务"],
+    "callout":"加载模型由 vLLM 执行；异常同样清理自有进程组",
+    "source":"deployment.py、cli.py；managed lifecycle 在 Linux 验证",
+    "notes":"用户执行 experiment 后，管线先检查指定 GPU 的空闲显存和端点是否已被占用，然后启动属于本轮的 Linux 进程组。vLLM 负责真正把模型加载到 GPU，管线轮询模型列表直到就绪，再开始回放和测量。结束时保存文件并回收自己的服务。异常启动或执行失败也走清理路径，不会去杀原本存在的他人服务。当前测量时钟在服务就绪后建立，因此首段响应指标不包含模型冷启动，冷启动需要另外从部署记录衡量。"
+  },
+  {
+    "title":"时延指标的时间口径",
+    "subtitle":"以客户端单调时钟定义，保留逐查询数据与 p50 / p95",
+    "kind":"metrics",
+    "section":"05 执行与测量",
+    "items":["r：名义就绪","a：接纳","s：线程开始","f：首段文本","d：完成"],
+    "callout":"首段文本 f−r 含客户端影响；SSE chunk 间隔不等于 TPOT",
+    "source":"report.py；native 全响应路径没有首 token 指标",
+    "notes":"为避免口径混乱，我们明确五个时刻。r 是查询名义就绪，a 是管线接纳，s 是线程开始处理，f 是第一段非空文本，d 是完成。a 减 r 表示接纳延迟，s 减 a 是客户端队列，f 减 r 是从名义到达到首段文本的延迟，d 减 r 是完成延迟。这些都是客户端时钟上的值。它们不能直接给出 vLLM 内部排队或 GPU 独占时间。HTTP 文本块也不保证一个块一个 token，所以块间隔不能写成 TPOT。当前分位数和原始数据都保留，但小样本验收不支持稳定性能结论。"
+  },
+  {
+    "title":"GPU 诊断与普通计时分开运行",
+    "subtitle":"先确认实际执行路径，再用匹配的非 profiling 运行比较性能",
+    "kind":"split",
+    "section":"05 执行与测量",
+    "left_title":"Native trace",
+    "left":["请求范围与 CPU / CUDA 活动","vision_encoder 模块范围","首次语言 forward 标为 prefill","随后语言 forward 标为 decode"],
+    "right_title":"vLLM 引擎 trace",
+    "right":["调用真实服务端 profiler 接口","已确认 kernel 与 memcpy 事件","采集引擎工作负载区间","逐请求 kernel 归属尚未建立"],
+    "callout":"CPU range 不是 GPU 独占时长；客户端重叠不证明 GPU kernel 并行",
+    "source":"stages.py、profile CLI、inspect_trace.py；vLLM 0.11.0 文档",
+    "notes":"当前我们有两类 GPU 诊断。Native trace 在请求和模型模块上标范围，可以把执行路径对应到视觉、首次语言 forward 和后续 decode。它只对配置过的 native generate 路径成立，不能自动套用到 vLLM 的 chunked prefill。vLLM 路径调用真实服务端 profiler，已经观察到 kernel 和 memcpy，但目前没有把每个 kernel 都归属到请求。Profiler 有明显干扰，所以用来找路径和机制，性能比较另跑非 profiling 实验。设备级 nvidia-smi 采样约两秒一次，也不能代替请求级 GPU 时间。"
+  },
+  {
+    "title":"负载变化与成组实验",
+    "subtitle":"模板会话复制、到达错开、预热和重复都保留为显式条件",
+    "kind":"list",
+    "section":"05 执行与测量",
+    "items":[["workload","复制会话并生成唯一 ID，可配置 stagger，保留来源时间"],["suite","命名 case、参数覆盖、预热与重复，失败写入汇总"],["服务边界","每个 managed case 启停一次；同 case 的重复可能保留缓存"],["解释边界","复制会话是负载变化；观测吞吐包含输入节奏"]],
+    "callout":"当前不会自动清空每轮缓存，也不将观测吞吐称为最大吞吐",
+    "source":"workloads.py、suite.py、report.py",
+    "notes":"为了系统改变条件，workload 可以复制模板会话，设置到达错开，并生成唯一事件 ID。复制时保留视频来源时间，改变的是到达安排。suite 再组织多个 case、预热和重复，并保留失败。managed case 会拥有自己的服务生命周期，但同一个 case 内多次重复共用服务，所以可能继承缓存，当前不会自动清空。复制同一语义输入只能构造负载，不能当成新增独立语义样本。当前吞吐还包含输入等待，因此不能直接叫最大吞吐。"
+  },
+  {
+    "title":"结果如何追溯到实际实现",
+    "subtitle":"每轮写入新目录，同时保存原始记录、配置与源码身份",
+    "kind":"archive",
+    "section":"05 执行与测量",
+    "items":["deployment：命令、环境、日志、清理记录","measurement：config、timeline、summary、metrics、resources","source_snapshot：本轮管线源码","implementation_snapshot：配置后记录引擎差异与身份","traces：独立诊断文件"],
+    "callout":"输入 / 图片哈希 + 模型锁 + 包版本；指定源码路径后记录 Git 与修改",
+    "source":"identity.py、runner.py、deployment.py；外部源码快照有体积预算",
+    "notes":"性能结果必须能回答当时跑的是哪份代码。每轮使用新输出目录，保存部署日志、最终配置、原始时间线、结果、指标和资源采样，还复制管线源码。输入清单和图片有哈希，模型有来源锁，环境记录包版本。如果指定外部引擎源码路径，则记录 commit、tracked diff 和 untracked 文件身份，并在预算内保存差异。只装 wheel 的情况只能证明包版本，不能证明某个源码改动已被用到。版本记录提高可追溯性，但仍不能消除其他 GPU 进程争用和系统状态差异。"
+  },
+  {
+    "title":"当前真机验收结果",
+    "subtitle":"这些记录证明工程通路可用，尚不支持普遍性能或加速结论",
+    "kind":"evidence",
+    "section":"06 当前进展与边界",
+    "items":["Linux：18 / 18 测试通过","Native：3 个视觉查询，阶段标签与 CUDA 活动","Managed vLLM：3 查询完成，真实引擎 trace，服务回收","真实 suite：2 cases，每 case 6 查询完成","Burst：6 查询完成，峰值客户端在途 4"],
+    "callout":"RTX 3090；Torch 2.8.0；Transformers 4.57.1；vLLM 0.11.0",
+    "source":"validation-architecture.json；测试代码 27a91e2，Windows 17 通过 / 1 跳过",
+    "notes":"这里列的是已经有文件记录的验收结果。Linux 十八项测试通过，Windows 十七项通过一项跳过，跳过的是 Linux 进程组相关测试。真实模型方面，native 三个视觉查询完成并产生阶段和 CUDA 活动；managed vLLM 三个查询完成，有实际引擎 trace 且服务结束。真实 suite 两个 case，各六个查询完成。突发实验也完成六个查询，客户端峰值在途四个。环境如页下所列。它们证明关键通路跑通过，不是代表性视频的性能评估，更不意味着四个 GPU kernel 同时运行。"
+  },
+  {
+    "title":"本轮相对初版的工程改进",
+    "subtitle":"初版已能发送请求；现在补齐可自动执行、观察和追溯的实验闭环",
+    "kind":"improvements",
+    "section":"06 当前进展与边界",
+    "items":[["自动化","手动管理服务 → experiment 负责启动、等待、执行与清理"],["实验控制","少量固定运行 → workload、suite、预热与重复"],["可观察性","客户端日志 → native 阶段与真实引擎 GPU trace"],["可追溯性","代码与结果易混用 → 配置、输入身份与源码快照"]],
+    "callout":"提升的是实验平台能力；本轮没有 GPU 优化与加速比",
+    "source":"当前实现与工程验收摘要；保留原有事件 / 会话 / 请求框架",
+    "notes":"这页回答我们做了半天到底改了什么。初版并不是完全没有管线，它已经能发送请求和记录基本日志。本轮首先把服务生命周期自动化，减少手动步骤；第二增加负载和成组实验，便于控制条件；第三补了真实 GPU 和模型阶段的观察入口；第四把结果和实际源码身份关联起来。最后用真机验收证明通路可运行。这里不能说模型算得更快了，因为这轮没有修改 GPU 算子，也没有形成配对性能比较。"
+  },
+  {
+    "title":"后续 GPU 改进如何接入",
+    "subtitle":"保留同一 workload 与测量协议，替换被测实现",
+    "kind":"candidate",
+    "section":"07 研究对接",
+    "items":["基线：原版引擎环境与源码身份","候选：修改版 vLLM 或 CUDA / Triton 算子","匹配：模型、帧、预处理、资源、输出与缓存条件","流程：正确性检查、独立诊断、非 profiling 性能比较"],
+    "callout":"管线提供证据，不自动保证候选更快或改动已经生效",
+    "source":"RUNBOOK.md；候选比较为后续使用流程，非本轮优化结果",
+    "notes":"后续如果修改一个视觉算子，基线环境装原版实现，候选环境装修改版，管线配置分别指向它们。两者运行相同事件、相同预处理、相同资源和输出预算。先确认实际加载了候选算子，再做数值检查和独立 profiling，最后比较匹配的普通运行。调度或 KV 内存优化同理，只是主要改 vLLM 内部代码，并需要补内部队列、缓存占用等观测。我们虽然研究重点是性能，仍要确认算子没有算错，否则加速结果不成立。"
+  },
+  {
+    "title":"当前能力边界与验收收敛",
+    "subtitle":"先冻结已验证底座，新增功能按专项合同补实现与证据",
+    "kind":"split",
+    "section":"07 研究对接",
+    "left_title":"当前底座可作为起点",
+    "left":["因果输入与查询快照","真实 Qwen3-VL 运行和服务清理","明确指标、GPU 诊断、实现归档","接口兼容的引擎替换入口"],
+    "right_title":"需要另行验收的扩展",
+    "right":["代表性长视频与交互 workload","跨查询增量 KV 与提前 GPU prefill","Qwen3.5 / MiniCPM-o / 语音双工","真实 PD、多 GPU / 多机排布"],
+    "callout":"本轮达到小规模工程闭环；原始多模型 / PD 大范围合同仍未全部完成",
+    "source":"STATUS.md、TASK_SPEC.md；本轮没有新增上述扩展实现",
+    "notes":"管线收敛需要用能力和验收来定义，不能无限增加模型。当前底座已经验证了因果输入、查询快照、Qwen3-VL 真机执行、服务清理和证据归档，能作为下一阶段起点。右边这些尚需单独验收，尤其是跨查询增量 KV、提前 GPU prefill、音频和真实 PD。当前清单里的 input committed 只是原始帧进入管线，media prepare 也只是载荷准备，都不能当作 GPU 已经完成视觉或 prefill。原始任务的大范围合同仍然有未完成项，汇报时需要保留这个边界。"
+  },
+  {
+    "title":"附录：运行入口与代码导航",
+    "subtitle":"详细参数、机器配置和注意事项见配套报告与 RUNBOOK",
+    "kind":"commands",
+    "section":"附录 A",
+    "items":["experiment：自动部署 + 回放 + 归档 + 清理","profile：独立 native 或 vLLM GPU 诊断","workload：生成复制会话与错开到达输入","suite：按 case 执行预热和重复","events / runner / backends：输入与执行主路径"],
+    "callout":"新负载需要更新 manifest，并核对帧、图片与上下文预算",
+    "source":"cli.py、configure_local.py；github.com/sxq999/stream-VLM",
+    "notes":"附录给出操作入口。experiment 负责一整轮，profile 单独收集诊断，workload 只生成输入，不会自己启动推理，suite 组织多个 case。具体机器路径不写死在汇报中，通过 configure local 生成本地配置。输入主路径从 events 到 runner 再到 backends。真实负载准备后，需要在配置中更新 manifest，并检查管线帧预算、引擎每请求图片上限和上下文预算是否一致。所有可执行命令在配套报告和 RUNBOOK 中都有示例。"
+  },
+  {
+    "title":"附录：汇报中容易混淆的概念",
+    "subtitle":"用能力与证据描述进展，避免把接口名字当成实现",
+    "kind":"faq",
+    "section":"附录 B",
+    "items":[["流式输入 / 流式输出","按时间开放视频帧，与 SSE 逐段返回文本是两件事"],["前缀重放 / 持续状态","重发历史图片，不证明跨查询 KV 复用"],["控制 / 调度","客户端提交请求，不等于引擎内部 batch 与 KV 调度"],["真实 GPU / 硬件模拟","当前运行真实 GPU；改微架构需另接模拟器或原型"]],
+    "callout":"结构来源：官方配置与报告；实现结论：本仓库代码与验证记录",
+    "source":"详细来源、逐页说明与常见追问见配套设计报告和讲稿",
+    "notes":"最后保留四组容易混淆的概念，便于讨论时澄清。流式输入是按时到达的帧，流式输出是 SSE 逐段返回文字。前缀重放是重发历史，持续状态需要跨查询缓存接口与验证。客户端控制何时提交请求，引擎才决定内部批处理与 KV 分配。当前是真实 GPU 运行平台，不是微架构模拟器；若以后改变硬件本身，需要另接建模或原型工具。关于模型结构的事实来自官方资料，关于本项目已经完成什么的结论来自代码和验收记录。"
+  }
+]

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" font-family="Arial, Microsoft YaHei, sans-serif" data-pptx-page-role="content">
+<rect id="bg" data-pptx-role="background" width="1280" height="720" fill="#F8FAFC"/>
+<g id="header" data-pptx-bounds="64 18 1152 148"><text x="64" y="42" font-size="18" fill="#087F8C">06 当前进展与边界</text><text x="64" y="102" font-size="42" fill="#16324F" font-weight="bold">当前真机验收结果</text><text x="64" y="150" font-size="24" fill="#566879">这些记录证明工程通路可用，尚不支持普遍性能或加速结论</text></g>
+<g id="tests" data-pptx-bounds="64 195 1152 63"><text x="64" y="234" font-size="26" fill="#203448"><tspan font-weight="bold" fill="#087F8C">Linux 18 / 18</tspan><tspan> 测试通过，Windows 17 通过 / 1 跳过</tspan></text></g>
+<g id="native-evidence" data-pptx-bounds="64 265 1152 63"><text x="64" y="304" font-size="26" fill="#203448"><tspan font-weight="bold" fill="#16324F">Native 3 查询</tspan><tspan> 完成，有阶段标签和 CUDA 活动</tspan></text></g>
+<g id="engine-evidence" data-pptx-bounds="64 335 1152 63"><text x="64" y="374" font-size="26" fill="#203448"><tspan font-weight="bold" fill="#16324F">Managed vLLM 3 查询</tspan><tspan> 完成，真实引擎 trace，服务回收</tspan></text></g>
+<g id="suite-evidence" data-pptx-bounds="64 405 1152 63"><text x="64" y="444" font-size="26" fill="#203448"><tspan font-weight="bold" fill="#16324F">真实 suite 2 cases</tspan><tspan>，每 case 6 查询完成</tspan></text></g>
+<g id="burst-evidence" data-pptx-bounds="64 475 1152 63"><text x="64" y="514" font-size="26" fill="#203448"><tspan font-weight="bold" fill="#16324F">Burst 6 查询</tspan><tspan> 完成，峰值客户端在途 4</tspan></text></g>
+<g id="scope" data-pptx-bounds="64 575 1152 78" fill="#087F8C" font-size="24"><text x="64" y="605">RTX 3090；Torch 2.8.0；Transformers 4.57.1；vLLM 0.11.0</text><text x="64" y="642">小规模合成输入验收，未给出代表性 StreamVLM 性能结论</text></g>
+<g id="footer" data-pptx-role="footer" data-pptx-bounds="64 664 1152 40" fill="#566879" font-size="18"><text x="64" y="688">来源：validation-architecture.json；测试代码 27a91e2；客户端在途不等于 kernel 并行</text><text x="1170" y="688">19</text></g>
+</svg>

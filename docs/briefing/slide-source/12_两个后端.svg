@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" font-family="Arial, Microsoft YaHei, sans-serif" data-pptx-page-role="content">
+<rect id="bg" data-pptx-role="background" width="1280" height="720" fill="#F8FAFC"/>
+<g id="header" data-pptx-bounds="64 18 1152 148"><text x="64" y="42" font-size="18" fill="#087F8C">04 流式输入与控制</text><text x="64" y="102" font-size="42" fill="#16324F" font-weight="bold">两个后端承担不同的实验任务</text><text x="64" y="150" font-size="24" fill="#566879">保留 serving 入口，同时提供容易观察模型阶段的参考路径</text></g>
+<g id="http-backend" data-pptx-bounds="64 205 544 350" fill="#203448"><text x="64" y="245" font-size="30" fill="#087F8C" font-weight="bold">HTTP / vLLM</text><text x="64" y="310" font-size="26">本机 /v1/chat/completions 接口</text><text x="64" y="370" font-size="26">SSE 文本流与完成状态检查</text><text x="64" y="430" font-size="26">当前使用历史图片前缀重放</text><text x="64" y="490" font-size="26">面向引擎、调度与缓存研究</text></g>
+<g id="native-backend" data-pptx-bounds="664 205 552 350" fill="#203448"><text x="664" y="245" font-size="30" fill="#16324F" font-weight="bold">Native / Transformers</text><text x="664" y="310" font-size="26">直接加载本地权重并 generate</text><text x="664" y="370" font-size="26">串行保护，返回完整回答</text><text x="664" y="430" font-size="26">请求与模型模块的 profiler 标签</text><text x="664" y="490" font-size="26">面向计算路径与算子诊断</text></g>
+<g id="scope" data-pptx-bounds="64 585 1152 60"><text x="64" y="624" font-size="24" fill="#B76B23">两条路径执行策略不同，延迟差不能直接归因于某个算子</text></g>
+<g id="footer" data-pptx-role="footer" data-pptx-bounds="64 662 1152 42" fill="#566879" font-size="18"><text x="64" y="688">实现：backends.py、native.py、stages.py；mock 只用于控制逻辑检查</text><text x="1170" y="688">12</text></g>
+</svg>

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" font-family="Arial, Microsoft YaHei, sans-serif" data-pptx-page-role="ending">
+<rect id="bg" data-pptx-role="background" width="1280" height="720" fill="#F8FAFC"/>
+<g id="header" data-pptx-bounds="64 18 1152 148"><text x="64" y="42" font-size="18" fill="#087F8C">07 研究对接</text><text x="64" y="102" font-size="42" fill="#16324F" font-weight="bold">当前能力边界与验收收敛</text><text x="64" y="150" font-size="24" fill="#566879">冻结已验证底座，新增功能按专项合同补实现与证据</text></g>
+<g id="verified-foundation" data-pptx-bounds="64 205 544 350" fill="#203448"><text x="64" y="245" font-size="30" fill="#087F8C" font-weight="bold">当前底座可作为起点</text><text x="64" y="310" font-size="26">因果输入与查询快照</text><text x="64" y="370" font-size="26">真实 Qwen3-VL 运行与服务清理</text><text x="64" y="430" font-size="26">指标、GPU 诊断与实现归档</text><text x="64" y="490" font-size="26">接口兼容的引擎替换入口</text></g>
+<g id="pending-extensions" data-pptx-bounds="664 205 552 350" fill="#203448"><text x="664" y="245" font-size="30" fill="#B76B23" font-weight="bold">需要另行验收的扩展</text><text x="664" y="310" font-size="26">代表性长视频与交互 workload</text><text x="664" y="370" font-size="26">增量 KV 与提前 GPU prefill</text><text x="664" y="430" font-size="26">其他模型与原生语音双工</text><text x="664" y="490" font-size="26">真实 PD、多 GPU / 多机排布</text></g>
+<g id="scope" data-pptx-bounds="64 575 1152 78" fill="#16324F" font-size="24"><text x="64" y="605">本轮达到小规模工程闭环，尚未完成原始多模型 / PD 大范围合同</text><text x="64" y="642">下一阶段：确定代表性输入，再借助 trace 提出可检验的瓶颈假设</text></g>
+<g id="footer" data-pptx-role="footer" data-pptx-bounds="64 664 1152 40" fill="#566879" font-size="18"><text x="64" y="688">依据：STATUS.md、TASK_SPEC.md；input_committed 与 media_prepare 不表示 GPU prefill 完成</text><text x="1170" y="688">22</text></g>
+</svg>

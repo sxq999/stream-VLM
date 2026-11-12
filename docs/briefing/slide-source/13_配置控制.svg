@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" font-family="Arial, Microsoft YaHei, sans-serif" data-pptx-page-role="content">
+<rect id="bg" data-pptx-role="background" width="1280" height="720" fill="#F8FAFC"/>
+<g id="header" data-pptx-bounds="64 18 1152 148"><text x="64" y="42" font-size="18" fill="#087F8C">04 流式输入与控制</text><text x="64" y="102" font-size="42" fill="#16324F" font-weight="bold">配置如何控制一次实验</text><text x="64" y="150" font-size="24" fill="#566879">客户端负载预算与引擎内部调度是两组独立参数</text></g>
+<g id="replay-mode" data-pptx-bounds="64 200 1152 75"><text x="64" y="240" font-size="30" fill="#087F8C" font-weight="bold">回放模式</text><text x="300" y="240" font-size="26" fill="#203448">realtime 按时放行；fastest 尽快执行功能回归</text></g>
+<g id="client-budget" data-pptx-bounds="64 290 1152 75"><text x="64" y="330" font-size="30" fill="#16324F" font-weight="bold">客户端预算</text><text x="300" y="330" font-size="26" fill="#203448">concurrency 控制线程，pending_capacity 限制总在途</text></g>
+<g id="retention-policy" data-pptx-bounds="64 380 1152 75"><text x="64" y="420" font-size="30" fill="#16324F" font-weight="bold">历史策略</text><text x="300" y="420" font-size="26" fill="#203448">full 超限报错；recent 丢弃旧帧并记录 ID</text></g>
+<g id="engine-budget" data-pptx-bounds="64 470 1152 80"><text x="64" y="510" font-size="30" fill="#16324F" font-weight="bold">引擎参数</text><text x="300" y="510" font-size="26" fill="#203448">模型、GPU、上下文、batch、预处理与输出预算</text></g>
+<g id="scope" data-pptx-bounds="64 585 1152 60"><text x="64" y="624" font-size="24" fill="#B76B23">减少历史或输出会改变工作负载，必须与实现优化区分</text></g>
+<g id="footer" data-pptx-role="footer" data-pptx-bounds="64 662 1152 42" fill="#566879" font-size="18"><text x="64" y="688">实现：read_config()、Session、runner.py；fastest 的名义实时延迟字段为 null</text><text x="1170" y="688">13</text></g>
+</svg>

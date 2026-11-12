@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" font-family="Arial, Microsoft YaHei, sans-serif" data-pptx-page-role="content">
+<rect id="bg" data-pptx-role="background" width="1280" height="720" fill="#F8FAFC"/>
+<g id="header" data-pptx-bounds="64 18 1152 148"><text x="64" y="42" font-size="18" fill="#087F8C">01 项目定位</text><text x="64" y="102" font-size="42" fill="#16324F" font-weight="bold">本轮交付与研究目标</text><text x="64" y="150" font-size="24" fill="#566879">统一控制输入、运行实现与测量条件，为后续比较建立基线</text></g>
+<g id="deliverables" data-pptx-bounds="64 205 544 330" fill="#203448"><text x="64" y="245" font-size="30" fill="#087F8C" font-weight="bold">本轮已经搭建</text><text x="64" y="315" font-size="26">按时间开放帧与查询的 Python 管线</text><text x="64" y="385" font-size="26">真实模型部署、回放与服务清理</text><text x="64" y="455" font-size="26">指标、GPU trace 与实现版本归档</text></g>
+<g id="research-goals" data-pptx-bounds="664 205 552 330" fill="#203448"><text x="664" y="245" font-size="30" fill="#16324F" font-weight="bold">后续研究使用它回答</text><text x="664" y="315" font-size="26">视觉与语言阶段的瓶颈在哪里？</text><text x="664" y="385" font-size="26">调度、KV 或算子改动是否有效？</text><text x="664" y="455" font-size="26">相同条件下，收益是否仍成立？</text></g>
+<g id="scope" data-pptx-bounds="64 585 1152 60"><text x="64" y="624" font-size="24" fill="#087F8C">当前验收基座：Qwen3-VL-8B-Instruct。暂无优化算法或加速结论</text></g>
+<g id="footer" data-pptx-role="footer" data-pptx-bounds="64 662 1152 42" fill="#566879" font-size="18"><text x="64" y="688">来源：STATUS.md、RUNBOOK.md</text><text x="1170" y="688">02</text></g>
+</svg>

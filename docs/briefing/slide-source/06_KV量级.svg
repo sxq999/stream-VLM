@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" font-family="Arial, Microsoft YaHei, sans-serif" data-pptx-page-role="content">
+<rect id="bg" data-pptx-role="background" width="1280" height="720" fill="#F8FAFC"/>
+<g id="header" data-pptx-bounds="64 18 1152 148"><text x="64" y="42" font-size="18" fill="#087F8C">02 Qwen 计算路径</text><text x="64" y="102" font-size="42" fill="#16324F" font-weight="bold">历史长度与 KV 体积的量级</text><text x="64" y="150" font-size="24" fill="#566879">按当前检查点配置推导，建立显存需求的直觉</text></g>
+<g id="derivation" data-pptx-bounds="64 200 1152 115"><text x="64" y="260" font-size="42" fill="#16324F">2 × 36 × 8 × 128 × 2 bytes</text><text x="64" y="304" font-size="24" fill="#566879">K / V 两份，36 层，8 KV heads，128 维，BF16</text></g>
+<g id="per-token" data-pptx-bounds="64 345 540 180"><text x="64" y="390" font-size="26" fill="#203448">每 token 理论 KV</text><text x="64" y="484" font-size="64" fill="#087F8C" font-weight="bold">144 KiB</text></g>
+<g id="context-memory" data-pptx-bounds="664 345 552 180"><text x="664" y="390" font-size="26" fill="#203448">4096 tokens 理论原始 KV</text><text x="664" y="484" font-size="64" fill="#16324F" font-weight="bold">576 MiB</text></g>
+<g id="assumptions" data-pptx-bounds="64 575 1152 78" fill="#B76B23" font-size="24"><text x="64" y="605">假设单 GPU、单份 BF16 缓存，忽略分页与对齐</text><text x="64" y="642">这是推导量，不是实测显存；不含权重、视觉特征与运行时开销</text></g>
+<g id="footer" data-pptx-role="footer" data-pptx-bounds="64 664 1152 40" fill="#566879" font-size="18"><text x="64" y="688">来源：按官方 text_config 推导，报告第 3.2 节</text><text x="1170" y="688">06</text></g>
+</svg>

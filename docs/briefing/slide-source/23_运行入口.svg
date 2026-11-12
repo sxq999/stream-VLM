@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" font-family="Arial, Microsoft YaHei, sans-serif" data-pptx-page-role="content">
+<rect id="bg" data-pptx-role="background" width="1280" height="720" fill="#F8FAFC"/>
+<g id="header" data-pptx-bounds="64 18 1152 148"><text x="64" y="42" font-size="18" fill="#087F8C">附录 A</text><text x="64" y="102" font-size="42" fill="#16324F" font-weight="bold">运行入口与代码导航</text><text x="64" y="150" font-size="24" fill="#566879">详细参数、机器配置与注意事项见配套报告和 RUNBOOK</text></g>
+<g id="experiment-command" data-pptx-bounds="64 195 1152 65"><text x="64" y="235" font-size="26" fill="#203448"><tspan fill="#087F8C" font-weight="bold">experiment</tspan><tspan>　自动部署、回放、归档与清理</tspan></text></g>
+<g id="profile-command" data-pptx-bounds="64 270 1152 65"><text x="64" y="310" font-size="26" fill="#203448"><tspan fill="#16324F" font-weight="bold">profile</tspan><tspan>　独立 native 或 vLLM GPU 诊断</tspan></text></g>
+<g id="workload-command" data-pptx-bounds="64 345 1152 65"><text x="64" y="385" font-size="26" fill="#203448"><tspan fill="#16324F" font-weight="bold">workload</tspan><tspan>　生成复制会话与错开到达输入</tspan></text></g>
+<g id="suite-command" data-pptx-bounds="64 420 1152 65"><text x="64" y="460" font-size="26" fill="#203448"><tspan fill="#16324F" font-weight="bold">suite</tspan><tspan>　按 case 执行预热与重复</tspan></text></g>
+<g id="source-navigation" data-pptx-bounds="64 495 1152 65"><text x="64" y="535" font-size="26" fill="#203448"><tspan fill="#16324F" font-weight="bold">events / runner / backends</tspan><tspan>　输入与执行主路径</tspan></text></g>
+<g id="scope" data-pptx-bounds="64 585 1152 60"><text x="64" y="624" font-size="24" fill="#B76B23">新负载需要更新 manifest，并核对帧、图片与上下文预算</text></g>
+<g id="footer" data-pptx-role="footer" data-pptx-bounds="64 662 1152 42" fill="#566879" font-size="18"><text x="64" y="688">入口：cli.py、configure_local.py；github.com/sxq999/stream-VLM</text><text x="1170" y="688">23</text></g>
+</svg>

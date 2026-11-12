@@ -1,0 +1,170 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>逐页讲稿</title><style>body{font-family:"Microsoft YaHei",Arial,sans-serif;color:#203448;line-height:1.85;margin:40px auto;max-width:1120px;padding:0 32px;background:#fff}h1{font-size:32px;line-height:1.5;color:#16324f}h2{font-size:25px;color:#16324f;margin-top:48px;border-bottom:1px solid #cbd5df;padding-bottom:8px}h3{font-size:20px;color:#087f8c;margin-top:30px}p,li{font-size:16px}table{border-collapse:collapse;font-size:14px;width:100%;margin:24px 0}td,th{border:1px solid #cbd5df;padding:10px 12px;text-align:left;vertical-align:top}th{background:#e8f1f5}pre{background:#f1f5f9;padding:18px;white-space:pre-wrap;overflow-wrap:anywhere;font-size:14px}code{font-family:Consolas,monospace}a{color:#087f8c;overflow-wrap:anywhere}hr{border:0;border-top:1px solid #cbd5df;margin:42px 0}@media print{body{max-width:none;margin:0;padding:0}h2{break-after:avoid}pre,table,tr{break-inside:avoid}a{color:inherit}}</style><body><h1 id="streamvlm">StreamVLM 管线汇报逐页讲稿</h1>
+<p>建议主讲第 1–22 页，约 25–30 分钟；第 23–24 页为操作与概念附录。时长为汇报安排，不是实验测量。每页先讲本页主体，再根据追问展开配套报告。PPT 备注已嵌入同一份讲稿。</p>
+<h1 id="01_-streamvlm">01_面向 StreamVLM 的实验管线</h1>
+<p>师兄好，这次汇报的是为后续 StreamVLM GPU 架构研究准备的实验管线。我会先说明当前使用的 Qwen3-VL 基座有哪些计算阶段，再介绍我们如何把持续到达的视频帧和问题变成可复现的实验，以及管线如何调用真实 GPU、记录结果。最后说明目前已经验证到什么程度，以及以后修改 vLLM 或算子时如何接入。本轮完成的是实验工具，没有提出新的优化算法，也没有形成加速结论。</p>
+<p>来源：项目代码与验证记录，截至 2026-11-12。</p>
+<p>https://github.com/sxq999/stream-VLM/blob/34b4218/STATUS.md
+https://github.com/sxq999/stream-VLM/blob/34b4218/docs/RUNBOOK.md
+https://github.com/sxq999/stream-VLM/blob/34b4218/docs/validation-architecture.json</p>
+<hr />
+<h1 id="02_">02_本轮交付与研究目标</h1>
+<p>项目落脚于 StreamVLM 的持续输入与交互场景。我们当前负责把实验条件写清楚，并把它执行到真实 GPU 上。左边是本轮交付，右边是后续研究要借助这套工具回答的问题。Qwen 和 vLLM 都是已有的软件，我们做的是连接和控制它们。模型下载、部署和 GPU 运行是验证管线的步骤，不能算成我们又做了一个模型。现在也不能说已经找到了瓶颈或者获得了性能提升。</p>
+<p>来源：仓库 STATUS.md、RUNBOOK.md。</p>
+<p>https://github.com/sxq999/stream-VLM/blob/34b4218/STATUS.md
+https://github.com/sxq999/stream-VLM/blob/34b4218/docs/RUNBOOK.md
+https://github.com/sxq999/stream-VLM/blob/34b4218/docs/validation-architecture.json</p>
+<hr />
+<h1 id="03_streamvlm">03_StreamVLM 实验的特殊约束</h1>
+<p>流式 VLM 的难点不仅是让视频模型回答一次问题。问题可能在视频播放中途出现，因此首先要约束此时到底能看到哪些帧。其次，随着历史增长，视觉处理和语言上下文的计算量都会变化。多个会话又会改变排队与引擎批处理。如果比较两种实现时少看了帧、缩短了输出，或者缓存状态不同，就不能把延迟差全部归因于 GPU 优化。所以我们要把这些因素做成输入和配置，而不是靠手动操作控制。</p>
+<p>来源：项目设计约束与 events.py / runner.py。</p>
+<p>https://github.com/sxq999/stream-VLM/blob/34b4218/STATUS.md
+https://github.com/sxq999/stream-VLM/blob/34b4218/docs/RUNBOOK.md
+https://github.com/sxq999/stream-VLM/blob/34b4218/docs/validation-architecture.json</p>
+<hr />
+<h1 id="04_qwen3-vl-8b">04_当前学习与验证对象：Qwen3-VL-8B</h1>
+<p>师兄让我学习 Qwen 架构，我先把对象限定到当前实际部署的 Qwen3-VL-8B-Instruct dense 检查点。视觉部分是二十七层 ViT，经过空间合并，并通过 DeepStack 提供多层视觉特征。语言部分是三十六层，查询头三十二个，KV 头八个，属于分组查询注意力。这里列出的数字来自官方配置。需要特别区分，其他 Qwen 系列提到的 GDN、QSA 或 MoE 不能直接当作当前检查点结构。后续若更换模型，需要重新核对计算路径。</p>
+<p>来源：官方 Qwen3-VL-8B-Instruct config.json；详见报告 S1。</p>
+<p>https://huggingface.co/Qwen/Qwen3-VL-8B-Instruct/blob/main/config.json
+https://github.com/huggingface/transformers/blob/v4.57.1/src/transformers/models/qwen3_vl/modeling_qwen3_vl.py
+https://arxiv.org/abs/2511.21631</p>
+<hr />
+<h1 id="05_qwen3-vl">05_Qwen3-VL 的计算流程</h1>
+<p>一次实际推理可以沿这条路径理解。CPU 先准备图像和文字，图像张量进入视觉编码器，产生供语言模型使用的特征。DeepStack 会把多层视觉特征接入语言网络。prefill 处理当前请求的输入上下文，随后 decode 逐步生成回答。视觉计算、prefill 和 decode 的形状、状态和访存特点不同，所以需要分别观察。当前部署设置四千零九十六的上下文预算是小规模验收配置，不代表官方模型能力上限。另外，适配器会给每帧插入 source PTS 文本标签，让模型收到来源时间文字，但图片列表加自定义标签仍不等于官方完整的原生视频输入路径。</p>
+<p>来源：官方配置与 Transformers v4.57.1 实现；报告 S1–S3。</p>
+<p>https://huggingface.co/Qwen/Qwen3-VL-8B-Instruct/blob/main/config.json
+https://github.com/huggingface/transformers/blob/v4.57.1/src/transformers/models/qwen3_vl/modeling_qwen3_vl.py
+https://arxiv.org/abs/2511.21631</p>
+<hr />
+<h1 id="06_-kv">06_历史长度与 KV 体积的量级</h1>
+<p>为了把架构学习与 GPU 问题联系起来，这里做一个存储量推导。K 和 V 两份，乘三十六层、八个 KV 头、每头一百二十八维，再乘 BF16 的两个字节，得到每个上下文 token 一百四十四 KiB。四千零九十六个 token 大约五百七十六 MiB。它不是实测显存，也不是整个请求的显存，因为没有计算权重、视觉特征、临时张量和分页冗余。这个推导说明，历史长度与并发会话会让 KV 管理成为值得观察的对象，但还不能据此宣称 KV 已经是瓶颈。</p>
+<p>来源：按官方 text_config 推导；不含权重、视觉特征和运行时开销。</p>
+<p>https://huggingface.co/Qwen/Qwen3-VL-8B-Instruct/blob/main/config.json
+https://github.com/huggingface/transformers/blob/v4.57.1/src/transformers/models/qwen3_vl/modeling_qwen3_vl.py
+https://arxiv.org/abs/2511.21631</p>
+<hr />
+<h1 id="07_">07_管线与被测推理实现的边界</h1>
+<p>这张图解释我们写的代码在哪里。最上面是实验输入，管线在 CPU 上维护时间、会话和请求。HTTP 后端调用本机 vLLM，native 后端直接调用 Transformers。推理实现再通过 PyTorch、自定义 CUDA、Triton 或 CUDA 库执行到 GPU。这里是职责关系，不是每个算子都必须经过图中的所有节点。vLLM 本身包含调度、缓存和模型执行逻辑，并不是语言翻译脚本。通过 HTTP 调用也不妨碍我们修改服务端源码，只需让管线启动对应的环境。</p>
+<p>来源：cli.py、backends.py、native.py；图为职责关系。</p>
+<p>https://github.com/sxq999/stream-VLM/blob/34b4218/STATUS.md
+https://github.com/sxq999/stream-VLM/blob/34b4218/docs/RUNBOOK.md
+https://github.com/sxq999/stream-VLM/blob/34b4218/docs/validation-architecture.json</p>
+<hr />
+<h1 id="08_">08_六个模块组成一轮可复现实验</h1>
+<p>从代码组织看，可以分成六个职责。事件与会话模块保证输入可见性，回放模块按时间提交查询，后端适配器屏蔽接口差异。部署模块管理自己的服务进程，负载与实验套件模块安排成组运行，最后测量和身份模块把结果与实现关联起来。它们不是六个独立产品，而是一轮实验的不同部分。这样以后替换一个接口兼容的候选引擎时，原则上不需要重写输入控制和统计主逻辑。若模型需要持续状态或音频接口，再扩展相应适配器。</p>
+<p>来源：events / runner / backends / deployment / suite / identity / report。</p>
+<p>https://github.com/sxq999/stream-VLM/blob/34b4218/STATUS.md
+https://github.com/sxq999/stream-VLM/blob/34b4218/docs/RUNBOOK.md
+https://github.com/sxq999/stream-VLM/blob/34b4218/docs/validation-architecture.json</p>
+<hr />
+<h1 id="09_jsonl">09_输入协议：JSONL 事件与图像</h1>
+<p>实际输入不是让模型直接读取一个完整视频文件，而是事件清单和图像。每行 JSON 表示一个 frame、query、cancel 或 close。frame 中的 capture 和 PTS 表达来源视频时间，ready 表达这次实验中何时可用。query 另有 evidence cutoff，控制允许使用的来源证据范围。全局唯一事件 ID 和连续来源序号方便追踪，路径检查避免引用清单目录以外的图片。语音目前没有原生接入，问题以预写文字和出现时间建模。</p>
+<p>来源：events.py；examples/visual/events.jsonl。</p>
+<p>https://github.com/sxq999/stream-VLM/blob/34b4218/STATUS.md
+https://github.com/sxq999/stream-VLM/blob/34b4218/docs/RUNBOOK.md
+https://github.com/sxq999/stream-VLM/blob/34b4218/docs/validation-architecture.json</p>
+<hr />
+<h1 id="10_">10_完整视频如何模拟流式可见性</h1>
+<p>如果硬盘中有完整视频，我们可以提前抽帧和写好清单，但执行时只按时间放行图片。查询接纳时，从同一会话中取采集结束不晚于证据截止、就绪时间不晚于查询的帧，并固定成快照。这样查询即使在队列里等了一会儿，也不会看到等待期间新到的帧。这个保证有前提：视频到清单的准备不能先引入未来内容。当前 runner 的接口是帧和清单，还没有自动完成任意视频的解码与语音准备。</p>
+<p>来源：Session.snapshot() 与 runner.py；视频抽帧属于输入准备步骤。</p>
+<p>https://github.com/sxq999/stream-VLM/blob/34b4218/STATUS.md
+https://github.com/sxq999/stream-VLM/blob/34b4218/docs/RUNBOOK.md
+https://github.com/sxq999/stream-VLM/blob/34b4218/docs/validation-architecture.json</p>
+<hr />
+<h1 id="11_">11_一个已执行的双会话例子</h1>
+<p>这里用实际验收输入解释。第一秒，A 收到红图，B 收到蓝图，各自问颜色。两点零四秒，A 收到绿图，再问第一个方块是什么颜色。full 策略下，新查询提交 A 的红绿两张图，B 会话的图不会混进来，旧查询也不会变。这个例子可以检查隔离、历史和真实推理路径。但它使用程序生成的简单图像，不是代表性视频基准。回答第一个颜色依赖我们重新发送历史图片，不能用它证明引擎已经维护了跨查询连续 KV。</p>
+<p>来源：examples/visual/events.jsonl；验收为合成输入，非真实视频 benchmark。</p>
+<p>https://github.com/sxq999/stream-VLM/blob/34b4218/STATUS.md
+https://github.com/sxq999/stream-VLM/blob/34b4218/docs/RUNBOOK.md
+https://github.com/sxq999/stream-VLM/blob/34b4218/docs/validation-architecture.json</p>
+<hr />
+<h1 id="12_">12_两个后端承担不同的实验任务</h1>
+<p>HTTP 路径把图片和文字发给 vLLM，读取流式输出，并检查流是否真正完成。它适合研究 serving 整体行为。Native 路径直接执行 Transformers 模型，方便给请求、视觉和语言模块加 profiler 范围，但当前串行保护模型调用，而且返回完整回答，所以没有 native 首 token 指标。两者服务的观察目标不同，不应该把 native 与 vLLM 的时间差当作某个算子的收益。mock 则仅用于检查控制逻辑，不运行真实模型。</p>
+<p>来源：backends.py、native.py、stages.py。</p>
+<p>https://github.com/sxq999/stream-VLM/blob/34b4218/STATUS.md
+https://github.com/sxq999/stream-VLM/blob/34b4218/docs/RUNBOOK.md
+https://github.com/sxq999/stream-VLM/blob/34b4218/docs/validation-architecture.json</p>
+<hr />
+<h1 id="13_">13_配置如何控制一次实验</h1>
+<p>管线不是一份永远固定的配置。realtime 用于按时到达实验，fastest 用于快速功能回归，后者不能按原名义时间解释延迟。客户端 concurrency 是线程数，pending capacity 是已接纳但未释放的总请求上限，达到上限会显式失败。full 保留历史到预算，recent 明确丢弃旧帧并记账。引擎中的 max num seqs 等又是另一组参数。以后比较优化时，这些条件必须保持匹配，尤其不能把少看历史导致的加速误报成实现收益。</p>
+<p>来源：read_config()、Session、runner.py；实际参数以当次 config 为准。</p>
+<p>https://github.com/sxq999/stream-VLM/blob/34b4218/STATUS.md
+https://github.com/sxq999/stream-VLM/blob/34b4218/docs/RUNBOOK.md
+https://github.com/sxq999/stream-VLM/blob/34b4218/docs/validation-architecture.json</p>
+<hr />
+<h1 id="14_-gpu">14_真实 GPU 实验的生命周期</h1>
+<p>用户执行 experiment 后，管线先检查指定 GPU 的空闲显存和端点是否已被占用，然后启动属于本轮的 Linux 进程组。vLLM 负责真正把模型加载到 GPU，管线轮询模型列表直到就绪，再开始回放和测量。结束时保存文件并回收自己的服务。异常启动或执行失败也走清理路径，不会去杀原本存在的他人服务。当前测量时钟在服务就绪后建立，因此首段响应指标不包含模型冷启动，冷启动需要另外从部署记录衡量。</p>
+<p>来源：deployment.py、cli.py；managed lifecycle 在 Linux 验证。</p>
+<p>https://github.com/sxq999/stream-VLM/blob/34b4218/STATUS.md
+https://github.com/sxq999/stream-VLM/blob/34b4218/docs/RUNBOOK.md
+https://github.com/sxq999/stream-VLM/blob/34b4218/docs/validation-architecture.json</p>
+<hr />
+<h1 id="15_">15_时延指标的时间口径</h1>
+<p>为避免口径混乱，我们明确五个时刻。r 是查询名义就绪，a 是管线接纳，s 是线程开始处理，f 是第一段非空文本，d 是完成。a 减 r 表示接纳延迟，s 减 a 是客户端队列，f 减 r 是从名义到达到首段文本的延迟，d 减 r 是完成延迟。这些都是客户端时钟上的值。它们不能直接给出 vLLM 内部排队或 GPU 独占时间。HTTP 文本块也不保证一个块一个 token，所以块间隔不能写成 TPOT。当前分位数和原始数据都保留，但小样本验收不支持稳定性能结论。</p>
+<p>来源：report.py；native 全响应路径没有首 token 指标。</p>
+<p>https://github.com/sxq999/stream-VLM/blob/34b4218/STATUS.md
+https://github.com/sxq999/stream-VLM/blob/34b4218/docs/RUNBOOK.md
+https://github.com/sxq999/stream-VLM/blob/34b4218/docs/validation-architecture.json</p>
+<hr />
+<h1 id="16_gpu">16_GPU 诊断与普通计时分开运行</h1>
+<p>当前我们有两类 GPU 诊断。Native trace 在请求和模型模块上标范围，可以把执行路径对应到视觉、首次语言 forward 和后续 decode。它只对配置过的 native generate 路径成立，不能自动套用到 vLLM 的 chunked prefill。vLLM 路径调用真实服务端 profiler，已经观察到 kernel 和 memcpy，但目前没有把每个 kernel 都归属到请求。Profiler 有明显干扰，所以用来找路径和机制，性能比较另跑非 profiling 实验。设备级 nvidia-smi 采样约两秒一次，也不能代替请求级 GPU 时间。</p>
+<p>来源：stages.py、profile CLI、inspect_trace.py；vLLM 0.11.0 文档。</p>
+<p>https://github.com/sxq999/stream-VLM/blob/34b4218/STATUS.md
+https://github.com/sxq999/stream-VLM/blob/34b4218/docs/RUNBOOK.md
+https://github.com/sxq999/stream-VLM/blob/34b4218/docs/validation-architecture.json
+https://docs.vllm.ai/en/v0.11.0/contributing/profiling.html</p>
+<hr />
+<h1 id="17_">17_负载变化与成组实验</h1>
+<p>为了系统改变条件，workload 可以复制模板会话，设置到达错开，并生成唯一事件 ID。复制时保留视频来源时间，改变的是到达安排。suite 再组织多个 case、预热和重复，并保留失败。managed case 会拥有自己的服务生命周期，但同一个 case 内多次重复共用服务，所以可能继承缓存，当前不会自动清空。复制同一语义输入只能构造负载，不能当成新增独立语义样本。当前吞吐还包含输入等待，因此不能直接叫最大吞吐。</p>
+<p>来源：workloads.py、suite.py、report.py。</p>
+<p>https://github.com/sxq999/stream-VLM/blob/34b4218/STATUS.md
+https://github.com/sxq999/stream-VLM/blob/34b4218/docs/RUNBOOK.md
+https://github.com/sxq999/stream-VLM/blob/34b4218/docs/validation-architecture.json</p>
+<hr />
+<h1 id="18_">18_结果如何追溯到实际实现</h1>
+<p>性能结果必须能回答当时跑的是哪份代码。每轮使用新输出目录，保存部署日志、最终配置、原始时间线、结果、指标和资源采样，还复制管线源码。输入清单和图片有哈希，模型有来源锁，环境记录包版本。如果指定外部引擎源码路径，则记录 commit、tracked diff 和 untracked 文件身份，并在预算内保存差异。只装 wheel 的情况只能证明包版本，不能证明某个源码改动已被用到。版本记录提高可追溯性，但仍不能消除其他 GPU 进程争用和系统状态差异。</p>
+<p>来源：identity.py、runner.py、deployment.py；外部源码快照有体积预算。</p>
+<p>https://github.com/sxq999/stream-VLM/blob/34b4218/STATUS.md
+https://github.com/sxq999/stream-VLM/blob/34b4218/docs/RUNBOOK.md
+https://github.com/sxq999/stream-VLM/blob/34b4218/docs/validation-architecture.json</p>
+<hr />
+<h1 id="19_">19_当前真机验收结果</h1>
+<p>这里列的是已经有文件记录的验收结果。Linux 十八项测试通过，Windows 十七项通过一项跳过，跳过的是 Linux 进程组相关测试。真实模型方面，native 三个视觉查询完成并产生阶段和 CUDA 活动；managed vLLM 三个查询完成，有实际引擎 trace 且服务结束。真实 suite 两个 case，各六个查询完成。突发实验也完成六个查询，客户端峰值在途四个。环境如页下所列。它们证明关键通路跑通过，不是代表性视频的性能评估，更不意味着四个 GPU kernel 同时运行。</p>
+<p>来源：validation-architecture.json；测试代码 27a91e2，Windows 17 通过 / 1 跳过。</p>
+<p>https://github.com/sxq999/stream-VLM/blob/34b4218/STATUS.md
+https://github.com/sxq999/stream-VLM/blob/34b4218/docs/RUNBOOK.md
+https://github.com/sxq999/stream-VLM/blob/34b4218/docs/validation-architecture.json</p>
+<hr />
+<h1 id="20_">20_本轮相对初版的工程改进</h1>
+<p>这页回答我们做了半天到底改了什么。初版并不是完全没有管线，它已经能发送请求和记录基本日志。本轮首先把服务生命周期自动化，减少手动步骤；第二增加负载和成组实验，便于控制条件；第三补了真实 GPU 和模型阶段的观察入口；第四把结果和实际源码身份关联起来。最后用真机验收证明通路可运行。这里不能说模型算得更快了，因为这轮没有修改 GPU 算子，也没有形成配对性能比较。</p>
+<p>来源：当前实现与工程验收摘要；保留原有事件 / 会话 / 请求框架。</p>
+<p>https://github.com/sxq999/stream-VLM/blob/34b4218/STATUS.md
+https://github.com/sxq999/stream-VLM/blob/34b4218/docs/RUNBOOK.md
+https://github.com/sxq999/stream-VLM/blob/34b4218/docs/validation-architecture.json</p>
+<hr />
+<h1 id="21_-gpu">21_后续 GPU 改进如何接入</h1>
+<p>后续如果修改一个视觉算子，基线环境装原版实现，候选环境装修改版，管线配置分别指向它们。两者运行相同事件、相同预处理、相同资源和输出预算。先确认实际加载了候选算子，再做数值检查和独立 profiling，最后比较匹配的普通运行。调度或 KV 内存优化同理，只是主要改 vLLM 内部代码，并需要补内部队列、缓存占用等观测。我们虽然研究重点是性能，仍要确认算子没有算错，否则加速结果不成立。</p>
+<p>来源：RUNBOOK.md；候选比较为后续使用流程，非本轮优化结果。</p>
+<p>https://github.com/sxq999/stream-VLM/blob/34b4218/STATUS.md
+https://github.com/sxq999/stream-VLM/blob/34b4218/docs/RUNBOOK.md
+https://github.com/sxq999/stream-VLM/blob/34b4218/docs/validation-architecture.json</p>
+<hr />
+<h1 id="22_">22_当前能力边界与验收收敛</h1>
+<p>管线收敛需要用能力和验收来定义，不能无限增加模型。当前底座已经验证了因果输入、查询快照、Qwen3-VL 真机执行、服务清理和证据归档，能作为下一阶段起点。右边这些尚需单独验收，尤其是跨查询增量 KV、提前 GPU prefill、音频和真实 PD。当前清单里的 input committed 只是原始帧进入管线，media prepare 也只是载荷准备，都不能当作 GPU 已经完成视觉或 prefill。原始任务的大范围合同仍然有未完成项，汇报时需要保留这个边界。</p>
+<p>来源：STATUS.md、TASK_SPEC.md；本轮没有新增上述扩展实现。</p>
+<p>https://github.com/sxq999/stream-VLM/blob/34b4218/STATUS.md
+https://github.com/sxq999/stream-VLM/blob/34b4218/docs/RUNBOOK.md
+https://github.com/sxq999/stream-VLM/blob/34b4218/docs/validation-architecture.json</p>
+<hr />
+<h1 id="23_">23_附录：运行入口与代码导航</h1>
+<p>附录给出操作入口。experiment 负责一整轮，profile 单独收集诊断，workload 只生成输入，不会自己启动推理，suite 组织多个 case。具体机器路径不写死在汇报中，通过 configure local 生成本地配置。输入主路径从 events 到 runner 再到 backends。真实负载准备后，需要在配置中更新 manifest，并检查管线帧预算、引擎每请求图片上限和上下文预算是否一致。所有可执行命令在配套报告和 RUNBOOK 中都有示例。</p>
+<p>来源：cli.py、configure_local.py；github.com/sxq999/stream-VLM。</p>
+<p>https://github.com/sxq999/stream-VLM/blob/34b4218/STATUS.md
+https://github.com/sxq999/stream-VLM/blob/34b4218/docs/RUNBOOK.md
+https://github.com/sxq999/stream-VLM/blob/34b4218/docs/validation-architecture.json</p>
+<hr />
+<h1 id="24_">24_附录：汇报中容易混淆的概念</h1>
+<p>最后保留四组容易混淆的概念，便于讨论时澄清。流式输入是按时到达的帧，流式输出是 SSE 逐段返回文字。前缀重放是重发历史，持续状态需要跨查询缓存接口与验证。客户端控制何时提交请求，引擎才决定内部批处理与 KV 分配。当前是真实 GPU 运行平台，不是微架构模拟器；若以后改变硬件本身，需要另接建模或原型工具。关于模型结构的事实来自官方资料，关于本项目已经完成什么的结论来自代码和验收记录。</p>
+<p>来源：详细来源、逐页说明与常见追问见配套设计报告和讲稿。</p>
+<p>https://github.com/sxq999/stream-VLM/blob/34b4218/STATUS.md
+https://github.com/sxq999/stream-VLM/blob/34b4218/docs/RUNBOOK.md
+https://github.com/sxq999/stream-VLM/blob/34b4218/docs/validation-architecture.json</p></body></html>

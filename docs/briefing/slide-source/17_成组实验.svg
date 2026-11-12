@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" font-family="Arial, Microsoft YaHei, sans-serif" data-pptx-page-role="content">
+<rect id="bg" data-pptx-role="background" width="1280" height="720" fill="#F8FAFC"/>
+<g id="header" data-pptx-bounds="64 18 1152 148"><text x="64" y="42" font-size="18" fill="#087F8C">05 执行与测量</text><text x="64" y="102" font-size="42" fill="#16324F" font-weight="bold">负载变化与成组实验</text><text x="64" y="150" font-size="24" fill="#566879">模板会话复制、到达错开、预热和重复都保留为显式条件</text></g>
+<g id="workload-generation" data-pptx-bounds="64 200 1152 75"><text x="64" y="240" font-size="30" fill="#087F8C" font-weight="bold">workload</text><text x="300" y="240" font-size="26" fill="#203448">复制会话、唯一 ID、可调 stagger，保留来源时间</text></g>
+<g id="suite-execution" data-pptx-bounds="64 290 1152 75"><text x="64" y="330" font-size="30" fill="#16324F" font-weight="bold">suite</text><text x="300" y="330" font-size="26" fill="#203448">命名 case、参数覆盖、预热与重复，失败进入汇总</text></g>
+<g id="cache-boundary" data-pptx-bounds="64 380 1152 75"><text x="64" y="420" font-size="30" fill="#16324F" font-weight="bold">服务边界</text><text x="300" y="420" font-size="26" fill="#203448">每个 managed case 启停；同 case 重复可能保留缓存</text></g>
+<g id="statistical-boundary" data-pptx-bounds="64 470 1152 75"><text x="64" y="510" font-size="30" fill="#16324F" font-weight="bold">解释边界</text><text x="300" y="510" font-size="26" fill="#203448">复制产生负载变体，不产生独立语义样本</text></g>
+<g id="scope" data-pptx-bounds="64 585 1152 60"><text x="64" y="624" font-size="24" fill="#B76B23">不会隐式清空每轮缓存；观测吞吐包含输入节奏，不等于最大吞吐</text></g>
+<g id="footer" data-pptx-role="footer" data-pptx-bounds="64 662 1152 42" fill="#566879" font-size="18"><text x="64" y="688">来源：workloads.py、suite.py、report.py</text><text x="1170" y="688">17</text></g>
+</svg>

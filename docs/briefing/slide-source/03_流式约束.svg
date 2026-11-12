@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" font-family="Arial, Microsoft YaHei, sans-serif" data-pptx-page-role="content">
+<rect id="bg" data-pptx-role="background" width="1280" height="720" fill="#F8FAFC"/>
+<g id="header" data-pptx-bounds="64 18 1152 148"><text x="64" y="42" font-size="18" fill="#087F8C">01 项目定位</text><text x="64" y="102" font-size="42" fill="#16324F" font-weight="bold">StreamVLM 实验的特殊约束</text><text x="64" y="150" font-size="24" fill="#566879">持续输入和中途提问，会同时改变证据范围与计算负载</text></g>
+<g id="causality" data-pptx-bounds="64 200 1152 75"><text x="64" y="240" font-size="30" fill="#087F8C" font-weight="bold">因果可见性</text><text x="300" y="240" font-size="26" fill="#203448">只能使用已到达且满足截止时间的帧</text></g>
+<g id="history" data-pptx-bounds="64 290 1152 75"><text x="64" y="330" font-size="30" fill="#16324F" font-weight="bold">历史增长</text><text x="300" y="330" font-size="26" fill="#203448">历史改变视觉输入量、prefill 长度与 KV 需求</text></g>
+<g id="load" data-pptx-bounds="64 380 1152 75"><text x="64" y="420" font-size="30" fill="#16324F" font-weight="bold">到达与并发</text><text x="300" y="420" font-size="26" fill="#203448">多会话、错开和突发会改变排队与批处理</text></g>
+<g id="fairness" data-pptx-bounds="64 470 1152 75"><text x="64" y="510" font-size="30" fill="#16324F" font-weight="bold">公平比较</text><text x="300" y="510" font-size="26" fill="#203448">帧数、输出预算和缓存状态都需要匹配</text></g>
+<g id="scope" data-pptx-bounds="64 585 1152 60"><text x="64" y="624" font-size="24" fill="#087F8C">一次 model.generate() 能证明推理可用，尚不能固定这些实验条件</text></g>
+<g id="footer" data-pptx-role="footer" data-pptx-bounds="64 662 1152 42" fill="#566879" font-size="18"><text x="64" y="688">依据：项目设计约束、events.py 与 runner.py</text><text x="1170" y="688">03</text></g>
+</svg>
