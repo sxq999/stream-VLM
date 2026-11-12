@@ -42,4 +42,4 @@ Prefer `experiment` for owned server lifecycle, `suite` for matrices, and a sepa
 
 ## Design briefing
 
-The [Chinese pipeline design briefing](docs/pipeline-design/README.md) contains a 10-slide, diagram-led editable PowerPoint, an illustrated design report and a matching speaker script. It explains the final pipeline modules, input protocol, causal snapshots, request execution, engine interface, deployment lifecycle and experiment recording.
+The [Chinese pipeline design talk](docs/pipeline-talk/README.md) contains an 8-slide editable PowerPoint, an illustrated report and a matching spoken script. It separates the outer experiment lifecycle from the inner input/request flow, explicitly distinguishes pipeline and engine roles, and follows one query through the history window, CPU workers, engine call and result record.

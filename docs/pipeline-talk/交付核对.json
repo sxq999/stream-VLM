@@ -1,0 +1,46 @@
+{
+  "slides": 8,
+  "notes": 8,
+  "checks": [
+    {
+      "slide": 1,
+      "text_and_notes": "pass"
+    },
+    {
+      "slide": 2,
+      "text_and_notes": "pass"
+    },
+    {
+      "slide": 3,
+      "text_and_notes": "pass"
+    },
+    {
+      "slide": 4,
+      "text_and_notes": "pass"
+    },
+    {
+      "slide": 5,
+      "text_and_notes": "pass"
+    },
+    {
+      "slide": 6,
+      "text_and_notes": "pass"
+    },
+    {
+      "slide": 7,
+      "text_and_notes": "pass"
+    },
+    {
+      "slide": 8,
+      "text_and_notes": "pass"
+    }
+  ],
+  "files": {
+    "StreamVLM管线设计_汇报版.pptx": "1a42087db319f7b7e58078538b57425d60633cfb78cf62c0fdb270b4fa82a69d",
+    "管线设计图解.md": "d416ad59e0cc1f3e8b1ab2d57d63b49e13b1d0d57a714d9e71004a0e9b196ca8",
+    "管线设计图解.html": "b7877ba32767cf613ba5692782538d810c9cd1ced27aedab62673af372b7839a",
+    "逐页讲稿.md": "6f35d96e76d5897d50558852e320b57dec1ae6d6c650ad77ca0d0c3606363958",
+    "逐页讲稿.html": "d540ccd88ab2474f1bd63bf12c0ebb66f4dc210b302d2e00ed87c696b723476a",
+    "PPT预览.html": "5cc61d5a22c19d973f3d23c7853e4d4fb1e5aa0c95e9fb82a23c79788605c684"
+  }
+}

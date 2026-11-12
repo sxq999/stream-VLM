@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" font-family="Arial, Microsoft YaHei, sans-serif" data-pptx-page-role="content">
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#087F8C"/></marker></defs>
+<rect id="bg" data-pptx-role="background" width="1280" height="720" fill="#F8FAFC"/>
+<g id="header" data-pptx-bounds="64 24 1152 140"><text x="64" y="48" font-size="18" fill="#087F8C">运行阶段 ④ · 记录与归档</text><text x="64" y="105" font-size="42" font-weight="bold" fill="#16324F">结果如何记录</text><text x="64" y="148" font-size="24" fill="#566879">把输入、响应和时间点按同一个请求 ID 保存</text></g>
+<g id="timing-to-record" data-pptx-bounds="64 190 1152 435">
+<text x="64" y="226" font-size="26" fill="#087F8C">Q0 的事件时间线</text><rect x="64" y="245" width="1150" height="109" fill="none" stroke="#CBD5DF" stroke-width="2"/><line x1="90" y1="313" x2="1180" y2="313" stroke="#087F8C" stroke-width="3"/>
+<circle cx="90" cy="313" r="7" fill="#087F8C"/><circle cx="350" cy="313" r="7" fill="#087F8C"/><circle cx="620" cy="313" r="7" fill="#087F8C"/><circle cx="900" cy="313" r="7" fill="#087F8C"/><circle cx="1180" cy="313" r="7" fill="#087F8C"/>
+<text x="80" y="282" font-size="24" fill="#16324F">问题就绪 r</text><text x="309" y="282" font-size="24" fill="#16324F">接纳 a</text><text x="551" y="282" font-size="24" fill="#16324F">开始调用 s</text><text x="830" y="282" font-size="24" fill="#16324F">首段文本 f</text><text x="1100" y="282" font-size="24" fill="#16324F">完成 d</text>
+<line x1="640" y1="354" x2="640" y2="381" stroke="#087F8C" stroke-width="3"/><line x1="640" y1="381" x2="264" y2="381" stroke="#087F8C" stroke-width="3"/><line x1="264" y1="381" x2="264" y2="418" stroke="#087F8C" stroke-width="3" marker-end="url(#a)"/>
+<rect x="64" y="420" width="400" height="160" fill="#E8F1F5"/><text x="90" y="461" font-size="26" fill="#16324F">Q0 原始记录</text><text x="90" y="506" font-size="24" fill="#203448">帧 ID、各时间点、回答与状态</text><text x="90" y="550" font-size="24" fill="#203448">问题通过输入清单关联</text>
+<rect x="520" y="420" width="300" height="160" fill="#E8F1F5"/><text x="545" y="459" font-size="26" fill="#087F8C">计算指标</text><text x="545" y="499" font-size="24" fill="#203448">客户端排队：s − a</text><text x="545" y="534" font-size="24" fill="#203448">首段响应：f − r</text><text x="545" y="569" font-size="24" fill="#203448">完成延迟：d − r</text>
+<rect x="950" y="420" width="264" height="160" fill="#E8F1F5"/><text x="1082" y="461" text-anchor="middle" font-size="26" fill="#16324F">本轮结果目录</text><text x="1082" y="506" text-anchor="middle" font-size="24" fill="#203448">配置与实现身份</text><text x="1082" y="550" text-anchor="middle" font-size="24" fill="#203448">原始记录 + 指标</text>
+<line x1="464" y1="500" x2="518" y2="500" stroke="#087F8C" stroke-width="3" marker-end="url(#a)"/><line x1="820" y1="500" x2="948" y2="500" stroke="#087F8C" stroke-width="3" marker-end="url(#a)"/>
+<text x="64" y="614" font-size="18" fill="#566879">时间点按顺序示意，间距不表示时长。每轮结果独立保存，不覆盖旧结果</text>
+</g>
+<g id="footer" data-pptx-bounds="64 645 1152 57"><text x="64" y="678" font-size="24" fill="#16324F">客户端时延不是 GPU 独占时间；GPU 内部执行另用引擎 trace 诊断</text><text x="1180" y="678" font-size="18" fill="#566879">06</text></g>
+</svg>
