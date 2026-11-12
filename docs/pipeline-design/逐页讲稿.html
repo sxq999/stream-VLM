@@ -1,0 +1,51 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>逐页讲稿</title><style>body{font-family:"Microsoft YaHei",Arial,sans-serif;color:#203448;max-width:1200px;margin:36px auto;padding:0 24px;line-height:1.9}h1,h2{color:#16324f}h2{margin-top:50px}p{font-size:18px}img{width:100%;height:auto;display:block;margin:24px 0}table{border-collapse:collapse;width:100%}th,td{border:1px solid #cbd5df;padding:10px;text-align:left}a{color:#087f8c;overflow-wrap:anywhere}pre{white-space:pre-wrap}hr{border:0;border-top:1px solid #cbd5df;margin:36px 0}</style><body><h1>StreamVLM 管线设计汇报讲稿</h1>
+<p>对应十页图解汇报，建议约十二至十五分钟。</p>
+<h1>01_管线总体设计</h1>
+<p>这张总图给出管线的职责边界。左侧是预先准备的帧文件和事件清单，中间蓝色区域是我们设计的 Python 管线，右侧是实际执行模型的推理引擎。管线包含四个核心功能：事件回放决定何时放行输入，会话状态决定每次查询使用哪些历史帧，请求提交控制接纳和调用，结果记录收集回答与实验信息。请求发给引擎，引擎在 GPU 上计算后把响应返回管线。最终输出是本次实验的结果目录。下面按这条数据路径逐步展开。</p>
+<p>来源：本项目 events.py、runner.py、backends.py、deployment.py、suite.py、identity.py、report.py。
+https://github.com/sxq999/stream-VLM/tree/34b4218/src/stream_pipeline</p>
+<hr />
+<h1>02_输入协议</h1>
+<p>输入设计把内容和时间分开。图片文件提供视觉内容，JSONL 清单描述它何时可用以及何时提问。图中的例子在一点零秒提交 A0 帧，一点五秒提出 Q0，二点零秒再提交 A1。frame 需要会话标识、图片引用、来源时间和就绪时间；query 需要问题文字、就绪时间和证据截止时间。这样不需要改模型就能改变实验的到达节奏与交互安排。当前执行器接收准备好的图片和清单，视频抽帧在执行前完成；语音问题目前以文字事件表示。</p>
+<p>来源：本项目 events.py、runner.py、backends.py、deployment.py、suite.py、identity.py、report.py。
+https://github.com/sxq999/stream-VLM/tree/34b4218/src/stream_pipeline</p>
+<hr />
+<h1>03_事件回放</h1>
+<p>回放器解决什么时候可以使用输入的问题。它读取按 ready 时间排序的事件，并在 realtime 模式下按相对实验起点的时刻放行。当前时刻为一点五秒时，一点零秒的 A0 和一点五秒的 Q0 已被处理，二点零秒的 A1 仍然待到达。文件预先在硬盘上不改变这个规则，因为模型请求只能使用管线已放行的状态。另一种 fastest 模式按顺序尽快执行，便于功能检查；实时延迟测量使用 realtime 模式。</p>
+<p>来源：本项目 events.py、runner.py、backends.py、deployment.py、suite.py、identity.py、report.py。
+https://github.com/sxq999/stream-VLM/tree/34b4218/src/stream_pipeline</p>
+<hr />
+<h1>04_会话状态与查询快照</h1>
+<p>会话状态解决本次问题可以使用哪些帧。不同 session ID 对应独立历史，因此 A 的查询不会使用 B 的帧。Q0 到达后，管线从 A 已保留的帧中检查来源截止时间和就绪时间，并固定快照。当前例子得到 A0，而 B0 因为属于另一会话被排除，A1 因为尚未到达也不会出现。快照在接纳时固定，所以查询即使排队等待，后续到达的新帧也不会改变它。历史数量由配置控制，保留全部到预算或只保留最近若干帧是明确的输入策略。</p>
+<p>来源：本项目 events.py、runner.py、backends.py、deployment.py、suite.py、identity.py、report.py。
+https://github.com/sxq999/stream-VLM/tree/34b4218/src/stream_pipeline</p>
+<hr />
+<h1>05_请求接纳与并发</h1>
+<p>请求提交模块有两个不同的预算。pending capacity 限制已接纳但尚未释放的总量，其中包括在线程池等待和正在执行的请求。concurrency 则限制工作线程数，决定同时有多少客户端调用。图中请求先通过接纳检查，再进入等待队列，工作线程调用后端。请求结束时释放预算；预算满会明确报错。这种设计使客户端积压有边界。它控制的是请求提交侧，vLLM 如何组 batch、如何分配 KV 仍由引擎内部决定。</p>
+<p>来源：本项目 events.py、runner.py、backends.py、deployment.py、suite.py、identity.py、report.py。
+https://github.com/sxq999/stream-VLM/tree/34b4218/src/stream_pipeline</p>
+<hr />
+<h1>06_推理后端接口</h1>
+<p>后端接口隔离实验控制与推理实现。输入是已经固定的帧快照和当前问题。HTTP 适配器给每帧附上 source PTS 文字标签，把历史图片和问题组成单条 user message，调用本机 vLLM 的 chat completions 接口。引擎返回 SSE 文本流后，适配器检查完成标记，再输出统一的回答和状态记录。当前语义是前缀重放，不能据此保证跨查询连续 KV。另有 Transformers 参考适配器，但两者共享的仍是同一套输入与运行控制逻辑。</p>
+<p>来源：本项目 events.py、runner.py、backends.py、deployment.py、suite.py、identity.py、report.py。
+https://github.com/sxq999/stream-VLM/tree/34b4218/src/stream_pipeline</p>
+<hr />
+<h1>07_服务生命周期</h1>
+<p>为了让一轮实验可以自动执行，服务生命周期由实验控制器管理。它根据配置检查 GPU 和端点，启动自己的引擎进程组，然后等待模型服务就绪。真正的权重加载由引擎完成。就绪之后，管线才启动回放时钟和工作负载。正常结束后收集日志、结束自有服务；启动或运行异常也进入收尾。这样部署与请求测量不会混在同一个阶段，而且不会误停已经存在的他人服务。</p>
+<p>来源：本项目 events.py、runner.py、backends.py、deployment.py、suite.py、identity.py、report.py。
+https://github.com/sxq999/stream-VLM/tree/34b4218/src/stream_pipeline</p>
+<hr />
+<h1>08_实验配置与批量运行</h1>
+<p>管线本体保持稳定，实验差异通过配置表达。输入配置指定清单和历史策略，客户端配置指定回放方式、并发和待处理预算，引擎配置指定模型、环境、GPU 及启动参数。实验套件把多个配置组织成命名 case，并安排预热与重复。图中各 case 复用同一执行流程，但写入各自结果目录。需要注意，同一 managed case 内的重复共享服务，因此可能保留引擎缓存；当前并不会自动在每次重复前清空缓存。</p>
+<p>来源：本项目 events.py、runner.py、backends.py、deployment.py、suite.py、identity.py、report.py。
+https://github.com/sxq999/stream-VLM/tree/34b4218/src/stream_pipeline</p>
+<hr />
+<h1>09_测量与结果归档</h1>
+<p>结果记录贯穿输入和执行过程。一个查询 ID 把使用的帧、各时间点、返回内容和状态关联起来。这里记录名义就绪 r、接纳 a、线程开始 s、首段文本 f 和完成 d，因此可以区分客户端排队与总体响应延迟。每轮还保存实际配置、输入和代码身份，避免结果与实现对应不上。GPU trace 使用独立诊断运行保存，设备采样也单独记录。这样指标可以复核，但客户端记录不会被当作引擎内部或 GPU 独占时间。</p>
+<p>来源：本项目 events.py、runner.py、backends.py、deployment.py、suite.py、identity.py、report.py。
+https://github.com/sxq999/stream-VLM/tree/34b4218/src/stream_pipeline</p>
+<hr />
+<h1>10_一次查询的完整执行</h1>
+<p>最后用同一个例子串起完整路径。Q0 在一点五秒到达，事件回放器将它放行。会话 A 此时只有 A0 可见，状态模块因此生成只包含 A0 的固定快照。通过预算检查后，请求排队等待工作线程；适配器构造本机 vLLM 请求，GPU 完成模型推理并返回回答。结果模块以 Q0 为关联键保存帧来源、响应和时间指标。A1 在二点零秒到达后只影响后续查询，不会补入 Q0。整个流程明确了输入在何时进入、由谁处理，以及最终留下什么实验结果。</p>
+<p>来源：本项目 events.py、runner.py、backends.py、deployment.py、suite.py、identity.py、report.py。
+https://github.com/sxq999/stream-VLM/tree/34b4218/src/stream_pipeline</p></body></html>

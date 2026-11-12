@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" font-family="Arial, Microsoft YaHei, sans-serif" data-pptx-page-role="content">
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#087F8C"/></marker></defs>
+<rect id="bg" data-pptx-role="background" width="1280" height="720" fill="#F8FAFC"/>
+<g id="header" data-pptx-bounds="64 24 1152 140"><text x="64" y="48" font-size="18" fill="#087F8C">请求与执行 · 请求提交模块</text><text x="64" y="105" font-size="42" font-weight="bold" fill="#16324F">请求接纳与并发</text><text x="64" y="148" font-size="24" fill="#566879">用总在途预算限制积压，用工作线程数控制客户端并发</text></g>
+<g id="admission-diagram" data-pptx-bounds="64 190 1152 420">
+<rect x="309" y="225" width="690" height="346" fill="none" stroke="#087F8C" stroke-width="2"/><text x="337" y="267" font-size="26" fill="#087F8C" font-weight="bold">已接纳请求：共同占用 pending_capacity</text>
+<rect x="64" y="339" width="181" height="113" fill="#E8F1F5"/><text x="154" y="382" text-anchor="middle" font-size="26" fill="#16324F">快照 + 问题</text><text x="154" y="425" text-anchor="middle" font-size="24" fill="#203448">接纳检查</text>
+<rect x="339" y="323" width="230" height="154" fill="#E8F1F5"/><text x="454" y="364" text-anchor="middle" font-size="26" fill="#16324F">等待队列</text><rect x="365" y="392" width="72" height="52" fill="#F8FAFC" stroke="#087F8C"/><rect x="472" y="392" width="72" height="52" fill="#F8FAFC" stroke="#087F8C"/><text x="401" y="426" text-anchor="middle" font-size="24" fill="#16324F">请求</text><text x="508" y="426" text-anchor="middle" font-size="24" fill="#16324F">请求</text>
+<rect x="664" y="323" width="299" height="154" fill="#E8F1F5"/><text x="813" y="363" text-anchor="middle" font-size="26" fill="#16324F">工作线程调用后端</text><text x="813" y="409" text-anchor="middle" font-size="24" fill="#203448">线程 1：执行请求</text><text x="813" y="450" text-anchor="middle" font-size="24" fill="#203448">线程 2：执行请求</text>
+<rect x="1070" y="340" width="144" height="113" fill="#CBD5DF"/><text x="1142" y="383" text-anchor="middle" font-size="26" fill="#16324F">推理引擎</text><text x="1142" y="426" text-anchor="middle" font-size="24" fill="#203448">GPU</text>
+<line x1="245" y1="395" x2="337" y2="395" stroke="#087F8C" stroke-width="3" marker-end="url(#a)"/><line x1="569" y1="395" x2="662" y2="395" stroke="#087F8C" stroke-width="3" marker-end="url(#a)"/><line x1="963" y1="395" x2="1068" y2="395" stroke="#087F8C" stroke-width="3" marker-end="url(#a)"/>
+<text x="337" y="533" font-size="24" fill="#566879">排队 + 执行</text><text x="664" y="533" font-size="24" fill="#087F8C">concurrency：工作线程上限</text><text x="64" y="602" font-size="24" fill="#B76B23">预算满则明确报错；请求结束后释放预算</text>
+</g>
+<g id="rule" data-pptx-bounds="64 641 1152 61"><text x="64" y="679" font-size="24" fill="#16324F">客户端控制提交并发；GPU batch 与 KV 调度由推理引擎内部决定</text><text x="1176" y="679" font-size="18" fill="#566879">05</text></g>
+</svg>

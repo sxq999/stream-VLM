@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" font-family="Arial, Microsoft YaHei, sans-serif" data-pptx-page-role="content">
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#087F8C"/></marker></defs>
+<rect id="bg" data-pptx-role="background" width="1280" height="720" fill="#F8FAFC"/>
+<g id="header" data-pptx-bounds="64 24 1152 140"><text x="64" y="48" font-size="18" fill="#087F8C">实验组织 · 结果记录模块</text><text x="64" y="105" font-size="42" font-weight="bold" fill="#16324F">测量与结果归档</text><text x="64" y="148" font-size="24" fill="#566879">用查询 ID 关联输入、运行时间点、响应与当次配置</text></g>
+<g id="recording-diagram" data-pptx-bounds="64 195 1152 415">
+<text x="64" y="235" font-size="26" fill="#087F8C">一条查询 Q0 的时间线</text><line x1="90" y1="320" x2="1180" y2="320" stroke="#087F8C" stroke-width="3"/>
+<circle cx="90" cy="320" r="8" fill="#087F8C"/><circle cx="360" cy="320" r="8" fill="#087F8C"/><circle cx="630" cy="320" r="8" fill="#087F8C"/><circle cx="900" cy="320" r="8" fill="#087F8C"/><circle cx="1180" cy="320" r="8" fill="#087F8C"/>
+<text x="64" y="291" font-size="26" fill="#16324F">r 就绪</text><text x="322" y="291" font-size="26" fill="#16324F">a 接纳</text><text x="568" y="291" font-size="26" fill="#16324F">s 线程开始</text><text x="832" y="291" font-size="26" fill="#16324F">f 首段文本</text><text x="1105" y="291" font-size="26" fill="#16324F">d 完成</text>
+<text x="64" y="365" font-size="18" fill="#566879">时间点顺序示意，间距不表示时长</text><line x1="630" y1="332" x2="630" y2="418" stroke="#087F8C" stroke-width="3" marker-end="url(#a)"/>
+<rect x="64" y="420" width="280" height="140" fill="#E8F1F5"/><text x="204" y="466" text-anchor="middle" font-size="26" fill="#16324F">实验身份</text><text x="204" y="508" text-anchor="middle" font-size="24" fill="#203448">输入与配置</text><text x="204" y="544" text-anchor="middle" font-size="24" fill="#203448">代码与环境</text>
+<rect x="455" y="420" width="340" height="140" fill="#E8F1F5"/><text x="625" y="466" text-anchor="middle" font-size="26" fill="#087F8C">Q0 关联记录</text><text x="625" y="510" text-anchor="middle" font-size="24" fill="#203448">帧 ID、时间点</text><text x="625" y="546" text-anchor="middle" font-size="24" fill="#203448">回答与完成状态</text>
+<rect x="930" y="420" width="284" height="140" fill="#E8F1F5"/><text x="1072" y="466" text-anchor="middle" font-size="26" fill="#16324F">本轮实验目录</text><text x="1072" y="510" text-anchor="middle" font-size="24" fill="#203448">原始记录</text><text x="1072" y="546" text-anchor="middle" font-size="24" fill="#203448">指标 JSON</text>
+<line x1="344" y1="490" x2="453" y2="490" stroke="#087F8C" stroke-width="3" marker-end="url(#a)"/><line x1="795" y1="490" x2="928" y2="490" stroke="#087F8C" stroke-width="3" marker-end="url(#a)"/>
+<text x="64" y="602" font-size="24" fill="#566879">独立 profile 运行另存 GPU trace，用于诊断引擎计算</text>
+</g>
+<g id="rule" data-pptx-bounds="64 641 1152 61"><text x="64" y="679" font-size="24" fill="#16324F">时延由明确时间点计算，结果保留当次配置与实现身份</text><text x="1176" y="679" font-size="18" fill="#566879">09</text></g>
+</svg>

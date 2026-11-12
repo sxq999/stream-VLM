@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" font-family="Arial, Microsoft YaHei, sans-serif" data-pptx-page-role="content">
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#087F8C"/></marker></defs>
+<rect id="bg" data-pptx-role="background" width="1280" height="720" fill="#F8FAFC"/>
+<g id="header" data-pptx-bounds="64 24 1152 140"><text x="64" y="48" font-size="18" fill="#087F8C">输入与状态 · 事件回放模块</text><text x="64" y="105" font-size="42" font-weight="bold" fill="#16324F">事件回放</text><text x="64" y="148" font-size="24" fill="#566879">回放器按就绪时间放行事件，控制实验中的输入可见性</text></g>
+<g id="replay-diagram" data-pptx-bounds="64 195 1152 416">
+<text x="64" y="231" font-size="26" fill="#16324F">realtime：当前回放时刻 1.5 s</text><line x1="120" y1="347" x2="1175" y2="347" stroke="#087F8C" stroke-width="3" marker-end="url(#a)"/>
+<circle cx="260" cy="347" r="11" fill="#087F8C"/><circle cx="640" cy="347" r="11" fill="#087F8C"/><circle cx="1020" cy="347" r="11" fill="#CBD5DF"/><text x="260" y="292" text-anchor="middle" font-size="26" fill="#16324F">A0 · 1.0 s</text><text x="640" y="292" text-anchor="middle" font-size="26" fill="#087F8C" font-weight="bold">Q0 · 1.5 s</text><text x="1020" y="292" text-anchor="middle" font-size="26" fill="#566879">A1 · 2.0 s</text>
+<line x1="640" y1="310" x2="640" y2="560" stroke="#B76B23" stroke-width="2" stroke-dasharray="8 6"/><text x="663" y="407" font-size="24" fill="#B76B23">当前时刻</text>
+<rect x="100" y="448" width="530" height="110" fill="#E8F1F5"/><text x="128" y="488" font-size="26" font-weight="bold" fill="#087F8C">已放行</text><text x="128" y="533" font-size="26" fill="#203448">A0 进入会话，Q0 开始处理</text>
+<rect x="748" y="448" width="428" height="110" fill="none" stroke="#CBD5DF" stroke-width="2"/><text x="775" y="488" font-size="26" font-weight="bold" fill="#566879">待到达</text><text x="775" y="533" font-size="26" fill="#566879">A1 暂不加入会话</text>
+<text x="100" y="600" font-size="18" fill="#566879">图中时刻为输入示例，位置仅表示事件顺序</text>
+</g>
+<g id="rule" data-pptx-bounds="64 641 1152 61"><text x="64" y="679" font-size="24" fill="#16324F">realtime 按相对时间放行；fastest 保留事件顺序，用于快速功能检查</text><text x="1176" y="679" font-size="18" fill="#566879">03</text></g>
+</svg>

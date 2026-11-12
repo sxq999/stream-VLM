@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" font-family="Arial, Microsoft YaHei, sans-serif" data-pptx-page-role="content">
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#087F8C"/></marker><marker id="c" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#B76B23"/></marker></defs>
+<rect id="bg" data-pptx-role="background" width="1280" height="720" fill="#F8FAFC"/>
+<g id="header" data-pptx-bounds="64 24 1152 140"><text x="64" y="48" font-size="18" fill="#087F8C">实验组织 · 配置与套件</text><text x="64" y="105" font-size="42" font-weight="bold" fill="#16324F">实验配置与批量运行</text><text x="64" y="148" font-size="24" fill="#566879">同一执行逻辑读取不同配置，形成多组独立实验</text></g>
+<g id="configuration-diagram" data-pptx-bounds="64 190 1152 420">
+<rect x="64" y="228" width="300" height="138" fill="#E8F1F5"/><rect x="490" y="228" width="300" height="138" fill="#E8F1F5"/><rect x="916" y="228" width="298" height="138" fill="#E8F1F5"/>
+<text x="214" y="270" text-anchor="middle" font-size="30" fill="#16324F">输入条件</text><text x="214" y="316" text-anchor="middle" font-size="24" fill="#203448">清单、历史保留策略</text><text x="640" y="270" text-anchor="middle" font-size="30" fill="#16324F">客户端控制</text><text x="640" y="316" text-anchor="middle" font-size="24" fill="#203448">回放、并发、在途预算</text><text x="1065" y="270" text-anchor="middle" font-size="30" fill="#16324F">被测引擎</text><text x="1065" y="316" text-anchor="middle" font-size="24" fill="#203448">模型、环境、GPU</text>
+<line x1="214" y1="366" x2="214" y2="400" stroke="#B76B23" stroke-width="2" stroke-dasharray="7 5"/><line x1="214" y1="400" x2="1065" y2="400" stroke="#B76B23" stroke-width="2" stroke-dasharray="7 5"/><line x1="1065" y1="366" x2="1065" y2="400" stroke="#B76B23" stroke-width="2" stroke-dasharray="7 5"/><line x1="640" y1="366" x2="640" y2="452" stroke="#B76B23" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#c)"/>
+<rect x="64" y="454" width="270" height="112" fill="none" stroke="#087F8C" stroke-width="2"/><text x="199" y="498" text-anchor="middle" font-size="26" fill="#087F8C">suite 逐个执行 case</text><text x="199" y="542" text-anchor="middle" font-size="24" fill="#203448">预热 + 正式重复</text>
+<rect x="430" y="454" width="420" height="112" fill="#16324F"/><text x="640" y="521" text-anchor="middle" font-size="30" fill="#F8FAFC">同一套管线执行逻辑</text>
+<rect x="960" y="454" width="254" height="112" fill="#E8F1F5"/><text x="1087" y="497" text-anchor="middle" font-size="26" fill="#16324F">各 case 的结果</text><text x="1087" y="542" text-anchor="middle" font-size="24" fill="#203448">每轮独立目录</text>
+<line x1="334" y1="510" x2="428" y2="510" stroke="#087F8C" stroke-width="3" marker-end="url(#a)"/><line x1="850" y1="510" x2="958" y2="510" stroke="#087F8C" stroke-width="3" marker-end="url(#a)"/>
+</g>
+<g id="rule" data-pptx-bounds="64 641 1152 61"><text x="64" y="679" font-size="24" fill="#16324F">预热单独保存；同一 case 内的重复共享服务，可能保留引擎缓存</text><text x="1176" y="679" font-size="18" fill="#566879">08</text></g>
+</svg>

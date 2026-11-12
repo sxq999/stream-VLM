@@ -42,4 +42,4 @@ Prefer `experiment` for owned server lifecycle, `suite` for matrices, and a sepa
 
 ## Design briefing
 
-The [Chinese design briefing](docs/briefing/README.md) contains a detailed report, a 24-slide editable PowerPoint with speaker notes, and a matching script. It explains the Qwen3-VL compute path, streaming input protocol, deployment lifecycle, metrics, verified capabilities and future GPU implementation interfaces.
+The [Chinese pipeline design briefing](docs/pipeline-design/README.md) contains a 10-slide, diagram-led editable PowerPoint, an illustrated design report and a matching speaker script. It explains the final pipeline modules, input protocol, causal snapshots, request execution, engine interface, deployment lifecycle and experiment recording.
