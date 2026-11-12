@@ -58,6 +58,13 @@ class OpenAIBackend:
         names = [m["id"] for m in data.get("data", [])]
         return dict(ok=self.cfg["model"] in names, models=names)
 
+    def profile_control(self,start):
+        # These are engine APIs, not a profiler attached to the HTTP client.
+        base=self.url[:-3] if self.url.endswith('/v1') else self.url
+        req=urllib.request.Request(base+('/start_profile' if start else '/stop_profile'),
+                                   headers=self.headers(),method='POST')
+        with urllib.request.urlopen(req,timeout=120) as response:response.read()
+
     def prepare(self, frame):
         path = Path(frame["resolved_image"])
         mime = mimetypes.guess_type(path.name)[0]
@@ -93,6 +100,7 @@ class OpenAIBackend:
         emit("request_sent", source_ids=[f["event_id"] for f in frames], execution="prefix_replay")
         req = urllib.request.Request(self.url + "/chat/completions", data=json.dumps(payload).encode(), headers=self.headers())
         pieces, finish, usage, done = [], None, None, False
+        response_id=None
         with urllib.request.urlopen(req, timeout=self.cfg.get("timeout_s", 120)) as response:
             emit("http_headers_received")
             for raw in response:
@@ -106,6 +114,8 @@ class OpenAIBackend:
                     done = True
                     break
                 obj = json.loads(body)
+                if response_id is None and obj.get('id'):
+                    response_id=obj['id'];emit('engine_response_identity',server_request_id=response_id)
                 if obj.get("error"):
                     raise RuntimeError("backend stream returned an error")
                 if obj.get("usage") is not None:
@@ -121,7 +131,7 @@ class OpenAIBackend:
                         finish = choice["finish_reason"]
         if not done or finish is None:
             raise RuntimeError("truncated SSE stream: missing DONE or finish_reason")
-        return dict(text="".join(pieces), finish_reason=finish, usage=usage)
+        return dict(text="".join(pieces), finish_reason=finish, usage=usage,server_request_id=response_id)
 
 def create_backend(cfg):
     if cfg["type"] == "mock":

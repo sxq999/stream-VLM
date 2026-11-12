@@ -1,20 +1,20 @@
-# Implementation status
+﻿# Current capability status
 
-| Milestone | Status | Evidence |
+| Capability | Status | Evidence |
 |---|---|---|
-| M1 hardware / dependency locks | In progress | Server reachable; exact engine compatibility remains under validation |
-| M2 causal events / sessions | Partial implementation | 13 tests on Windows; server run recorded below. Covers causal snapshot, fractional boundary, retention, cross-session rejection, cancel, HTTP/SSE completion/truncation and lazy native-reference health |
-| M3 three model adapters | Planned | No target model deployed in this repository yet |
-| M4 deployment / PD | Planned | No PD validation yet |
-| M5 metrics / profiling | Planned | No trace from this repository yet |
-| M6 acceptance / reproduction | Planned | Mandatory acceptance not complete |
+| Causal input / sessions / bounded admission | Implemented, tested | Boundaries, isolation, retention, cancellation rejection, SSE truncation |
+| Tested implementation identity | Implemented, tested | Packages, optional Git commit/diff/untracked hashes, model source-lock hash, GPU inventory |
+| Managed deployment | Real Qwen3-VL verified | Readiness, three requests, owned server reaped; occupied endpoint and failed-start cleanup tested |
+| Workload / suite runner | Implemented, tested | Replicated sessions, staggered arrivals, warmup separation, repeats, per-run reports |
+| Native GPU execution | Real Qwen3-VL verified | Three visual requests on RTX 3090 |
+| Native GPU profiling | Verified | Request traces contain kernels/memcpy and vision/prefill/decode ranges |
+| vLLM GPU profiling | Verified | Real engine traces through managed profiler APIs |
+| Metrics | Implemented, tested | Client queue/first-text/completion, chunks, optional token usage, resource samples |
+| Qwen3.5 / MiniCPM-o / duplex | Pending | Not certified by Qwen3-VL runs |
+| Real PD / multi-host | Pending | HTTP adapter does not claim state transfer |
 
-Historical Realtime-Venus experiments belong to a separate baseline repository/directory. Their results do not certify these new model adapters.
+Tested environment: vLLM 0.11.0, Transformers 4.57.1, Torch 2.8.0 / CUDA runtime 12.8, RTX 3090, driver 560.35.03. Qwen3-VL files passed locked SHA256 acquisition. Existing research environments and shared driver were not modified.
 
-Current code includes mock and text/image OpenAI-compatible HTTP backends, a JSONL replay CLI, bounded request admission, explicit retained/dropped input IDs, immutable run directories, source/payload identity, resource sampling and client timing. Qwen3-VL has a deployment configuration but is not yet certified deployed. A separate vLLM 0.11.0 environment installation has started on the lab server; installation/driver/model checks are pending. No shared driver or old research environment was changed.
+See [RUNBOOK.md](docs/RUNBOOK.md) and [engineering acceptance](docs/validation-architecture.json). The older validation-initial.json is historical. The broader original TASK_SPEC.md still includes multi-model/PD requirements; those remain incomplete.
 
-Remaining required capabilities include actual vision workload examples, native reference adapters, native audio/duplex, verified backend cancellation, PD transfer, real profiling, model/environment locks and the complete acceptance matrix. CI wiring is committed; its cloud result must be observed separately before claiming CI passed.
-
-Update: original visual fixtures and an optional Transformers reference adapter are now implemented (target-model execution pending). A two-session mock CLI run also completed. All three model metadata endpoints were reachable through ModelScope; Hugging Face access from the server timed out. Qwen3-VL weights are downloading from a captured per-file revision/SHA256 listing into an isolated model directory, with bounded retries and resume. Runtime dependency download is slow; no target model load, native audio/duplex or PD success is claimed. Package mirror probes are diagnostic scripts, not a change to the server's global package configuration.
-
-Latest setup observation: Qwen3-VL acquisition completed with `MODEL_DOWNLOAD_VERIFIED`; all four weight shards and required configuration/tokenizer files passed their captured SHA256 checks. The vLLM wheel download finished and the isolated environment is downloading PyTorch 2.8.0. No target GPU model load has occurred. Transformers 4.57.1 remains a candidate pin to apply after the initial installation; current dependency resolution is not a validated lock. Do not launch the model until the candidate pins, imports and CUDA smoke have passed.
+Boundaries: HTTP uses prefix replay, not guaranteed KV reuse. Early media preparation encodes payloads, not GPU vision/prefill. Native output is whole-response with no native TTFT. SSE chunks are not tokens. Profiling is intrusive and separate from ordinary timings. Per-request server cancellation reclamation remains unverified. Machine-specific configs/raw traces stay in ignored run directories.

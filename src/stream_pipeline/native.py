@@ -1,6 +1,8 @@
 """Optional Transformers quality reference. Full output only; no native TTFT claim."""
 import os
 import threading
+import contextlib
+import hashlib
 from pathlib import Path
 from .backends import Cancelled
 
@@ -44,12 +46,28 @@ class NativeReference:
                 content.extend([dict(type='text',text=f"[source PTS {frame['frame_pts_ms']/1000:.6f}s]"),
                                 dict(type='image',image=frame['resolved_image'])])
             content.append(dict(type='text',text=query['prompt']))
-            inputs=self.processor.apply_chat_template([dict(role='user',content=content)],
-                     add_generation_prompt=True,tokenize=True,return_dict=True,return_tensors='pt').to(self.model.device)
-            emit('native_generate_started',source_ids=[f['event_id'] for f in frames])
-            with torch.inference_mode():
-                output=self.model.generate(**inputs,do_sample=False,max_new_tokens=self.cfg.get('max_tokens',64),
-                                           stopping_criteria=StoppingCriteriaList([Stop()]))
+            profile_dir=self.cfg.get('profile_dir')
+            trace=None
+            if profile_dir:
+                trace=Path(profile_dir)/('request-'+hashlib.sha256(query['event_id'].encode()).hexdigest()[:16]+'.json')
+                trace.parent.mkdir(parents=True,exist_ok=True)
+                if trace.exists():raise FileExistsError('trace cannot be overwritten')
+                activities=[torch.profiler.ProfilerActivity.CPU]
+                if self.model.device.type=='cuda':activities.append(torch.profiler.ProfilerActivity.CUDA)
+                ctx=torch.profiler.profile(activities=activities,record_shapes=True,profile_memory=True)
+            else:ctx=contextlib.nullcontext()
+            from .stages import stage_ranges
+            ranges=stage_ranges(self.model,self.cfg.get('stage_modules',{}),query['event_id']) if profile_dir else contextlib.nullcontext()
+            with ranges,ctx as prof:
+                with torch.profiler.record_function('request/'+query['event_id']+'/prepare_and_transfer'):
+                    inputs=self.processor.apply_chat_template([dict(role='user',content=content)],
+                         add_generation_prompt=True,tokenize=True,return_dict=True,return_tensors='pt').to(self.model.device)
+                emit('native_generate_started',source_ids=[f['event_id'] for f in frames])
+                with torch.inference_mode(),torch.profiler.record_function('request/'+query['event_id']+'/generate'):
+                    output=self.model.generate(**inputs,do_sample=False,max_new_tokens=self.cfg.get('max_tokens',64),
+                                               stopping_criteria=StoppingCriteriaList([Stop()]))
+            if trace:
+                prof.export_chrome_trace(str(trace));emit('profile_exported',path=str(trace),intrusive=True)
             if cancel.is_set():raise Cancelled()
             ids=output[0,inputs['input_ids'].shape[-1]:].tolist()
             text=self.processor.decode(ids,skip_special_tokens=True)

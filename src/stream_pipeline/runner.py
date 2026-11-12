@@ -47,6 +47,10 @@ def run(cfg, out):
                     payload_sha256={e["event_id"]: fingerprint(e["resolved_image"]) for e in events if e["kind"] == "frame"},
                     capabilities=backend.capabilities(), timing="client monotonic; engine internal stages unknown",
                     media_preparation="optional file/base64 preparation only; no encoder/prefill overlap claimed")
+    from .identity import capture
+    snapshot=out/'source_snapshot';snapshot.mkdir()
+    for p in Path(__file__).parent.glob('*.py'):(snapshot/p.name).write_bytes(p.read_bytes())
+    identity['implementation']=capture(cfg,out/'implementation_snapshot')
     (out / "environment.json").write_text(json.dumps(identity, indent=2), encoding="utf-8")
     epoch, lock = time.perf_counter(), threading.Lock()
     results, failures, sessions, cancellations, futures = [], [], {}, {}, []
@@ -149,4 +153,6 @@ def run(cfg, out):
                    query_count=len(results), results=sorted(results, key=lambda x:x["query_id"]),
                    capabilities=backend.capabilities(), resources="sampled, not exclusive kernel attribution")
     (out / "summary.json").write_text(json.dumps(summary, indent=2), encoding="utf-8")
+    from .report import summarize
+    summarize(out)
     return summary

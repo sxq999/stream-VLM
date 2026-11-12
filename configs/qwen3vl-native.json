@@ -5,5 +5,5 @@
   "pending_capacity":16,
   "frame_policy":"full",
   "max_frames":8,
-  "backend":{"type":"transformers_reference","model":"Qwen/Qwen3-VL-8B-Instruct","model_path_env":"QWEN3VL_MODEL_DIR","device":"cuda:0","dtype":"bfloat16","max_tokens":64}
+  "backend":{"type":"transformers_reference","model":"Qwen/Qwen3-VL-8B-Instruct","model_path_env":"QWEN3VL_MODEL_DIR","device":"cuda:0","dtype":"bfloat16","max_tokens":64,"stage_modules":{"vision_encoder":"model.visual","language_model":"model.language_model"}}
 }

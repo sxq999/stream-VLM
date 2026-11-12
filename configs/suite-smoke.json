@@ -1,0 +1,1 @@
+{"cases":[{"name":"serial","config":"mock.json","overrides":{"concurrency":1},"warmups":1,"repeats":2},{"name":"parallel","config":"mock.json","overrides":{"concurrency":2},"repeats":2}]}

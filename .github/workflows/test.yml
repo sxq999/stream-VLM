@@ -11,3 +11,4 @@ jobs:
       - run: python -m pip install -e .
       - run: python -m stream_pipeline validate --suite tests
       - run: python -m stream_pipeline run --config configs/mock.json --out runs/ci-smoke
+      - run: python -m stream_pipeline suite --suite configs/suite-smoke.json --out runs/ci-suite
