@@ -2,6 +2,8 @@
 
 Reusable streaming VLM experiment harness. Scope: model deployment, causal input replay, sessions, backend integration, observability and reproducible acceptance. Optimization research is out of scope.
 
+[中文快速入门](docs/QUICKSTART.zh-CN.md) · [GPU experiment runbook](docs/RUNBOOK.md)
+
 The implementation contract is [TASK_SPEC.md](TASK_SPEC.md). Machine-readable milestones and acceptance requirements are in [task_manifest.json](task_manifest.json).
 
 Qwen3-VL has executed real GPU requests through both the native reference and managed vLLM service. Architecture-experiment tooling includes implementation identity, managed lifecycle, suites, workload generation and actual GPU profiling. The broader multi-model/PD contract remains in progress. See [STATUS.md](STATUS.md) and [docs/RUNBOOK.md](docs/RUNBOOK.md).

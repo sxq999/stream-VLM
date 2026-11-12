@@ -4,11 +4,11 @@ __pycache__/
 .env
 .env.*
 !.env.example
-weights/
-models/
-media/
-data/
-runs/
+/weights/
+/models/
+/media/
+/data/
+/runs/
 *.safetensors
 *.bin
 *.pt
