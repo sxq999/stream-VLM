@@ -1,0 +1,19 @@
+{
+  "manifest": "../examples/visual/events.jsonl",
+  "backend": {"type": "openai_http", "base_url": "http://127.0.0.1:8000/v1", "model": "Qwen/Qwen3-VL-8B-Instruct", "timeout_s": 180},
+  "unique_prompt_suffix": true,
+  "prompt": "Describe the visible images carefully, including colors, shapes, positions, and comparisons. Write a detailed description of at least 300 words using only visible evidence. Do not answer with just a color word.",
+  "cases": [
+    {"name": "c1", "mode": "closed_loop", "concurrency": 1, "requests": 8, "input_frames": 1, "max_tokens": 64},
+    {"name": "c2", "mode": "closed_loop", "concurrency": 2, "requests": 8, "input_frames": 1, "max_tokens": 64},
+    {"name": "c4", "mode": "closed_loop", "concurrency": 4, "requests": 16, "input_frames": 1, "max_tokens": 64},
+    {"name": "c8", "mode": "closed_loop", "concurrency": 8, "requests": 24, "input_frames": 1, "max_tokens": 64},
+    {"name": "c16", "mode": "closed_loop", "concurrency": 16, "requests": 32, "input_frames": 1, "max_tokens": 64},
+    {"name": "c32", "mode": "closed_loop", "concurrency": 32, "requests": 64, "input_frames": 1, "max_tokens": 64},
+    {"name": "frames2_c8", "mode": "closed_loop", "concurrency": 8, "requests": 24, "input_frames": 2, "max_tokens": 64},
+    {"name": "output256_c8", "mode": "closed_loop", "concurrency": 8, "requests": 16, "input_frames": 1, "max_tokens": 256},
+    {"name": "rate2", "mode": "open_loop", "concurrency": 32, "requests": 32, "request_rate": 2, "input_frames": 1, "max_tokens": 64},
+    {"name": "rate8", "mode": "open_loop", "concurrency": 32, "requests": 64, "request_rate": 8, "input_frames": 1, "max_tokens": 64},
+    {"name": "burst16", "mode": "open_loop", "concurrency": 32, "requests": 64, "request_rate": 8, "arrival_pattern": "burst", "burst_size": 16, "input_frames": 1, "max_tokens": 64}
+  ]
+}

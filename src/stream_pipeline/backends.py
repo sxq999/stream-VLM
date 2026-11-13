@@ -99,10 +99,13 @@ class OpenAIBackend:
                        stream_options={"include_usage": True})
         emit("request_sent", source_ids=[f["event_id"] for f in frames], execution="prefix_replay")
         req = urllib.request.Request(self.url + "/chat/completions", data=json.dumps(payload).encode(), headers=self.headers())
+        if query.get('session_id'):
+            req.add_header('X-Session-Id', query['session_id'])
         pieces, finish, usage, done = [], None, None, False
         response_id=None
         with urllib.request.urlopen(req, timeout=self.cfg.get("timeout_s", 120)) as response:
-            emit("http_headers_received")
+            emit("http_headers_received", gateway_queue_s=response.headers.get('X-Gateway-Queue-S'),
+                 upstream=response.headers.get('X-Upstream'))
             for raw in response:
                 if cancel.is_set():
                     raise Cancelled()

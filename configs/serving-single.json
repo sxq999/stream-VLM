@@ -1,0 +1,11 @@
+{
+  "host": "127.0.0.1",
+  "port": 8000,
+  "model": "Qwen/Qwen3-VL-8B-Instruct",
+  "mode": "aggregated",
+  "max_active": 32,
+  "max_pending": 64,
+  "queue_timeout_s": 30,
+  "upstream_timeout_s": 180,
+  "endpoints": [{"name": "gpu0", "base_url": "http://127.0.0.1:8100/v1", "role": "aggregated"}]
+}

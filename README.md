@@ -4,6 +4,10 @@ Reusable streaming VLM experiment harness. Scope: model deployment, causal input
 
 [中文快速入门](docs/QUICKSTART.zh-CN.md) · [GPU experiment runbook](docs/RUNBOOK.md)
 
+New: [Serving 与压力测试](docs/SERVING_STRESS.zh-CN.md) describes the bounded streaming gateway, closed/open-loop load matrices, raw metrics and the serial shared-storage PD debug integration. `service` and `stress` are separate from the original event-replay `run` command.
+
+[实测结果](docs/SERVING_RESULTS.zh-CN.md) and [machine-readable evidence](docs/validation-serving.json) cover 15 real-GPU load cases plus a two-GPU KV-transfer debug check. These are small-image acceptance measurements, not maximum real-video capacity claims.
+
 The implementation contract is [TASK_SPEC.md](TASK_SPEC.md). Machine-readable milestones and acceptance requirements are in [task_manifest.json](task_manifest.json).
 
 Qwen3-VL has executed real GPU requests through both the native reference and managed vLLM service. Architecture-experiment tooling includes implementation identity, managed lifecycle, suites, workload generation and actual GPU profiling. The broader multi-model/PD contract remains in progress. See [STATUS.md](STATUS.md) and [docs/RUNBOOK.md](docs/RUNBOOK.md).
@@ -34,7 +38,7 @@ The mock config uses a text-only manifest for dependency-free plumbing tests. Th
 
 Each query snapshots the causal frame history and sends it as interleaved timestamp text and image content. This backend uses complete prefix replay, not persistent engine state or guaranteed GPU prefix reuse. Frame policy is explicitly `full` (reject on budget overflow) or `recent` (log dropped IDs). Optional media preparation encodes files to data URIs; it does not run the vision encoder or prefill early.
 
-Outputs: frozen config, input/source/implementation identity, capabilities, monotonic timeline, sampled GPU resources, raw results and `metrics.json`. Missing engine timings remain unknown. Per-request server cancellation reclamation is not yet verified. Native duplex and PD are pending. Native and managed vLLM engine GPU profiling are implemented and validated.
+Outputs: frozen config, input/source/implementation identity, capabilities, monotonic timeline, sampled GPU resources, raw results and `metrics.json`. Missing engine timings remain unknown. Per-request server cancellation reclamation is not yet verified. Native duplex and production PD are pending; the separate serial disk-backed PD debug path has real KV-load evidence. Native and managed vLLM engine GPU profiling are implemented and validated.
 
 The `transformers_reference` adapter (`configs/qwen3vl-native.json`, set `QWEN3VL_MODEL_DIR`) produces complete responses/token IDs, not native first-token timing. Qwen3-VL execution and actual GPU traces have been verified. Measured versions and acceptance evidence are recorded in `docs/validation-architecture.json`; large artifacts stay outside Git.
 

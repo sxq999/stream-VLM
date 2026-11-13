@@ -16,10 +16,20 @@ def main():
         if name in ("run", "profile", "experiment"):
             q.add_argument("--out", required=True)
     q=sub.add_parser('suite');q.add_argument('--suite',required=True);q.add_argument('--out',required=True)
+    for name in ('service', 'stress'):
+        q=sub.add_parser(name);q.add_argument('--config',required=True);q.add_argument('--out',required=True)
     q=sub.add_parser('workload');q.add_argument('--manifest',required=True);q.add_argument('--out',required=True)
     q.add_argument('--sessions',type=int,default=1);q.add_argument('--stagger-ms',type=float,default=0)
     sub.add_parser("validate").add_argument("--suite", default="tests")
     args = p.parse_args()
+    if args.command == 'service':
+        from .serving import read_service_config, serve
+        serve(read_service_config(args.config), args.out);return
+    if args.command == 'stress':
+        from .stress import read_spec, execute
+        result=execute(read_spec(args.config),args.out)
+        print(json.dumps(dict(status=result['status'],runs=len(result['runs']))))
+        raise SystemExit(0 if result['status']=='complete' else 1)
     if args.command=='workload':
         from .workloads import generate
         print(generate(args.manifest,args.out,args.sessions,args.stagger_ms));return
