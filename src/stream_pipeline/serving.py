@@ -9,6 +9,7 @@ import hashlib
 import json
 import os
 import math
+import re
 import threading
 import time
 import urllib.error
@@ -31,7 +32,7 @@ def validate_config(config):
     cfg = copy.deepcopy(config)
     if cfg.get("host", "127.0.0.1") not in ("127.0.0.1", "localhost", "::1"):
         raise ValueError("research gateway binds loopback only; use an SSH tunnel")
-    if cfg.get("mode", "aggregated") not in ("aggregated", "pd_shared_storage_debug"):
+    if cfg.get("mode", "aggregated") not in ("aggregated", "pd_shared_storage_debug", "pd_nccl"):
         raise ValueError("unsupported serving mode")
     for key, default, high in (("max_active", 8, 1024), ("max_pending", 32, 4096),
                                ("max_body_bytes", 16777216, 67108864)):
@@ -61,10 +62,18 @@ def validate_config(config):
     else:
         if len(endpoints) != 2 or sorted(e["role"] for e in endpoints) != ["decode", "prefill"]:
             raise ValueError("debug PD requires exactly one prefill and one decode")
-        if cfg["max_active"] != 1:
+        if cfg.get('mode') == 'pd_shared_storage_debug' and cfg["max_active"] != 1:
             raise ValueError("SharedStorageConnector debug path is serial; max_active must be 1")
-        if cfg.get("connector") != "SharedStorageConnector" or cfg.get("engine_version") != "0.11.0":
-            raise ValueError("debug PD integration is pinned to vLLM 0.11.0 SharedStorageConnector")
+        expected = 'SharedStorageConnector' if cfg.get('mode') == 'pd_shared_storage_debug' else 'AuditedP2pNcclConnector'
+        if cfg.get("connector") != expected or cfg.get("engine_version") != "0.11.0":
+            raise ValueError("PD integration requires the pinned vLLM 0.11.0 connector")
+        if cfg.get('mode') == 'pd_nccl':
+            for e in endpoints:
+                address=e.get('kv_address','')
+                if not re.fullmatch(r'(127\.0\.0\.1|localhost):[0-9]{1,5}',address) or not 0<int(address.rsplit(':',1)[1])<65536:
+                    raise ValueError('NCCL KV endpoint requires explicit loopback host:port')
+            if len({e['kv_address'] for e in endpoints}) != 2:
+                raise ValueError('P and D KV endpoints must differ')
     return cfg
 
 
@@ -90,9 +99,9 @@ class Gateway:
     def capabilities(self):
         return dict(mode=self.cfg.get("mode", "aggregated"), execution="complete_prefix_replay",
                     incremental_prefill=False, persistent_engine_session=False,
-                    pd_configured=self.cfg.get("mode") == "pd_shared_storage_debug",
-                    pd_transfer_verified=False, pd_evidence="requires producer files and consumer injection logs",
-                    transport="disk_debug" if self.cfg.get("mode") == "pd_shared_storage_debug" else "http",
+                    pd_configured=self.cfg.get("mode") in ("pd_shared_storage_debug", "pd_nccl"),
+                    pd_transfer_verified=False, pd_evidence="requires connector-specific send/load evidence; HTTP routing is insufficient",
+                    transport={'pd_shared_storage_debug':'disk_debug','pd_nccl':'NCCL; physical path requires topology/transport logs'}.get(self.cfg.get('mode'),'http'),
                     routing="least_inflight; no KV-affinity guarantee", cancellation="upstream stream close; GPU reclamation unverified")
 
     def snapshot(self):
@@ -233,24 +242,28 @@ def make_server(config, out):
             released = False
             outcome = "upstream_failed"
             try:
-                if gateway.cfg.get("mode") == "pd_shared_storage_debug":
+                wire_id = ident
+                if gateway.cfg.get("mode") in ("pd_shared_storage_debug", "pd_nccl"):
                     producer = gateway.choose("prefill")
+                    endpoint = gateway.choose("decode")
+                    if gateway.cfg.get('mode') == 'pd_nccl':
+                        wire_id = f"___prefill_addr_{producer['kv_address']}___decode_addr_{endpoint['kv_address']}_{ident}"
+                        gateway.event('pd_pair',request_id=ident,producer=producer['name'],consumer=endpoint['name'],wire_request_id=wire_id)
                     prefill = copy.deepcopy(payload)
                     prefill.update(max_tokens=1, stream=False)
                     prefill.pop("stream_options", None)
                     prefill.pop("max_completion_tokens", None)
                     try:
-                        with gateway.open_upstream(producer, prefill, ident) as response:
+                        with gateway.open_upstream(producer, prefill, wire_id) as response:
                             result = json.load(response)
                             if result.get("error") or not result.get("choices"):
                                 raise RuntimeError("prefill failed")
                     finally: gateway.unchoose(producer)
                     gateway.event("prefill_response", request_id=ident, duration_s=time.perf_counter()-started,
                                   meaning="includes HTTP, processing, debug store and first sampled token")
-                    endpoint = gateway.choose("decode")
                 else: endpoint = gateway.choose()
                 gateway.event("dispatched", request_id=ident, endpoint=endpoint["name"], queue_s=queue_s)
-                with gateway.open_upstream(endpoint, payload, ident) as upstream:
+                with gateway.open_upstream(endpoint, payload, wire_id) as upstream:
                     self.send_response(200)
                     self.send_header("Content-Type", upstream.headers.get("Content-Type", "application/json"))
                     self.send_header("X-Request-Id", ident)

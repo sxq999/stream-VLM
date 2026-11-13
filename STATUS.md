@@ -14,6 +14,8 @@
 | Metrics | Implemented, tested | Client queue/first-text/completion, chunks, optional token usage, resource samples |
 | Qwen3.5 / MiniCPM-o / duplex | Pending | Not certified by Qwen3-VL runs |
 | Serial PD debug | Real KV load verified | vLLM 0.11 SharedStorageConnector, two RTX 3090 GPUs, disk-backed KV files plus consumer injection logs |
+| Same-host NCCL PD | Verified on real video snapshots | Official P2pNcclConnector with audit wrapper; matched send/receive bytes, request injection, and independent 216-tensor SHA256 checks |
+| Video preparation and replay | Verified | Original PTS, 4/8/8-frame query snapshots, arrivals during answers, recent-8 window; not native incremental engine input |
 | Production PD / multi-host | Pending | No GPU-direct transport, persistent multi-turn return, adaptive P/D policy or hybrid-state certification |
 
 Tested environment: vLLM 0.11.0, Transformers 4.57.1, Torch 2.8.0 / CUDA runtime 12.8, RTX 3090, driver 560.35.03. Qwen3-VL files passed locked SHA256 acquisition. Existing research environments and shared driver were not modified.
@@ -24,4 +26,6 @@ Boundaries: ordinary HTTP uses prefix replay, not guaranteed KV reuse. The separ
 
 See [Serving 与压力测试](docs/SERVING_STRESS.zh-CN.md) for commands, workload semantics, measurement limits and the distinction between configured concurrency and actual GPU batches. No new vLLM scheduling algorithm or CUDA kernel optimization is claimed.
 
-Latest acceptance: 28 Linux tests passed; 15 real-GPU cases offered 1,120 requests, of which 1,024 completed and 96 were explicitly rejected by the load generator's in-flight cap in the 64 req/s case. Closed-loop 64/128-client cases completed all requests. Serial debug PD completed three measured requests with actual external KV injection. See [results](docs/SERVING_RESULTS.zh-CN.md) and [evidence](docs/validation-serving.json). No owned GPU service is left running after acceptance.
+Initial serving acceptance: 28 Linux tests passed; 15 real-GPU cases offered 1,120 requests, of which 1,024 completed and 96 were explicitly rejected by the load generator's in-flight cap in the 64 req/s case. Closed-loop 64/128-client cases completed all requests. Serial debug PD completed three measured requests with actual external KV injection. See [results](docs/SERVING_RESULTS.zh-CN.md) and [evidence](docs/validation-serving.json).
+
+V2 acceptance: 33 Linux tests passed; three topologies × five video workloads × two repeats completed all 384 measured requests. Independent realtime replay and concurrent color questions passed; all 216 transmitted/received KV tensor SHA256 pairs matched. CUDA peer access on GPUs 2/3 is false and NCCL used SHM, so this is no-disk NCCL transfer with host shared memory, not GPU peer-direct. See [V2 design](docs/SERVING_V2.zh-CN.md), [V2 results](docs/SERVING_V2_RESULTS.zh-CN.md) and [evidence](docs/validation-serving-v2.json). Owned GPU services are stopped after acceptance.

@@ -1,0 +1,16 @@
+{
+  "host": "127.0.0.1",
+  "port": 21000,
+  "model": "Qwen/Qwen3-VL-8B-Instruct",
+  "mode": "pd_nccl",
+  "engine_version": "0.11.0",
+  "connector": "AuditedP2pNcclConnector",
+  "max_active": 4,
+  "max_pending": 64,
+  "queue_timeout_s": 120,
+  "upstream_timeout_s": 120,
+  "endpoints": [
+    {"name": "p", "role": "prefill", "base_url": "http://127.0.0.1:21100/v1", "kv_address": "127.0.0.1:21300"},
+    {"name": "d", "role": "decode", "base_url": "http://127.0.0.1:21200/v1", "kv_address": "127.0.0.1:21400"}
+  ]
+}

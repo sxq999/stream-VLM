@@ -16,13 +16,14 @@ from stream_pipeline.stress import aggregate, execute, validate_spec
 
 class FakeEngine:
     def __init__(self):
-        self.calls = []; self.delay = .025; self.truncate = False; owner = self
+        self.calls = []; self.identities=[]; self.delay = .025; self.truncate = False; owner = self
         class Handler(BaseHTTPRequestHandler):
             def log_message(self, *args): pass
             def do_GET(self):
                 self.send_response(200);self.end_headers();self.wfile.write(b'{"data":[{"id":"test"}]}')
             def do_POST(self):
                 payload = json.loads(self.rfile.read(int(self.headers['Content-Length'])))
+                owner.identities.append(self.headers.get('X-Request-Id'))
                 owner.calls.append(payload);time.sleep(owner.delay)
                 self.send_response(200); self.end_headers()
                 if payload.get('stream'):
@@ -99,6 +100,23 @@ class ServingStressTests(unittest.TestCase):
         self.assertTrue(self.engine.calls[1]['stream']);self.assertEqual(self.engine.calls[1]['max_tokens'],64)
         self.assertFalse(server.gateway.capabilities()['pd_transfer_verified'])
         with self.assertRaises(ValueError):validate_config(dict(cfg,max_active=2))
+    def test_nccl_pair_has_same_explicit_wire_identity(self):
+        cfg=dict(self.config,mode='pd_nccl',engine_version='0.11.0',connector='AuditedP2pNcclConnector',
+            endpoints=[dict(name='p',base_url=self.engine.url,role='prefill',kv_address='127.0.0.1:20300'),
+                       dict(name='d',base_url=self.engine.url,role='decode',kv_address='127.0.0.1:20400')])
+        server,url=self.gateway(cfg);self.backend_request(url)
+        events=[json.loads(line) for line in (self.root/'service-0/service-events.jsonl').read_text().splitlines()]
+        pair=next(e for e in events if e['kind']=='pd_pair')
+        self.assertIn('___prefill_addr_127.0.0.1:20300___decode_addr_127.0.0.1:20400_',pair['wire_request_id'])
+        self.assertEqual(len(self.engine.calls),2)
+        self.assertEqual(server.gateway.snapshot()['upstream_inflight'],{'p':0,'d':0})
+        self.assertEqual(self.engine.identities[-2:], [pair['wire_request_id']]*2)
+    def test_nccl_rejects_ambiguous_or_missing_addresses(self):
+        cfg=dict(self.config,mode='pd_nccl',engine_version='0.11.0',connector='AuditedP2pNcclConnector',
+            endpoints=[dict(name='p',base_url=self.engine.url,role='prefill'),dict(name='d',base_url=self.engine.url,role='decode')])
+        with self.assertRaises(ValueError):validate_config(cfg)
+        for e in cfg['endpoints']:e['kv_address']='127.0.0.1:12345'
+        with self.assertRaises(ValueError):validate_config(cfg)
     def test_closed_loop_exact_counts_real_overlap_and_warmup_excluded(self):
         _,url=self.gateway();r=execute(self.spec(url),self.root/'closed')['runs'][0]
         self.assertEqual(r['offered_requests'],8);self.assertEqual(r['completed_requests'],8)

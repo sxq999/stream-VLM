@@ -18,10 +18,16 @@ def main():
     q=sub.add_parser('suite');q.add_argument('--suite',required=True);q.add_argument('--out',required=True)
     for name in ('service', 'stress'):
         q=sub.add_parser(name);q.add_argument('--config',required=True);q.add_argument('--out',required=True)
+    q=sub.add_parser('prepare-video');q.add_argument('--video',required=True);q.add_argument('--out',required=True)
+    q.add_argument('--fps',type=float,default=1);q.add_argument('--width',type=int,default=448)
+    q.add_argument('--duration-s',type=float,default=12);q.add_argument('--query-every-s',type=float,default=4)
     q=sub.add_parser('workload');q.add_argument('--manifest',required=True);q.add_argument('--out',required=True)
     q.add_argument('--sessions',type=int,default=1);q.add_argument('--stagger-ms',type=float,default=0)
     sub.add_parser("validate").add_argument("--suite", default="tests")
     args = p.parse_args()
+    if args.command=='prepare-video':
+        from .media import prepare_video
+        print(prepare_video(args.video,args.out,args.fps,args.width,args.duration_s,args.query_every_s));return
     if args.command == 'service':
         from .serving import read_service_config, serve
         serve(read_service_config(args.config), args.out);return

@@ -16,7 +16,8 @@ class Deployment:
         self.out.mkdir(parents=True,exist_ok=False)
         env=dict(os.environ)
         for key,value in self.cfg.get('server_env',{}).items():
-            if key not in {'VLLM_TORCH_PROFILER_DIR','VLLM_TORCH_PROFILER_WITH_STACK','VLLM_TORCH_PROFILER_RECORD_SHAPES','OMP_NUM_THREADS'}:
+            if key not in {'VLLM_TORCH_PROFILER_DIR','VLLM_TORCH_PROFILER_WITH_STACK','VLLM_TORCH_PROFILER_RECORD_SHAPES','OMP_NUM_THREADS',
+                           'VLLM_HOST_IP','NCCL_DEBUG','NCCL_DEBUG_SUBSYS','NCCL_CUMEM_HOST_ENABLE'}:
                 raise ValueError('unsupported server environment key')
             env[key]=str(value)
         gpus=self.cfg.get('gpu_ids')
