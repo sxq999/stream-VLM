@@ -10,6 +10,8 @@ New: [Serving 与压力测试](docs/SERVING_STRESS.zh-CN.md) describes the bound
 
 [视频与 NCCL PD 基线](docs/SERVING_V2.zh-CN.md) adds timestamp-preserving video preparation, paired NCCL endpoints, replica comparisons and independent KV byte validation. [V2 results](docs/SERVING_V2_RESULTS.zh-CN.md) report the actual host-SHM transport on this RTX 3090 pair; GPU peer-direct is not claimed.
 
+[持续 serving 压测](docs/SERVING_SUSTAINED.zh-CN.md) adds finite duration-based arrivals, time-window accounting, live gateway/engine telemetry and cache/chunked-prefill controls. This is a tooling extension; new GPU capacity results are pending server access.
+
 The implementation contract is [TASK_SPEC.md](TASK_SPEC.md). Machine-readable milestones and acceptance requirements are in [task_manifest.json](task_manifest.json).
 
 Qwen3-VL has executed real GPU requests through both the native reference and managed vLLM service. Architecture-experiment tooling includes implementation identity, managed lifecycle, suites, workload generation and actual GPU profiling. The broader multi-model/PD contract remains in progress. See [STATUS.md](STATUS.md) and [docs/RUNBOOK.md](docs/RUNBOOK.md).

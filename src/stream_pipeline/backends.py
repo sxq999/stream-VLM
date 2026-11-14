@@ -105,7 +105,8 @@ class OpenAIBackend:
         response_id=None
         with urllib.request.urlopen(req, timeout=self.cfg.get("timeout_s", 120)) as response:
             emit("http_headers_received", gateway_queue_s=response.headers.get('X-Gateway-Queue-S'),
-                 upstream=response.headers.get('X-Upstream'))
+                 upstream=response.headers.get('X-Upstream'), gateway_request_id=response.headers.get('X-Request-Id'),
+                 gateway_prefill_s=response.headers.get('X-Gateway-Prefill-S'))
             for raw in response:
                 if cancel.is_set():
                     raise Cancelled()

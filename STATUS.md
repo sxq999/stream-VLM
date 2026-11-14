@@ -8,6 +8,7 @@
 | Workload / suite runner | Implemented, tested | Replicated sessions, staggered arrivals, warmup separation, repeats, per-run reports |
 | Serving gateway | Implemented; real Qwen3-VL exercised | Bounded active/queued admission, session conflict rejection, streaming forwarding, least-inflight replica selection |
 | Pressure testing | Implemented; real GPU matrices | Closed-loop concurrency, fixed open-loop arrivals, bursts, raw failures/drops, first-text/chunk-gap metrics, engine metrics snapshots |
+| Sustained pressure instrumentation | Implemented; local HTTP fixture validation | Duration-based open loop, arrival/finish time windows, live gateway/engine sampling, request-ID correlation; new GPU sustained runs pending SSH access |
 | Native GPU execution | Real Qwen3-VL verified | Three visual requests on RTX 3090 |
 | Native GPU profiling | Verified | Request traces contain kernels/memcpy and vision/prefill/decode ranges |
 | vLLM GPU profiling | Verified | Real engine traces through managed profiler APIs |

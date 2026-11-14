@@ -241,6 +241,7 @@ def make_server(config, out):
             headers_sent = False
             released = False
             outcome = "upstream_failed"
+            prefill_s = None
             try:
                 wire_id = ident
                 if gateway.cfg.get("mode") in ("pd_shared_storage_debug", "pd_nccl"):
@@ -259,8 +260,9 @@ def make_server(config, out):
                             if result.get("error") or not result.get("choices"):
                                 raise RuntimeError("prefill failed")
                     finally: gateway.unchoose(producer)
-                    gateway.event("prefill_response", request_id=ident, duration_s=time.perf_counter()-started,
-                                  meaning="includes HTTP, processing, debug store and first sampled token")
+                    prefill_s = time.perf_counter()-started
+                    gateway.event("prefill_response", request_id=ident, duration_s=prefill_s,
+                                  meaning="P service round trip: HTTP, engine processing, connector work and one sampled token; not pure GPU prefill")
                 else: endpoint = gateway.choose()
                 gateway.event("dispatched", request_id=ident, endpoint=endpoint["name"], queue_s=queue_s)
                 with gateway.open_upstream(endpoint, payload, wire_id) as upstream:
@@ -269,6 +271,7 @@ def make_server(config, out):
                     self.send_header("X-Request-Id", ident)
                     self.send_header("X-Gateway-Queue-S", str(queue_s))
                     self.send_header("X-Upstream", endpoint["name"])
+                    if prefill_s is not None: self.send_header('X-Gateway-Prefill-S', str(prefill_s))
                     self.end_headers()
                     headers_sent = True
                     done = finish = False

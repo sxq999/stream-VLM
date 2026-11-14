@@ -1,0 +1,118 @@
+{
+  "status": "local_tools_verified_gpu_extension_pending",
+  "created_utc": "2026-11-14T03:27:46.027508+00:00",
+  "tests": {
+    "platform": "Windows",
+    "discovered": 37,
+    "passed": 36,
+    "skipped": 1,
+    "failed": 0,
+    "skipped_reason": "Linux process-group lifecycle; previously tested in V2 Linux, not revalidated here",
+    "log_sha256": "dc2309db863148da8974e40ac1ea65a48283d0512aefde72dd0c66d14f8240e4"
+  },
+  "local_fixture": {
+    "kind": "HTTP fixture only, no GPU/model capacity evidence",
+    "offered": 480,
+    "runs": 6,
+    "completed": 235,
+    "outcome_counts": {
+      "complete": 235,
+      "http_rejected": 245
+    },
+    "all_offered_accounted": true,
+    "raw_relative_path": "runs/sustained-local-20261114",
+    "export_sha256": "d99e90c5332fcc3651013acf7c17e9678047959066f5a689a56447fdfcc4ea87",
+    "executed_source_scope": "Frozen source_snapshot in fixture artifact; final regression suite also checks later decimal-boundary and sampler-shutdown fixes"
+  },
+  "config_generation": {
+    "plans": [
+      {
+        "mode": "single",
+        "policy": "legacy",
+        "status": "plan_only",
+        "requests": 1350
+      },
+      {
+        "mode": "single",
+        "policy": "chunked",
+        "status": "plan_only",
+        "requests": 1350
+      },
+      {
+        "mode": "single",
+        "policy": "cache_chunked",
+        "status": "plan_only",
+        "requests": 1350
+      },
+      {
+        "mode": "replicas",
+        "policy": "legacy",
+        "status": "plan_only",
+        "requests": 1350
+      },
+      {
+        "mode": "replicas",
+        "policy": "chunked",
+        "status": "plan_only",
+        "requests": 1350
+      },
+      {
+        "mode": "replicas",
+        "policy": "cache_chunked",
+        "status": "plan_only",
+        "requests": 1350
+      },
+      {
+        "mode": "nccl",
+        "policy": "legacy",
+        "status": "plan_only",
+        "requests": 1350
+      },
+      {
+        "mode": "nccl",
+        "policy": "chunked",
+        "status": "plan_only",
+        "requests": 1350
+      },
+      {
+        "mode": "nccl",
+        "policy": "cache_chunked",
+        "status": "plan_only",
+        "requests": 1350
+      }
+    ],
+    "gpu_executions": 0,
+    "artifact_sha256": "d8c54572ab341abd32d4c0b64539b3584fd9068c60c715ae9fefc9aae6ad85bd",
+    "scope": "Config generation on Windows, not vLLM CLI compatibility or GPU deployment"
+  },
+  "historical_gpu_reanalysis": {
+    "new_gpu_runs": 0,
+    "matched_requests": 384,
+    "evidence": "validation-serving-phases.json",
+    "evidence_sha256": "2b64b90772600b050484babbc95ab8a2544b4326d42e1c942188eb410b798f06"
+  },
+  "new_gpu_campaign": {
+    "status": "not_run",
+    "reason": "ssh lab repeatedly closed connection before login",
+    "pending": [
+      "Sustained real-GPU rate sweeps",
+      "Admission-limit comparison",
+      "Pinned vLLM0.11 cache/chunked connector compatibility",
+      "Longer and diverse video loads"
+    ]
+  },
+  "source_sha256": {
+    "src/stream_pipeline/stress.py": "4cce57063b28f787916ed032a3355e0a6fdb5c395e8ba5e986bfa1fc4b860360",
+    "src/stream_pipeline/stress_metrics.py": "74bc73945bd4f3f5774607e238b5ee74c1ddc127376954b311f8f40d52c13331",
+    "src/stream_pipeline/serving.py": "f8d734fc1499aa1ab4e4cdc16a5113cce0b3c85c003ded491481d4c25ff1c854",
+    "src/stream_pipeline/backends.py": "517f5b6a3b567478706473e310c199dfc1bbe33a31f19f35b314bc19623a60b6",
+    "tests/test_serving_stress.py": "8dda988206fa3982430bf12e8a9c6860309bc42d4fa590555bed5a286de550ae",
+    "scripts/lab_serving_v2.py": "91a42a3a526d06eac58bc7631e1d9b5f518237a252dad35842c2dc2627e2d907",
+    "scripts/export_stress_timeline.py": "87ee365943d90c5772043b0ec5745622f5aea6e7470326d79664d5d4de3670ac",
+    "scripts/analyze_serving_phases.py": "ad520a4910763757d486950d15d56ffe0e84ab92d80a50baee92d883d1a705fe"
+  },
+  "evaluation_skill": {
+    "used": "archpaper-evaluation-design",
+    "domain_template": "Rejected unrelated cache/prefetch SPEC/MPKI template; no paper findings used as experiment results"
+  }
+}

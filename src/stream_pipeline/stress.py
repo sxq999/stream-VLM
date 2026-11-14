@@ -11,11 +11,13 @@ import threading
 import time
 import urllib.error
 import urllib.request
+from fractions import Fraction
 from pathlib import Path
 
 from .backends import OpenAIBackend
 from .events import Session, load_events
 from .report import quantile
+from .stress_metrics import meets_slo, windows
 
 
 def read_spec(path):
@@ -30,6 +32,14 @@ def read_spec(path):
 
 def validate_spec(cfg):
     cfg = copy.deepcopy(cfg)
+    for key, default, low in (("monitor_interval_s", 1.0, .1), ("time_window_s", 5.0, .01)):
+        cfg.setdefault(key, default)
+        value = cfg[key]
+        if isinstance(value, bool) or not isinstance(value, (int, float)) or not math.isfinite(value) or not low <= value <= 3600:
+            raise ValueError("invalid " + key)
+    cfg.setdefault('sample_engine_metrics', False)
+    if type(cfg['sample_engine_metrics']) is not bool:
+        raise ValueError('sample_engine_metrics must be boolean')
     if not cfg.get("cases") or len({c["name"] for c in cfg["cases"]}) != len(cfg["cases"]):
         raise ValueError("unique nonempty cases required")
     for c in cfg["cases"]:
@@ -37,6 +47,21 @@ def validate_spec(cfg):
             raise ValueError("invalid case name")
         if c.get("mode") not in ("closed_loop", "open_loop"):
             raise ValueError("mode must be closed_loop or open_loop")
+        if 'duration_s' in c:
+            duration = c['duration_s']
+            if c['mode'] != 'open_loop' or isinstance(duration, bool) or not isinstance(duration, (int, float)) or not math.isfinite(duration) or not .01 <= duration <= 3600:
+                raise ValueError('duration_s requires open_loop and a finite .01..3600 second duration')
+            rate = c.get('request_rate')
+            if isinstance(rate, bool) or not isinstance(rate, (int, float)) or not math.isfinite(rate) or not 0 < rate <= 10000:
+                raise ValueError('invalid request_rate')
+            if c.get('arrival_pattern', 'uniform') != 'uniform':
+                raise ValueError('duration_s currently supports uniform arrivals only')
+            # Decimal user inputs must not create an extra arrival at the end
+            # because e.g. 0.14 * 50 rounds slightly above seven in binary.
+            expected = math.ceil(Fraction(str(duration)) * Fraction(str(rate)))
+            if 'requests' in c and c['requests'] != expected:
+                raise ValueError('requests must equal ceil(duration_s * request_rate)')
+            c['requests'] = expected
         for key, default, low, high in (("concurrency", 1, 1, 1024), ("requests", 16, 1, 100000),
                                        ("input_frames", 1, 0, 64), ("max_tokens", 64, 1, 8192),
                                        ("repeats", 1, 1, 20), ("warmup_requests", 1, 0, 32)):
@@ -58,6 +83,8 @@ def validate_spec(cfg):
                 raise ValueError("invalid SLO")
     # Validate endpoint policy before creating files or launching engines.
     OpenAIBackend(cfg["backend"])
+    if cfg.get('gateway_metrics_url'):
+        OpenAIBackend(dict(cfg['backend'], base_url=cfg['gateway_metrics_url']))
     return cfg
 
 
@@ -83,14 +110,6 @@ def aggregate(rows, elapsed, case):
     usage = [r.get("usage", {}).get("completion_tokens") for r in completed]
     total_tokens = sum(usage) if completed and all(type(n) is int for n in usage) else None
     checks = any(case.get(k) is not None for k in ("first_text_slo_s", "max_chunk_gap_slo_s", "completion_slo_s"))
-    def meets(r):
-        if r["status"] != "complete": return False
-        for field, limit in (("first_text_after_scheduled_s", "first_text_slo_s"),
-                             ("completion_after_scheduled_s", "completion_slo_s")):
-            if case.get(limit) is not None and (r.get(field) is None or r[field] > case[limit]): return False
-        if case.get("max_chunk_gap_slo_s") is not None and r.get("max_text_chunk_gap_s", 0) > case["max_chunk_gap_slo_s"]:
-            return False
-        return True
     counts = {s: sum(r["status"] == s for r in rows) for s in sorted({r["status"] for r in rows})}
     return dict(offered_requests=len(rows), completed_requests=len(completed), status_counts=counts,
                 success_fraction=len(completed)/len(rows) if rows else None,
@@ -101,9 +120,11 @@ def aggregate(rows, elapsed, case):
                 first_text_after_send_s=distribution([r["first_text_after_send_s"] for r in completed if r.get("first_text_after_send_s") is not None]),
                 completion_after_scheduled_s=distribution([r["completion_after_scheduled_s"] for r in completed]),
                 client_dispatch_lag_s=distribution([r["dispatch_lag_s"] for r in rows if r.get("dispatch_lag_s") is not None]),
-                max_text_chunk_gap_s=distribution([r["max_text_chunk_gap_s"] for r in completed]),
-                slo_attainment_all_offered=sum(meets(r) for r in rows)/len(rows) if checks and rows else None,
-                slo_qualified_requests_per_s=sum(meets(r) for r in rows)/elapsed if checks and elapsed else None)
+                gateway_queue_s=distribution([r['gateway_queue_s'] for r in completed if r.get('gateway_queue_s') is not None]),
+                gateway_p_round_trip_s=distribution([r['gateway_p_round_trip_s'] for r in completed if r.get('gateway_p_round_trip_s') is not None]),
+                max_text_chunk_gap_s=distribution([r["max_text_chunk_gap_s"] for r in completed if r.get('max_text_chunk_gap_s') is not None]),
+                slo_attainment_all_offered=sum(meets_slo(r, case) for r in rows)/len(rows) if checks and rows else None,
+                slo_qualified_requests_per_s=sum(meets_slo(r, case) for r in rows)/elapsed if checks and elapsed else None)
 
 
 def run_case(spec, case, values, out):
@@ -129,18 +150,22 @@ def run_case(spec, case, values, out):
         if spec.get("unique_prompt_suffix", True): q["prompt"] += f"\n[request {case['name']} {i}]"
         first = sent = last = None
         chunks, gaps, gateway_queue, endpoint = 0, [], None, None
+        gateway_request_id, gateway_prefill_s = None, None
         def emit(kind, **kw):
             nonlocal first, sent, last, chunks, gateway_queue, endpoint
+            nonlocal gateway_request_id, gateway_prefill_s
             now = time.perf_counter()
             if kind == "request_sent": sent = now
             elif kind == "first_text": first = now
-            elif kind == "http_headers_received": gateway_queue, endpoint = kw.get("gateway_queue_s"), kw.get("upstream")
+            elif kind == "http_headers_received":
+                gateway_queue, endpoint = kw.get("gateway_queue_s"), kw.get("upstream")
+                gateway_request_id, gateway_prefill_s = kw.get('gateway_request_id'), kw.get('gateway_prefill_s')
             elif kind == "text_delta":
                 chunks += 1
                 if last is not None: gaps.append(now-last)
                 last = now
         row = dict(index=i, session_id=session, input_frames=len(fs), max_tokens=case["max_tokens"],
-                   scheduled_s=scheduled-start, dispatch_lag_s=t-scheduled)
+                   scheduled_s=scheduled-start, dispatch_s=t-start, dispatch_lag_s=t-scheduled)
         try:
             result = backend.generate(fs, q, threading.Event(), emit)
             row.update(status="complete", usage=result.get("usage") or {}, finish_reason=result["finish_reason"],
@@ -152,10 +177,14 @@ def run_case(spec, case, values, out):
             end = time.perf_counter()
             with lock: active -= 1
         row.update(first_text_after_scheduled_s=first-scheduled if first is not None else None,
+                   finished_s=end-start, sent_s=sent-start if sent is not None else None,
+                   first_text_s=first-start if first is not None else None,
                    first_text_after_send_s=first-sent if first is not None and sent is not None else None,
                    completion_after_scheduled_s=end-scheduled, text_chunks=chunks,
                    max_text_chunk_gap_s=max(gaps, default=0), text_chunk_gaps_s=gaps,
-                   gateway_queue_s=float(gateway_queue) if gateway_queue is not None else None, upstream=endpoint)
+                   gateway_queue_s=float(gateway_queue) if gateway_queue is not None else None, upstream=endpoint,
+                   gateway_request_id=gateway_request_id,
+                   gateway_p_round_trip_s=float(gateway_prefill_s) if gateway_prefill_s is not None else None)
         if record:
             with lock: rows.append(row); raw.write(json.dumps(row)+"\n")
         return row
@@ -190,13 +219,22 @@ def run_case(spec, case, values, out):
                     if slots.acquire(blocking=False): futures.append(pool.submit(bounded, i, scheduled))
                     else:
                         row = dict(index=i, status="client_capacity_rejected", scheduled_s=scheduled-start,
+                                   dispatch_s=None, finished_s=time.perf_counter()-start,
                                    dispatch_lag_s=time.perf_counter()-scheduled)
                         with lock: rows.append(row); raw.write(json.dumps(row)+"\n")
+                if case.get('duration_s'):
+                    time.sleep(max(0, start+case['duration_s']-time.perf_counter()))
                 for f in futures: f.result()
     finally: raw.close()
     elapsed = time.perf_counter()-start
     result = aggregate(rows, elapsed, case)
+    timeline = windows(rows, elapsed, case, spec.get('time_window_s', 5.0))
+    (out / 'time-windows.json').write_text(json.dumps(timeline, indent=2), encoding='utf-8')
     result.update(case=case, peak_client_requests=peak, client_inflight_at_end=active,
+                  requested_arrival_duration_s=case.get('duration_s'),
+                  last_scheduled_arrival_s=max((r['scheduled_s'] for r in rows), default=0),
+                  drain_after_last_scheduled_arrival_s=max(0, elapsed-max((r['scheduled_s'] for r in rows), default=0)),
+                  time_windows_artifact='time-windows.json',
                   measurement_start_monotonic_s=start, measurement_end_monotonic_s=start+elapsed,
                   measurement_status="complete" if len(rows) == case["requests"] and active == 0 else "incomplete",
                   limits=["First text is a client-observed TTFT proxy, not engine first-token timing.",
@@ -225,15 +263,54 @@ def execute(spec, out):
     identity["images_sha256"] = {f["event_id"]: hashlib.sha256(Path(f["resolved_image"]).read_bytes()).hexdigest() for _, fs in values for f in fs}
     (out / "identity.json").write_text(json.dumps(identity, indent=2), encoding="utf-8")
     stopped = threading.Event()
+    current_run = dict(case=None, repeat=None)
+    telemetry_lock = threading.Lock()
+    server = None
     def monitor():
         with (out / "resources.jsonl").open("w", encoding="utf-8", buffering=1) as f:
+            sample_index = 0
             while not stopped.is_set():
-                row = dict(monotonic_s=time.perf_counter())
+                sample_start = time.perf_counter()
+                with telemetry_lock:
+                    row = dict(monotonic_s=sample_start, wall_time_ns=time.time_ns(), **current_run)
+                if server is not None:
+                    row['gateway'] = server.gateway.snapshot()
+                elif spec.get('gateway_metrics_url'):
+                    try:
+                        with urllib.request.urlopen(spec['gateway_metrics_url'], timeout=2) as response:
+                            row['gateway'] = json.load(response)
+                    except Exception as exc:
+                        row['gateway_error_type'] = type(exc).__name__
                 try:
                     p = subprocess.run(["nvidia-smi", "--query-gpu=index,uuid,name,memory.used,utilization.gpu,power.draw", "--format=csv,noheader"], capture_output=True, text=True, timeout=4)
                     row.update(gpu_csv=p.stdout, returncode=p.returncode)
                 except (OSError, subprocess.TimeoutExpired) as exc: row["unavailable"] = type(exc).__name__
-                f.write(json.dumps(row)+"\n"); stopped.wait(1)
+                if spec.get('sample_engine_metrics'):
+                    target = out / 'engine_metrics' / 'timeline'
+                    target.mkdir(parents=True, exist_ok=True)
+                    samples = []
+                    for j, url in enumerate(metrics_urls):
+                        if stopped.is_set(): break
+                        scrape_start = time.perf_counter()
+                        sample = dict(engine=j, start_monotonic_s=scrape_start)
+                        try:
+                            import os
+                            headers = {}
+                            token = os.environ.get(spec['backend'].get('api_key_env', 'VLM_API_KEY'))
+                            if token: headers['Authorization'] = 'Bearer ' + token
+                            with urllib.request.urlopen(urllib.request.Request(url, headers=headers), timeout=2) as response:
+                                path = target / f'{sample_index:06d}-{j}.prom'
+                                path.write_bytes(response.read())
+                                sample['artifact'] = str(path.relative_to(out))
+                        except Exception as exc:
+                            sample['error_type'] = type(exc).__name__
+                        sample['end_monotonic_s'] = time.perf_counter()
+                        samples.append(sample)
+                    row['engine_scrapes'] = samples
+                row['sample_duration_s'] = time.perf_counter() - sample_start
+                f.write(json.dumps(row)+"\n")
+                sample_index += 1
+                stopped.wait(max(0, spec['monitor_interval_s']-row['sample_duration_s']))
     results = []
     from .deployment import Deployment
     from .runner import read_config
@@ -256,6 +333,7 @@ def execute(spec, out):
         try:
             for case in spec["cases"]:
                 for repeat in range(case["repeats"]):
+                    with telemetry_lock: current_run.update(case=case['name'], repeat=repeat)
                     dest = out / case["name"] / f"repeat-{repeat:02d}"
                     def metric_snapshot(phase):
                         target=out/'engine_metrics'/case['name']/f'repeat-{repeat:02d}';target.mkdir(parents=True,exist_ok=True)
@@ -278,7 +356,10 @@ def execute(spec, out):
                     metric_snapshot('after')
                     (out / "progress.json").write_text(json.dumps(results, indent=2), encoding="utf-8")
                     print(json.dumps(dict(event="stress_case_done", case=case["name"], status=result["measurement_status"], success=result.get("success_fraction"))), flush=True)
-        finally: stopped.set(); watcher.join(timeout=6)
+        finally:
+            stopped.set()
+            # Never close the owned services while the sampler still reads them.
+            watcher.join()
     summary = dict(status="complete" if all(r["measurement_status"] == "complete" for r in results) else "failed", runs=results,
                    interpretation="Complete means the load experiment drained and recorded all outcomes, not that every request or SLO passed.",
                    pd="Only consumer injection logs prove external KV loading. HTTP routing alone is not PD evidence.")
