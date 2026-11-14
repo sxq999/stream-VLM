@@ -47,6 +47,6 @@ CUDA 预检显示 GPU 2→3、3→2 的 peer access 均为 false；NCCL 实际�
 
 ## 可复现材料
 
-运行方式见 [SERVING_V2.zh-CN.md](SERVING_V2.zh-CN.md)。机器可读证据见 [validation-serving-v2.json](validation-serving-v2.json)。原始目录保留逐请求结果、完整配置、每次实际源码快照、引擎/NCCL 日志、GPU 资源采样、媒体来源哈希和重建的因果输入计划。
+运行方式见 [SERVING_V2.zh-CN.md](../guides/serving.md)。机器可读证据见 [validation-serving-v2.json](../evidence/validation-serving-v2.json)。原始目录保留逐请求结果、完整配置、每次实际源码快照、引擎/NCCL 日志、GPU 资源采样、媒体来源哈希和重建的因果输入计划。
 
 服务器原始目录：`/data/xiqiao/stream_vlm_serving_v2_20261114`。视频和 KV/张量内容不提交 Git。

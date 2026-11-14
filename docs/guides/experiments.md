@@ -7,7 +7,7 @@ The harness controls requests and deployments. The tested system is the installe
 Install the harness with `python -m pip install -e .`. Use a validated engine environment; the tested Qwen3-VL candidate uses Torch 2.8.0, Transformers 4.57.1 and vLLM 0.11.0 on RTX 3090. Full dependency freeze is stored separately. Set paths for your own machine:
 
 ```sh
-python scripts/configure_local.py --model-dir /path/to/Qwen3-VL-8B-Instruct \
+python scripts/setup/configure_local.py --model-dir /path/to/Qwen3-VL-8B-Instruct \
   --engine-python /path/to/engine-env/bin/python --gpu 0 --out runs/baseline-config.json
 ```
 
@@ -41,13 +41,13 @@ A suite contains named cases with a config, optional supported overrides, `warmu
 # Native HF execution: load the model, trace CPU/GPU operators per request.
 export QWEN3VL_MODEL_DIR=/path/to/Qwen3-VL-8B-Instruct
 python -m stream_pipeline profile --config configs/qwen3vl-native.json --out runs/native-profile-001
-python scripts/inspect_trace.py runs/native-profile-001/traces --require-stages
+python scripts/analysis/inspect_trace.py runs/native-profile-001/traces --require-stages
 
 # Actual vLLM engine: start a private profiled service, invoke its profiler APIs,
 # run requests, stop profiling and reap the service. Do not profile the HTTP
 # client and mistake it for a GPU execution trace.
 python -m stream_pipeline profile --config runs/baseline-config.json --out runs/vllm-profile-001
-python scripts/inspect_trace.py runs/vllm-profile-001/traces --engine
+python scripts/analysis/inspect_trace.py runs/vllm-profile-001/traces --engine
 ```
 
 Native traces contain request labels and configured module ranges: vision encoder, first language-model forward (prefill), subsequent language forwards (decode). These labels apply to the native `generate` path, not an arbitrary engine's chunked prefill. Module paths are configured and checked rather than assumed for all models. CPU range duration is not exclusive GPU duration. vLLM traces cover the engine workload interval; client/server IDs are retained, but per-request kernel ownership is not inferred without engine annotations. Chrome JSON traces can be opened in a compatible trace viewer such as Perfetto.
@@ -58,4 +58,4 @@ Profiling changes runtime behavior and has its own output directory. Do not clai
 
 Create another configuration pointing to the candidate engine environment/source, preserve the workload and resource budget, and repeat steps 2–4. Record cold/warm behavior and all failures. The harness provides measurement and versioning; it does not assert that the candidate is better.
 
-Current limits: Qwen3.5/MiniCPM native adapters, duplex audio and verified PD are still separate pending items in the broader task contract. GPU hardware simulation, optimization algorithms and model-quality research are not implemented by these commands.
+Current limits: Qwen3.5/MiniCPM adapters and duplex audio remain pending. Standard same-host NCCL PD is verified separately; see the [serving guide](serving.md) and [current status](../status.md). These commands do not implement GPU hardware simulation or new optimization algorithms.

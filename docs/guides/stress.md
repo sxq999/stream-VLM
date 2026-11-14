@@ -1,8 +1,8 @@
 # 持续 serving 压力测试
 
-本次完善的是测试工具和基线配置。此前 V2 真实 GPU 结果仍见 [V2 结果](SERVING_V2_RESULTS.zh-CN.md)。本次服务器 SSH 连续返回 `Connection closed`，新增持续实验尚无真实 GPU 结果；不能将本地 HTTP 模拟后端验收解释为模型性能。
+本次完善的是测试工具和基线配置。此前 V2 真实 GPU 结果仍见 [V2 结果](../results/video-serving.md)。本次服务器 SSH 连续返回 `Connection closed`，新增持续实验尚无真实 GPU 结果；不能将本地 HTTP 模拟后端验收解释为模型性能。
 
-本次另对旧 GPU 日志完成 384 个请求的阶段关联，见 [阶段复核](SERVING_PHASE_AUDIT.zh-CN.md)。旧 rate4 场景中，双副本和 PD 的网关平均排队分别占发送后平均首文本等待的 91.3% 和 89.4%。因此先补接纳上限与持续排队对照，而不直接把问题归因到 KV 传输或 GPU 算子。
+本次另对旧 GPU 日志完成 384 个请求的阶段关联，见 [阶段复核](../results/queue-analysis.md)。旧 rate4 场景中，双副本和 PD 的网关平均排队分别占发送后平均首文本等待的 91.3% 和 89.4%。因此先补接纳上限与持续排队对照，而不直接把问题归因到 KV 传输或 GPU 算子。
 
 ## 1 要回答什么
 
@@ -51,24 +51,24 @@ PY=/data/xiqiao/stream_vlm_pipeline_v1/env-qwen-vllm011/bin/python
 MEDIA=/data/xiqiao/stream_vlm_serving_v2_20261114/video-1fps-448/events.jsonl
 
 # 只生成配置，不连接 GPU；不会声称部署或测试成功
-"$PY" scripts/lab_serving_v2.py --mode replicas --gpus 2 3 \
+"$PY" scripts/lab/serving.py --mode replicas --gpus 2 3 \
   --profile sustained --engine-policy chunked --max-active 8 \
   --manifest "$MEDIA" --duration-s 60 --rates 0.5 1 2 4 --repeats 3 \
   --port-base 25000 --plan-only --out /data/xiqiao/stream_vlm_sustained/plan-replicas
 
 # 正式运行。先用 --duration-s 10 --rates 1 --repeats 1 检查兼容性。
-"$PY" scripts/lab_serving_v2.py --mode replicas --gpus 2 3 \
+"$PY" scripts/lab/serving.py --mode replicas --gpus 2 3 \
   --profile sustained --engine-policy chunked --max-active 8 \
   --manifest "$MEDIA" --duration-s 60 --rates 0.5 1 2 4 --repeats 3 \
   --port-base 25000 --out /data/xiqiao/stream_vlm_sustained/replicas-chunked
 
 # 同样的 GPU 和接纳配置测试 PD；仅在上一个命令清理完成后执行
-"$PY" scripts/lab_serving_v2.py --mode nccl --gpus 2 3 \
+"$PY" scripts/lab/serving.py --mode nccl --gpus 2 3 \
   --profile sustained --engine-policy chunked --max-active 8 \
   --manifest "$MEDIA" --duration-s 60 --rates 0.5 1 2 4 --repeats 3 \
   --port-base 26000 --out /data/xiqiao/stream_vlm_sustained/nccl-chunked
 
-"$PY" scripts/export_stress_timeline.py \
+"$PY" scripts/analysis/export_stress_timeline.py \
   --measurement /data/xiqiao/stream_vlm_sustained/replicas-chunked/measurement \
   --out /data/xiqiao/stream_vlm_sustained/replicas-chunked/export
 ```

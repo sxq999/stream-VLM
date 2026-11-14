@@ -477,7 +477,7 @@ PyTorch / 自定义 CUDA / Triton / CUDA 库
 <h2 id="15">15. 操作入口与参考来源</h2>
 <p>常用入口及完整参数以仓库 RUNBOOK.md 和 CLI 为准。以下为 Linux 示例，环境和权重路径需指向实际机器，输出目录每次使用新名字。</p>
 <pre><code class="language-bash"># 生成指向本地权重与引擎环境的配置
-python scripts/configure_local.py --model-dir /path/to/Qwen3-VL-8B-Instruct \
+python scripts/setup/configure_local.py --model-dir /path/to/Qwen3-VL-8B-Instruct \
   --engine-python /path/to/engine-env/bin/python --gpu 0 --out runs/base-config.json
 
 # 自动启动服务、执行、归档、结束服务
@@ -497,8 +497,8 @@ python -m stream_pipeline workload --manifest examples/visual/events.jsonl \
 <li>[S2] 官方实现：<a href="https://github.com/huggingface/transformers/blob/v4.57.1/src/transformers/models/qwen3_vl/modeling_qwen3_vl.py">Transformers v4.57.1 Qwen3-VL</a>。用于理解视觉、DeepStack 与语言执行接口。</li>
 <li>[S3] 官方技术报告：<a href="https://arxiv.org/abs/2511.21631">Qwen3-VL Technical Report</a>。结构概念只用于解释基座，不替代本项目实现证据。</li>
 <li>[S4] 引擎版本文档：<a href="https://docs.vllm.ai/en/v0.11.0/contributing/profiling.html">vLLM v0.11.0 profiling</a>。复现以已锁定版本和仓库 CLI 为准，不套用最新版参数。</li>
-<li>[E1] 仓库当前能力：<a href="../../STATUS.md">STATUS.md</a>、<a href="../RUNBOOK.md">RUNBOOK.md</a>。</li>
-<li>[E2] 工程验收：<a href="../validation-architecture.json">validation-architecture.json</a>、<a href="../acceptance-bundle.json">acceptance-bundle.json</a>。</li>
-<li>[E3] 实现入口：<a href="../../src/stream_pipeline/events.py">events.py</a>、<a href="../../src/stream_pipeline/runner.py">runner.py</a>、<a href="../../src/stream_pipeline/cli.py">cli.py</a>、<a href="../../src/stream_pipeline/report.py">report.py</a>、<a href="../../src/stream_pipeline/deployment.py">deployment.py</a>。</li>
+<li>[E1] 仓库当前能力：<a href="../../status.md">STATUS.md</a>、<a href="../../guides/experiments.md">RUNBOOK.md</a>。</li>
+<li>[E2] 工程验收：<a href="../../evidence/validation-architecture.json">validation-architecture.json</a>、<a href="../../evidence/acceptance-bundle.json">acceptance-bundle.json</a>。</li>
+<li>[E3] 实现入口：<a href="../../../src/stream_pipeline/events.py">events.py</a>、<a href="../../../src/stream_pipeline/runner.py">runner.py</a>、<a href="../../../src/stream_pipeline/cli.py">cli.py</a>、<a href="../../../src/stream_pipeline/report.py">report.py</a>、<a href="../../../src/stream_pipeline/deployment.py">deployment.py</a>。</li>
 </ul>
 <p>本报告的未来接入示例属于设计解释，KV 体积属于显式假设下的推导；其余关于当前能力的陈述以 E1–E3 为依据。资料与仓库状态截至 2026-11-12。</p></body></html>

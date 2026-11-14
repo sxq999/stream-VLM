@@ -26,7 +26,7 @@ with contextlib.ExitStack() as stack:
         server.shutdown();thread.join();server.server_close();server.gateway.close()
     stack.callback(close)
     result=run(cfg,out/'replay')
-    fixture=Path(__file__).resolve().parents[1]/'examples/visual/events.jsonl'
+    fixture=Path(__file__).resolve().parents[2]/'examples/visual/events.jsonl'
     color_templates=templates(fixture);expected_colors=['red','blue','red']
     backend=OpenAIBackend(cfg['backend'])
     def color_check(item):

@@ -1,7 +1,7 @@
 """Preserve raw run evidence with hashes; explicitly exclude weights and symlinks."""
 import hashlib,json,tarfile
 from pathlib import Path
-root=Path(__file__).resolve().parents[1]
+root=Path(__file__).resolve().parents[2]
 def sha(p):
     h=hashlib.sha256()
     with p.open('rb') as f:

@@ -3,7 +3,7 @@ import json
 from pathlib import Path
 from stream_pipeline.workloads import generate
 from stream_pipeline.suite import execute
-root=Path(__file__).resolve().parents[1]
+root=Path(__file__).resolve().parents[2]
 manifest=generate(root/'examples/visual/events.jsonl',root/'runs/workload-four-001',4,250)
 base=json.loads((root/'runs/managed-qwen3vl-001/measurement/config.json').read_text())
 inputs=root/'runs/suite-inputs-001';inputs.mkdir(exist_ok=False)

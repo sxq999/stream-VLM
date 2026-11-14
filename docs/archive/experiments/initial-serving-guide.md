@@ -115,7 +115,7 @@ python -m stream_pipeline stress --config configs/stress-serving.json --out runs
 
 ```sh
 PYTHONPATH=src /data/xiqiao/stream_vlm_pipeline_v1/env-qwen-vllm011/bin/python \
-  scripts/lab_serving_stress.py --gpu 0 --out /data/xiqiao/stream_vlm_serving_20261113/single-gpu-new
+  scripts/lab/serving_legacy.py --gpu 0 --out /data/xiqiao/stream_vlm_serving_20261113/single-gpu-new
 ```
 
 `--quick` 运行 1/4/16 并发的短冒烟。默认运行完整有限矩阵。配置使用 max-num-seqs=32，这只是引擎上限设置，不是 32 个请求必定同时在 GPU 上计算的保证，更不是设备最大承载能力。
@@ -126,7 +126,7 @@ PYTHONPATH=src /data/xiqiao/stream_vlm_pipeline_v1/env-qwen-vllm011/bin/python \
 
 ```sh
 PYTHONPATH=src /data/xiqiao/stream_vlm_pipeline_v1/env-qwen-vllm011/bin/python \
-  scripts/lab_serving_stress.py --pd-debug --gpu 1 --decode-gpu 3 \
+  scripts/lab/serving_legacy.py --pd-debug --gpu 1 --decode-gpu 3 \
   --port-base 19000 --out /data/xiqiao/stream_vlm_serving_20261113/pd-debug-new
 ```
 

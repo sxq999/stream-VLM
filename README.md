@@ -1,53 +1,51 @@
-# stream-VLM
+# StreamVLM 实验管线
 
-Reusable streaming VLM experiment harness. Scope: model deployment, causal input replay, sessions, backend integration, observability and reproducible acceptance. Optimization research is out of scope.
+为流式视觉语言模型提供可重复的 GPU 实验：**按时间输入视频帧和问题，调用推理引擎，记录性能与运行证据。** 用于后续比较 vLLM 调度、缓存管理和 GPU 算子实现。
 
-[中文快速入门](docs/QUICKSTART.zh-CN.md) · [GPU experiment runbook](docs/RUNBOOK.md)
+```text
+视频帧＋问题 → 按时间回放与历史选帧 → 后端适配器
+                                     ├─ 直接调用引擎 → GPU
+                                     └─ Serving 网关 → 引擎实例 → GPU
+                                                       单卡／副本／P-D
 
-New: [Serving 与压力测试](docs/SERVING_STRESS.zh-CN.md) describes the bounded streaming gateway, closed/open-loop load matrices, raw metrics and the serial shared-storage PD debug integration. `service` and `stress` are separate from the original event-replay `run` command.
+配置、输入、请求结果与性能记录 → runs/，不提交 Git
+```
 
-[实测结果](docs/SERVING_RESULTS.zh-CN.md) and [machine-readable evidence](docs/validation-serving.json) cover 15 real-GPU load cases plus a two-GPU KV-transfer debug check. These are small-image acceptance measurements, not maximum real-video capacity claims.
+## 从这里开始
 
-[视频与 NCCL PD 基线](docs/SERVING_V2.zh-CN.md) adds timestamp-preserving video preparation, paired NCCL endpoints, replica comparisons and independent KV byte validation. [V2 results](docs/SERVING_V2_RESULTS.zh-CN.md) report the actual host-SHM transport on this RTX 3090 pair; GPU peer-direct is not claimed.
+| 你想做什么 | 阅读入口 |
+|---|---|
+| 安装项目、跑通一次实验 | [快速开始](docs/guides/quickstart.md) |
+| 理解各模块及其边界 | [管线设计](docs/design.md) |
+| 部署 Serving、运行压力测试 | [Serving 与 PD](docs/guides/serving.md) |
+| 查看真实实验及当前结论 | [实验结果](docs/results/README.md) |
 
-[持续 serving 压测](docs/SERVING_SUSTAINED.zh-CN.md) adds finite duration-based arrivals, time-window accounting, live gateway/engine telemetry and cache/chunked-prefill controls. This is a tooling extension; new GPU capacity results are pending server access.
+## 先跑通，不需要 GPU
 
-The implementation contract is [TASK_SPEC.md](TASK_SPEC.md). Machine-readable milestones and acceptance requirements are in [task_manifest.json](task_manifest.json).
-
-Qwen3-VL has executed real GPU requests through both the native reference and managed vLLM service. Architecture-experiment tooling includes implementation identity, managed lifecycle, suites, workload generation and actual GPU profiling. The broader multi-model/PD contract remains in progress. See [STATUS.md](STATUS.md) and [docs/RUNBOOK.md](docs/RUNBOOK.md).
-
-Model weights, source videos, secrets, machine-specific settings and full run artifacts are excluded from Git. Models and services must run in isolated environments; existing research environments remain untouched.
-
-## Run the harness
-
-Python 3.11+, no runtime dependencies for the HTTP harness:
+Python 3.11+，在仓库根目录执行：
 
 ```sh
 python -m pip install -e .
 python -m stream_pipeline validate --suite tests
-python -m stream_pipeline doctor --config configs/mock.json
-python -m stream_pipeline run --config configs/mock.json --out runs/mock-smoke
+python -m stream_pipeline run --config configs/mock.json --out runs/mock-001
 ```
 
-Mock execution validates plumbing only. For an already installed compatible vLLM environment:
+Mock 只验证管线。真实 GPU 部署见快速开始，输出目录每次使用新名称。
 
-```sh
-CUDA_VISIBLE_DEVICES=0 python -m stream_pipeline serve --config configs/qwen3vl.json
-# In another terminal on the same host:
-python -m stream_pipeline doctor --config configs/qwen3vl.json
-python -m stream_pipeline run --config configs/qwen3vl.json --out runs/qwen-smoke
-```
+## 目前做到哪里
 
-The mock config uses a text-only manifest for dependency-free plumbing tests. The Qwen config uses original red/blue/green PNG fixtures with two sessions and three queries (`examples/visual/`), reproducible with `scripts/make_visual_example.py`. Supply a frame/query JSONL workload for other inputs: frames contain `session_id`, unique `event_id`, contiguous `source_seq`, capture start/end, `frame_pts_ms`, `ready_ms`, and a relative `image_path`; queries contain `prompt`, `ready_ms` and `evidence_cutoff_ms`. See `tests/test_core.py` for schema examples. Image paths must stay within the manifest directory.
+已验证 Qwen3-VL-8B 在 RTX 3090 上的部署、视频快照回放、GPU profiling、单卡／双副本／同机 NCCL PD。当前 HTTP 路径按查询提交完整历史快照；NCCL 实测走主机共享内存。
 
-Each query snapshots the causal frame history and sends it as interleaved timestamp text and image content. This backend uses complete prefix replay, not persistent engine state or guaranteed GPU prefix reuse. Frame policy is explicitly `full` (reject on budget overflow) or `recent` (log dropped IDs). Optional media preparation encodes files to data URIs; it does not run the vision encoder or prefill early.
+持续压测工具已通过本地验证，新增 GPU 持续实验待服务器恢复访问。其他模型、原生音视频双工、持久会话和新 PD 调度策略尚未验证。详见[当前状态](docs/status.md)。
 
-Outputs: frozen config, input/source/implementation identity, capabilities, monotonic timeline, sampled GPU resources, raw results and `metrics.json`. Missing engine timings remain unknown. Per-request server cancellation reclamation is not yet verified. Native duplex and production PD are pending; the separate serial disk-backed PD debug path has real KV-load evidence. Native and managed vLLM engine GPU profiling are implemented and validated.
+## 目录
 
-The `transformers_reference` adapter (`configs/qwen3vl-native.json`, set `QWEN3VL_MODEL_DIR`) produces complete responses/token IDs, not native first-token timing. Qwen3-VL execution and actual GPU traces have been verified. Measured versions and acceptance evidence are recorded in `docs/validation-architecture.json`; large artifacts stay outside Git.
+| 目录 | 内容 |
+|---|---|
+| `src/stream_pipeline/` | 管线、后端、Serving 网关与测量代码 |
+| `configs/`、`examples/` | 配置模板与小型示例输入 |
+| `scripts/` | 按用途分类的部署、分析、准备与验收工具 |
+| `tests/` | 自动化测试 |
+| `docs/` | 使用文档、实验结果和汇报；旧材料位于 `archive/` |
 
-Prefer `experiment` for owned server lifecycle, `suite` for matrices, and a separate `profile` run for GPU traces. The [runbook](docs/RUNBOOK.md) explains variant identity, warmups, workload replication and measurement boundaries.
-
-## Design briefing
-
-The [Chinese pipeline design talk](docs/pipeline-talk/README.md) contains an 8-slide editable PowerPoint, an illustrated report and a matching spoken script. It separates the outer experiment lifecycle from the inner input/request flow, explicitly distinguishes pipeline and engine roles, and follows one query through the history window, CPU workers, engine call and result record.
+需要汇报时使用[当前 PPT 与讲稿](docs/presentation/README.md)。完整资料入口见[文档目录](docs/README.md)。模型权重、视频原件、机器配置和大型运行产物保留在本地或服务器，不提交 Git。

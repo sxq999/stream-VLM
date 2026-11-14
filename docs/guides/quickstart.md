@@ -17,7 +17,7 @@ Mock 只返回固定文字，检查请求、会话和日志，不说明模型或
 ## 自动启动真实服务并运行
 
 ```
-python scripts/configure_local.py --model-dir /模型所在目录 \
+python scripts/setup/configure_local.py --model-dir /模型所在目录 \
   --engine-python /独立引擎环境/bin/python --gpu 0 --out runs/my-config.json
 python -m stream_pipeline experiment --config runs/my-config.json --out runs/real-001
 ```
@@ -45,7 +45,7 @@ python -m stream_pipeline experiment --config runs/my-config.json --out runs/rea
 
 ```
 python -m stream_pipeline profile --config runs/my-config.json --out runs/profile-001
-python scripts/inspect_trace.py runs/profile-001/traces --engine
+python scripts/analysis/inspect_trace.py runs/profile-001/traces --engine
 ```
 
 此命令启动被测 vLLM 的 profiler，捕获真实 GPU 活动；不是只测发送 HTTP 的 Python 客户端。trace 可以用兼容的查看器打开。原生 Transformers 路径还提供视觉编码、prefill、decode 的模块标记，见英文 runbook。
@@ -57,7 +57,7 @@ Profiling 会干扰性能，独立保存，不把它的耗时直接当普通推�
 将修改后的引擎安装在另一个独立环境，然后重新生成配置：
 
 ```
-python scripts/configure_local.py --model-dir /同一个模型目录 \
+python scripts/setup/configure_local.py --model-dir /同一个模型目录 \
   --engine-python /修改版引擎环境/bin/python --engine-source /修改版vllm源码目录 \
   --gpu 0 --out runs/candidate-config.json
 python -m stream_pipeline experiment --config runs/candidate-config.json --out runs/candidate-001
@@ -65,4 +65,4 @@ python -m stream_pipeline experiment --config runs/candidate-config.json --out r
 
 模型和负载保持一致，换的是被测引擎。程序会记录源码版本及修改痕迹。也可以改变并发、帧保留策略等配置，或使用 `workload`/`suite` 安排多种情况；请明确这时哪些实验条件发生了变化。
 
-本轮已在真实 Qwen3-VL 上验证这些工程入口。其它模型、原生双工、PD 分离仍按 STATUS.md 的状态推进，不能用一个模型的通过结果替代所有模型验收。
+Qwen3-VL 的这些入口已通过真实 GPU 验证。同机标准 NCCL PD 见 [Serving 指南](serving.md)；其他模型、原生双工与新策略见[当前状态](../status.md)。

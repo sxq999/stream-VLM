@@ -3,7 +3,7 @@ import json,os,sys
 from pathlib import Path
 from stream_pipeline.deployment import Deployment
 from stream_pipeline.runner import read_config,run
-root=Path(__file__).resolve().parents[1]
+root=Path(__file__).resolve().parents[2]
 cfg=read_config(root/'configs/qwen3vl.json')
 model=os.environ['QWEN3VL_MODEL_DIR']
 cfg.update(gpu_ids=[0],min_free_mib=22000,startup_timeout_s=300,

@@ -19,7 +19,7 @@ p.add_argument('--quick',action='store_true')
 p.add_argument('--extended',action='store_true',help='also test 64/128 clients and higher open-loop rates')
 p.add_argument('--port-base',type=int,default=18000)
 args=p.parse_args()
-repo=Path(__file__).resolve().parents[1]
+repo=Path(__file__).resolve().parents[2]
 base=Path('/data/xiqiao/stream_vlm_pipeline_v1')
 out=Path(args.out).resolve();out.mkdir(parents=True,exist_ok=False)
 python=base/'env-qwen-vllm011/bin/python'

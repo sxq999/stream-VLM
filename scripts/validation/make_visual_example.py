@@ -3,7 +3,7 @@ import json
 import struct
 import zlib
 from pathlib import Path
-root=Path(__file__).resolve().parents[1]/"examples/visual"
+root=Path(__file__).resolve().parents[2]/"examples/visual"
 root.mkdir(parents=True,exist_ok=True)
 def chunk(kind,data):
     return struct.pack('!I',len(data))+kind+data+struct.pack('!I',zlib.crc32(kind+data)&0xffffffff)

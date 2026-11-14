@@ -1,7 +1,7 @@
 """Export a sanitized, evidence-derived engineering acceptance summary."""
 import json,hashlib
 from pathlib import Path
-root=Path(__file__).resolve().parents[1];base=root.parent
+root=Path(__file__).resolve().parents[2];base=root.parent
 def read(path):return json.loads(path.read_text())
 native=read(root/'runs/final-native-profile-001/summary.json')
 engine=read(root/'runs/final-vllm-profile-001/measurement/summary.json')
@@ -25,5 +25,5 @@ result=dict(tested_code_commit='27a91e2b67d4a345a28322999ab0b78fbc597aca',
     ci='workflow added; cloud outcome not certified by local results',
     scope='Four architecture-harness improvements verified on Qwen3-VL; broader multi-model/PD contract remains incomplete',
     limits=['Profiling is intrusive; no speedup claim.','Client overlap does not imply simultaneous GPU kernels.','Native stage hooks apply to configured model modules.','HTTP uses prefix replay; incremental state/PD/duplex are not claimed.'])
-(root/'docs/validation-architecture.json').write_text(json.dumps(result,indent=2),encoding='utf-8')
+(root/'docs/evidence/validation-architecture.json').write_text(json.dumps(result,indent=2),encoding='utf-8')
 print('ACCEPTANCE_EXPORTED')

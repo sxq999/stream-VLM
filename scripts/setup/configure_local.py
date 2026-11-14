@@ -5,7 +5,7 @@ p=argparse.ArgumentParser()
 p.add_argument('--model-dir',type=Path,required=True);p.add_argument('--engine-python',default=sys.executable)
 p.add_argument('--gpu',type=int,default=0);p.add_argument('--port',type=int,default=8100)
 p.add_argument('--engine-source',type=Path);p.add_argument('--out',type=Path,required=True)
-a=p.parse_args();root=Path(__file__).resolve().parents[1]
+a=p.parse_args();root=Path(__file__).resolve().parents[2]
 if not (a.model_dir/'config.json').is_file():p.error('model directory missing config.json')
 if not 1024<=a.port<=65535 or a.gpu<0:p.error('invalid GPU or unprivileged port')
 cfg=json.loads((root/'configs/qwen3vl.json').read_text())

@@ -4,7 +4,7 @@ from pathlib import Path
 from stream_pipeline.workloads import generate
 from stream_pipeline.deployment import Deployment
 from stream_pipeline.runner import read_config,run
-root=Path(__file__).resolve().parents[1]
+root=Path(__file__).resolve().parents[2]
 manifest=generate(root/'examples/visual/events.jsonl',root/'runs/burst-workload-001',4,0)
 cfg=read_config(root/'runs/final-local-config.json');cfg.update(manifest=str(manifest),concurrency=4)
 out=root/'runs/burst-acceptance-001'

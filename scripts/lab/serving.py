@@ -20,7 +20,7 @@ p.add_argument('--client-cap', type=int, default=128)
 p.add_argument('--warmup-requests', type=int, default=4)
 p.add_argument('--plan-only', action='store_true', help='write complete configs without connecting to GPUs')
 p.add_argument('--wall-limit-s', type=int, default=7200)
-a=p.parse_args();repo=Path(__file__).resolve().parents[1]
+a=p.parse_args();repo=Path(__file__).resolve().parents[2]
 if (not math.isfinite(a.duration_s) or not .01<=a.duration_s<=3600 or
     any(not math.isfinite(rate) or not 0<rate<=10000 for rate in a.rates) or
     not 1<=a.repeats<=20 or not 1<=a.output_tokens<=1024 or
