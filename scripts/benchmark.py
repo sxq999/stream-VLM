@@ -1,12 +1,15 @@
-"""Finite serving acceptance on a real local clip, official NCCL, and equal-GPU replicas."""
-import argparse,hashlib,json,math,re,signal,sys
-from pathlib import Path, PurePosixPath
+"""Run reproducible Qwen3-VL serving benchmarks with explicit local model/GPU paths."""
+import argparse,hashlib,json,math,os,re,signal,sys
+from pathlib import Path
 from stream_pipeline.stress import execute
 
 p=argparse.ArgumentParser()
+p.add_argument('--model-dir',type=Path,required=True,help='local Qwen3-VL-8B-Instruct checkpoint')
+p.add_argument('--engine-python',default=sys.executable,help='Python from the isolated vLLM environment')
+p.add_argument('--min-free-mib',type=int,default=22000)
 p.add_argument('--mode',choices=['single','replicas','nccl'],required=True)
 p.add_argument('--manifest');p.add_argument('--out',required=True);p.add_argument('--port-base',type=int,default=21000)
-p.add_argument('--gpus',type=int,nargs='+',default=[2,3]);p.add_argument('--smoke',action='store_true')
+p.add_argument('--gpus',type=int,nargs='+',required=True);p.add_argument('--smoke',action='store_true')
 p.add_argument('--profile', choices=['acceptance','sustained'], default='acceptance')
 p.add_argument('--engine-policy', choices=['legacy','chunked','cache_chunked'], default='legacy')
 p.add_argument('--duration-s', type=float, default=60)
@@ -20,24 +23,29 @@ p.add_argument('--client-cap', type=int, default=128)
 p.add_argument('--warmup-requests', type=int, default=4)
 p.add_argument('--plan-only', action='store_true', help='write complete configs without connecting to GPUs')
 p.add_argument('--wall-limit-s', type=int, default=7200)
-a=p.parse_args();repo=Path(__file__).resolve().parents[2]
+a=p.parse_args();repo=Path(__file__).resolve().parents[1]
 if (not math.isfinite(a.duration_s) or not .01<=a.duration_s<=3600 or
     any(not math.isfinite(rate) or not 0<rate<=10000 for rate in a.rates) or
     not 1<=a.repeats<=20 or not 1<=a.output_tokens<=1024 or
     not 1<=a.client_cap<=1024 or not 1<=a.max_pending<=4096 or
     (a.max_active is not None and not 1<=a.max_active<=1024) or
-    not 0<=a.warmup_requests<=32 or not 60<=a.wall_limit_s<=43200):
+    not 0<=a.warmup_requests<=32 or not 60<=a.wall_limit_s<=43200 or
+    not 1024<=a.port_base<=65135 or a.min_free_mib<0):
     p.error('invalid finite campaign limits')
 if a.smoke and a.profile!='acceptance':p.error('--smoke cannot be combined with sustained profile')
-base=PurePosixPath('/data/xiqiao/stream_vlm_pipeline_v1');python=base/'env-qwen-vllm011/bin/python';model=base/'models/Qwen3-VL-8B-Instruct'
-if len(set(a.gpus))!=len(a.gpus) or (a.mode!='single' and len(a.gpus)!=2):raise ValueError('two distinct GPUs required')
+python=Path(a.engine_python).expanduser().resolve();model=a.model_dir.expanduser().resolve()
+if len(set(a.gpus))!=len(a.gpus) or any(gpu<0 for gpu in a.gpus) or len(a.gpus)!=(1 if a.mode=='single' else 2):
+    p.error('single requires one GPU; replicas/nccl require two distinct nonnegative GPUs')
+if not a.plan_only and os.name!='posix':p.error('managed GPU benchmarks require Linux; --plan-only works offline')
+if not a.plan_only and not (model/'config.json').is_file():p.error('model directory missing config.json')
+source_lock=str(model/'SOURCE_LOCK.json') if (model/'SOURCE_LOCK.json').is_file() else None
 manifest=str(Path(a.manifest).resolve()) if a.manifest else str(repo/'examples/visual/events.jsonl')
 if a.profile=='sustained' and not a.manifest:p.error('sustained profile requires an explicit real-media manifest')
 root=Path(a.out).resolve()
 def engine(gpu,port,role=None,kv_port=None):
     cfg=json.loads((repo/'configs/qwen3vl.json').read_text())
-    cfg.update(manifest=manifest,gpu_ids=[gpu],engine_python=str(python),startup_timeout_s=480,min_free_mib=22000,
-               model_source_lock=str(model/'SOURCE_LOCK.json'))
+    cfg.update(manifest=manifest,gpu_ids=[gpu],engine_python=str(python),startup_timeout_s=480,min_free_mib=a.min_free_mib)
+    if source_lock:cfg['model_source_lock']=source_lock
     cfg['backend']['base_url']=f'http://127.0.0.1:{port}/v1'
     cfg['serve_command']=[str(python),'-m','vllm.entrypoints.openai.api_server','--model',str(model),
         '--served-model-name',cfg['backend']['model'],'--host','127.0.0.1','--port',str(port),'--dtype','bfloat16',
@@ -84,7 +92,7 @@ else:
         warmup_requests=1,repeats=2,first_text_slo_s=5,max_chunk_gap_slo_s=.5) for frames,c in [(4,1),(4,4),(8,4),(4,8)]]
     cases.append(dict(name='rate4',mode='open_loop',concurrency=16,requests=24,request_rate=4,input_frames=4,max_tokens=64,warmup_requests=1,repeats=2,first_text_slo_s=5,max_chunk_gap_slo_s=.5))
 spec=dict(manifest=manifest,backend=dict(type='openai_http',base_url=f'http://127.0.0.1:{a.port_base}/v1',model=service['model'],timeout_s=150),
-    model_source_lock=str(model/'SOURCE_LOCK.json'),deployment_configs=paths,service_config=str(path),unique_prompt_suffix=False,cases=cases)
+    model_source_lock=source_lock,deployment_configs=paths,service_config=str(path),unique_prompt_suffix=False,cases=cases)
 spec.update(campaign_profile=a.profile,engine_policy=a.engine_policy,
             campaign_generator_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
             sample_engine_metrics=a.profile=='sustained',monitor_interval_s=2,time_window_s=5,
@@ -97,6 +105,9 @@ spec=validate_spec(spec)
 (root/'campaign.json').write_text(json.dumps(spec,indent=2))
 if a.plan_only:
     print(json.dumps(dict(status='plan_only',out=str(root),measured_requests=sum(c['requests']*c['repeats'] for c in spec['cases']))));sys.exit(0)
+# Let an isolated engine import this checkout's connector without editing its environment.
+os.environ['PYTHONPATH']=str(repo/'src')+(os.pathsep+os.environ['PYTHONPATH'] if os.environ.get('PYTHONPATH') else '')
+
 def timed_out(*_):raise TimeoutError('finite experiment wall-time limit reached')
 signal.signal(signal.SIGALRM,timed_out);signal.alarm(a.wall_limit_s)
 result=execute(spec,root/'measurement');signal.alarm(0)

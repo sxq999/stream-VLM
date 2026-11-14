@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" font-family="Arial, Microsoft YaHei, sans-serif" data-pptx-page-role="content">
-<rect id="bg" data-pptx-role="background" width="1280" height="720" fill="#F8FAFC"/>
-<g id="header" data-pptx-bounds="64 18 1152 148"><text x="64" y="42" font-size="18" fill="#087F8C">02 Qwen 计算路径</text><text x="64" y="102" font-size="42" fill="#16324F" font-weight="bold">当前学习与验证对象：Qwen3-VL-8B</text><text x="64" y="150" font-size="24" fill="#566879">限定到 dense 检查点，按真实模型配置理解计算结构</text></g>
-<g id="vision-config" data-pptx-bounds="64 205 544 350" fill="#203448"><text x="64" y="245" font-size="30" fill="#087F8C" font-weight="bold">视觉部分</text><text x="64" y="310" font-size="26">27 层 ViT，hidden size 1152</text><text x="64" y="370" font-size="26">patch 16，spatial merge 2</text><text x="64" y="430" font-size="26">DeepStack 索引 8 / 16 / 24</text><text x="64" y="490" font-size="26">输出对接 4096 维语言表示</text></g>
-<g id="language-config" data-pptx-bounds="664 205 552 350" fill="#203448"><text x="664" y="245" font-size="30" fill="#16324F" font-weight="bold">语言部分</text><text x="664" y="310" font-size="26">36 层，hidden size 4096</text><text x="664" y="370" font-size="26">32 query heads，8 KV heads</text><text x="664" y="430" font-size="26">head dimension 128，使用 GQA</text><text x="664" y="490" font-size="26">interleaved MRoPE 位置编码</text></g>
-<g id="scope" data-pptx-bounds="64 585 1152 60"><text x="64" y="624" font-size="24" fill="#B76B23">其他 Qwen 分支的 GDN / QSA 不能直接套用到当前基座</text></g>
-<g id="footer" data-pptx-role="footer" data-pptx-bounds="64 662 1152 42" fill="#566879" font-size="18"><text x="64" y="688">来源：官方 Qwen3-VL-8B-Instruct config.json，报告 S1</text><text x="1170" y="688">04</text></g>
-</svg>

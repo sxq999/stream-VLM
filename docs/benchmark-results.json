@@ -1,0 +1,216 @@
+{
+  "model": "Qwen/Qwen3-VL-8B-Instruct",
+  "engine": "vllm==0.11.0",
+  "hardware": "RTX 3090 24GB",
+  "precision": "bfloat16",
+  "dataset": {
+    "frames": 12,
+    "duration_s": 12.0,
+    "fps": 1.0,
+    "width_cap": 448,
+    "source_sha256": "5df8a6acf4b296c79a1055c1f73a93646184947a296096faf7e3cd638c628257"
+  },
+  "runs": [
+    {
+      "mode": "single",
+      "case": "frames4_c1",
+      "repeats": 2,
+      "offered": 16,
+      "completed": 16,
+      "first_text_p95_s": 0.24692645654431544,
+      "completion_p95_s": 2.1094821527658496,
+      "requests_per_s": 0.5661316875341916,
+      "output_tokens_min": 64,
+      "output_tokens_max": 64
+    },
+    {
+      "mode": "single",
+      "case": "frames4_c4",
+      "repeats": 2,
+      "offered": 16,
+      "completed": 16,
+      "first_text_p95_s": 0.6382830095244572,
+      "completion_p95_s": 2.193654567061458,
+      "requests_per_s": 1.907424260287106,
+      "output_tokens_min": 64,
+      "output_tokens_max": 64
+    },
+    {
+      "mode": "single",
+      "case": "frames8_c4",
+      "repeats": 2,
+      "offered": 16,
+      "completed": 16,
+      "first_text_p95_s": 1.090198007732397,
+      "completion_p95_s": 2.6218997960095294,
+      "requests_per_s": 1.5612021793439943,
+      "output_tokens_min": 64,
+      "output_tokens_max": 64
+    },
+    {
+      "mode": "single",
+      "case": "frames4_c8",
+      "repeats": 2,
+      "offered": 32,
+      "completed": 32,
+      "first_text_p95_s": 1.2024965180142317,
+      "completion_p95_s": 2.7856123580480925,
+      "requests_per_s": 2.944334305934324,
+      "output_tokens_min": 64,
+      "output_tokens_max": 64
+    },
+    {
+      "mode": "single",
+      "case": "rate4",
+      "repeats": 2,
+      "offered": 48,
+      "completed": 48,
+      "first_text_p95_s": 2.741651164577342,
+      "completion_p95_s": 4.92257677851012,
+      "requests_per_s": 2.631599164357806,
+      "output_tokens_min": 64,
+      "output_tokens_max": 64
+    },
+    {
+      "mode": "replicas",
+      "case": "frames4_c1",
+      "repeats": 2,
+      "offered": 16,
+      "completed": 16,
+      "first_text_p95_s": 0.23816235267440788,
+      "completion_p95_s": 1.736493252683431,
+      "requests_per_s": 0.6120494258344228,
+      "output_tokens_min": 64,
+      "output_tokens_max": 64
+    },
+    {
+      "mode": "replicas",
+      "case": "frames4_c4",
+      "repeats": 2,
+      "offered": 16,
+      "completed": 16,
+      "first_text_p95_s": 3.331038750737207,
+      "completion_p95_s": 5.277249603532255,
+      "requests_per_s": 1.622631777935228,
+      "output_tokens_min": 64,
+      "output_tokens_max": 64
+    },
+    {
+      "mode": "replicas",
+      "case": "frames8_c4",
+      "repeats": 2,
+      "offered": 16,
+      "completed": 16,
+      "first_text_p95_s": 0.6234007497841958,
+      "completion_p95_s": 2.4778368699771818,
+      "requests_per_s": 1.8239756284818687,
+      "output_tokens_min": 64,
+      "output_tokens_max": 64
+    },
+    {
+      "mode": "replicas",
+      "case": "frames4_c8",
+      "repeats": 2,
+      "offered": 32,
+      "completed": 32,
+      "first_text_p95_s": 4.649719658377579,
+      "completion_p95_s": 6.283840437675825,
+      "requests_per_s": 2.171552128604227,
+      "output_tokens_min": 64,
+      "output_tokens_max": 64
+    },
+    {
+      "mode": "replicas",
+      "case": "rate4",
+      "repeats": 2,
+      "offered": 48,
+      "completed": 48,
+      "first_text_p95_s": 6.5152978003025055,
+      "completion_p95_s": 8.374099135433788,
+      "requests_per_s": 1.9534125200556613,
+      "output_tokens_min": 64,
+      "output_tokens_max": 64
+    },
+    {
+      "mode": "nccl",
+      "case": "frames4_c1",
+      "repeats": 2,
+      "offered": 16,
+      "completed": 16,
+      "first_text_p95_s": 0.3598544592387043,
+      "completion_p95_s": 2.1536534875631332,
+      "requests_per_s": 0.5575749458770023,
+      "output_tokens_min": 64,
+      "output_tokens_max": 64
+    },
+    {
+      "mode": "nccl",
+      "case": "frames4_c4",
+      "repeats": 2,
+      "offered": 16,
+      "completed": 16,
+      "first_text_p95_s": 0.945025579421781,
+      "completion_p95_s": 2.7949112627247814,
+      "requests_per_s": 1.6000304368899088,
+      "output_tokens_min": 64,
+      "output_tokens_max": 64
+    },
+    {
+      "mode": "nccl",
+      "case": "frames8_c4",
+      "repeats": 2,
+      "offered": 16,
+      "completed": 16,
+      "first_text_p95_s": 1.387577218178194,
+      "completion_p95_s": 3.0533208366832696,
+      "requests_per_s": 1.423874773443089,
+      "output_tokens_min": 64,
+      "output_tokens_max": 64
+    },
+    {
+      "mode": "nccl",
+      "case": "frames4_c8",
+      "repeats": 2,
+      "offered": 32,
+      "completed": 32,
+      "first_text_p95_s": 4.813147246558219,
+      "completion_p95_s": 6.589473835309036,
+      "requests_per_s": 1.7114328761556281,
+      "output_tokens_min": 64,
+      "output_tokens_max": 64
+    },
+    {
+      "mode": "nccl",
+      "case": "rate4",
+      "repeats": 2,
+      "offered": 48,
+      "completed": 48,
+      "first_text_p95_s": 8.484373612358468,
+      "completion_p95_s": 10.193058446055511,
+      "requests_per_s": 1.8684696444341273,
+      "output_tokens_min": 64,
+      "output_tokens_max": 64
+    }
+  ],
+  "experiment": {
+    "max_model_len": 4096,
+    "max_num_seqs_per_gpu": 8,
+    "prefix_caching": false,
+    "chunked_prefill": false,
+    "eager": true,
+    "multimodal_processor_cache": true,
+    "gateway_max_active": {
+      "single": 8,
+      "replicas": 4,
+      "nccl": 4
+    },
+    "physical_pd_transport": "same-host NCCL SHM; no GPU peer-direct"
+  },
+  "limitations": [
+    "One 12-second clip, two repeats per case; not stable production capacity.",
+    "Single-GPU and two-GPU modes have different resource/admission budgets.",
+    "Client first text and chunk gaps are not native engine TTFT/TPOT.",
+    "Actual outputs contain 64 tokens, but text is not identical across deployments.",
+    "Independent KV checksum validation is separate from timed performance runs."
+  ]
+}

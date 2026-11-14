@@ -4,7 +4,7 @@ The harness controls requests and deployments. The tested system is the installe
 
 ## 1. Configure the tested implementation
 
-Install the harness with `python -m pip install -e .`. Use a validated engine environment; the tested Qwen3-VL candidate uses Torch 2.8.0, Transformers 4.57.1 and vLLM 0.11.0 on RTX 3090. Full dependency freeze is stored separately. Set paths for your own machine:
+Install the harness with `python -m pip install -e .`. Use a validated engine environment; the tested Qwen3-VL candidate uses Torch 2.8.0, Transformers 4.57.1 and vLLM 0.11.0 on RTX 3090. Version pins are in requirements/qwen-vllm011.txt; actual runtime versions are captured with each experiment. Set paths for your own machine:
 
 ```sh
 python scripts/setup/configure_local.py --model-dir /path/to/Qwen3-VL-8B-Instruct \
@@ -58,4 +58,4 @@ Profiling changes runtime behavior and has its own output directory. Do not clai
 
 Create another configuration pointing to the candidate engine environment/source, preserve the workload and resource budget, and repeat steps 2–4. Record cold/warm behavior and all failures. The harness provides measurement and versioning; it does not assert that the candidate is better.
 
-Current limits: Qwen3.5/MiniCPM adapters and duplex audio remain pending. Standard same-host NCCL PD is verified separately; see the [serving guide](serving.md) and [current status](../status.md). These commands do not implement GPU hardware simulation or new optimization algorithms.
+Current limits: Qwen3.5/MiniCPM adapters and duplex audio remain pending. Standard same-host NCCL PD is verified separately; see the [serving guide](serving.md) and [supported scope](../../README.md). These commands do not implement GPU hardware simulation or new optimization algorithms.

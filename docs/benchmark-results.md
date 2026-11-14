@@ -1,12 +1,12 @@
-# 视频 serving 与 NCCL PD 验收
+# Qwen3-VL Serving 实验结果
 
-本轮补齐真实视频快照负载与不落盘的 NCCL PD 基线。模型仍为 Qwen3-VL-8B-Instruct，vLLM 0.11.0；不含新的调度算法或模型训练。
+以下为真实视频快照负载下的 Serving 与同机 NCCL PD 基线。模型仍为 Qwen3-VL-8B-Instruct，vLLM 0.11.0；不含新的调度算法或模型训练。
 
-## 完成了什么
+## 实验条件
 
 - 本地 12 秒体育视频，1 fps 抽帧、宽度上限 448，保留源 PTS 与因果查询截止点。音频不送入模型。
 - 单卡、同两张 GPU 的双副本、NCCL PD 三种部署，各 5 组负载、每组重复两次。
-- 共 384 个测量请求全部完成，预热独立；Linux 33 项测试通过。
+- 共 384 个测量请求完成，预热单独记录。
 - NCCL 发送/接收各 4968 个张量、12527861760 字节，对应 138 次请求注入（含预热），无缺失/形状/溢出警告。
 
 - 独立实时回放 3 个查询，快照帧数为 4/8/8；生成期间收到的新帧不进入当前快照。另有 3 个并发颜色问答通过，216 个 KV 张量的发送/接收 SHA256 逐一相同。
@@ -45,8 +45,8 @@ CUDA 预检显示 GPU 2→3、3→2 的 peer access 均为 false；NCCL 实际�
 
 性能运行中的长文本输出跨部署不全部相同，不能用输出哈希把它们称为逐 token 等价。本轮额外使用独立验证运行核对 KV 原始字节和三个受控颜色问题。字节校验显式复制张量到 CPU 计算 SHA256，属于侵入式验证，不进入上表性能数据，也不代表完整任务质量评测。
 
-## 可复现材料
+## 复现方法与数据
 
-运行方式见 [SERVING_V2.zh-CN.md](../guides/serving.md)。机器可读证据见 [validation-serving-v2.json](../evidence/validation-serving-v2.json)。原始目录保留逐请求结果、完整配置、每次实际源码快照、引擎/NCCL 日志、GPU 资源采样、媒体来源哈希和重建的因果输入计划。
+运行方法见 [Serving](guides/serving.md)，持续负载见[压力测试](guides/stress.md)。完整结果与条件汇总在 [benchmark-results.json](benchmark-results.json)。
 
-服务器原始目录：`/data/xiqiao/stream_vlm_serving_v2_20261114`。视频和 KV/张量内容不提交 Git。
+本实验使用本地 12 秒体育片段，原视频不随仓库分发；汇总 JSON 保留源文件哈希。使用自己的片段可以复现流程，但不能视为对表中数值的精确复现。默认矩阵配置位于 `scripts/benchmark.py`，每次运行会保存实际配置、源码身份、请求日志、引擎日志与采样。

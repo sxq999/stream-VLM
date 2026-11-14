@@ -11,6 +11,9 @@ def check(root):
     documents = [root/'README.md', root/'scripts/README.md', root/'configs/README.md']
     documents += [p for p in (root/'docs').rglob('*') if p.suffix in ('.md','.html')]
     errors, checked = [], 0
+    for path in list((root/'docs').rglob('*'))+list(root.iterdir()):
+        if path.is_file() and path.suffix.lower() in ('.ppt','.pptx','.doc','.docx','.key'):
+            errors.append(dict(file=path.relative_to(root).as_posix(),error='internal presentation material is outside the public project scope'))
     for path in documents:
         text = path.read_text(encoding='utf-8')
         if path.suffix=='.md':

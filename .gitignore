@@ -18,3 +18,13 @@ __pycache__/
 *.tar*
 *.zip
 local.*
+
+# Internal reports and presentation assets are not project source.
+*.ppt
+*.pptx
+*.doc
+*.docx
+*.key
+/internal/
+/docs/archive/
+/docs/presentation/

@@ -1,28 +1,15 @@
-# StreamVLM 实验管线
+# StreamVLM Experiment Harness
 
-为流式视觉语言模型提供可重复的 GPU 实验：**按时间输入视频帧和问题，调用推理引擎，记录性能与运行证据。** 用于后续比较 vLLM 调度、缓存管理和 GPU 算子实现。
+流式视觉语言模型的实验与测量工具：按事件时间回放视频帧和问题，调用推理后端，测量延迟、吞吐与排队，并保存可复现的运行记录。
 
 ```text
-视频帧＋问题 → 按时间回放与历史选帧 → 后端适配器
-                                     ├─ 直接调用引擎 → GPU
-                                     └─ Serving 网关 → 引擎实例 → GPU
-                                                       单卡／副本／P-D
-
-配置、输入、请求结果与性能记录 → runs/，不提交 Git
+帧与问题 → 因果回放／历史选帧 → 后端适配器 → 推理引擎 → GPU
+                                   └→ 可选 Serving 网关 → 单实例／副本／P-D
 ```
 
-## 从这里开始
+## 快速开始
 
-| 你想做什么 | 阅读入口 |
-|---|---|
-| 安装项目、跑通一次实验 | [快速开始](docs/guides/quickstart.md) |
-| 理解各模块及其边界 | [管线设计](docs/design.md) |
-| 部署 Serving、运行压力测试 | [Serving 与 PD](docs/guides/serving.md) |
-| 查看真实实验及当前结论 | [实验结果](docs/results/README.md) |
-
-## 先跑通，不需要 GPU
-
-Python 3.11+，在仓库根目录执行：
+Python 3.11+。以下示例不需要 GPU：
 
 ```sh
 python -m pip install -e .
@@ -30,22 +17,30 @@ python -m stream_pipeline validate --suite tests
 python -m stream_pipeline run --config configs/mock.json --out runs/mock-001
 ```
 
-Mock 只验证管线。真实 GPU 部署见快速开始，输出目录每次使用新名称。
+Mock 检查数据流和日志，不执行模型。真实 GPU 的托管部署需要 Linux；模型与 vLLM 使用独立环境。
 
-## 目前做到哪里
+## 文档
 
-已验证 Qwen3-VL-8B 在 RTX 3090 上的部署、视频快照回放、GPU profiling、单卡／双副本／同机 NCCL PD。当前 HTTP 路径按查询提交完整历史快照；NCCL 实测走主机共享内存。
-
-持续压测工具已通过本地验证，新增 GPU 持续实验待服务器恢复访问。其他模型、原生音视频双工、持久会话和新 PD 调度策略尚未验证。详见[当前状态](docs/status.md)。
-
-## 目录
-
-| 目录 | 内容 |
+| 主题 | 入口 |
 |---|---|
-| `src/stream_pipeline/` | 管线、后端、Serving 网关与测量代码 |
-| `configs/`、`examples/` | 配置模板与小型示例输入 |
-| `scripts/` | 按用途分类的部署、分析、准备与验收工具 |
-| `tests/` | 自动化测试 |
-| `docs/` | 使用文档、实验结果和汇报；旧材料位于 `archive/` |
+| 安装、真实 GPU 执行与输出 | [快速开始](docs/guides/quickstart.md) |
+| 输入协议与模块边界 | [管线设计](docs/design.md) |
+| 单卡、副本与标准 PD | [Serving](docs/guides/serving.md) |
+| 持续负载、指标与结果导出 | [压力测试](docs/guides/stress.md) |
+| 多组实验与 GPU trace | [实验与 Profiling](docs/guides/experiments.md) |
+| 已测配置、结果与限制 | [实验结果](docs/benchmark-results.md) |
 
-需要汇报时使用[当前 PPT 与讲稿](docs/presentation/README.md)。完整资料入口见[文档目录](docs/README.md)。模型权重、视频原件、机器配置和大型运行产物保留在本地或服务器，不提交 Git。
+## 支持范围
+
+已在 RTX 3090 上验证 Qwen3-VL-8B、vLLM 0.11.0、单卡／双副本／同机 NCCL PD。持续压测工具已通过本地 HTTP 测试，尚无持续 GPU 容量结论。
+
+当前按查询提交完整输入快照，不提供持久会话增量 prefill、中途插帧、音视频双工或动态 PD 算法。其他模型需单独适配和验证。SSE 首文本与块间隔是客户端观察值，不直接等同于引擎 TTFT／TPOT。
+
+## 项目结构
+
+- `src/stream_pipeline/`：回放、后端、部署、Serving 与测量。
+- `configs/`、`examples/`：配置模板和小型输入示例。
+- `scripts/`：实验入口、配置准备和结果分析。
+- `tests/`：自动化测试；`docs/`：使用与实验说明。
+
+运行输出统一写入 `runs/`。模型权重、视频原件、机器配置和大型 trace 不提交 Git。

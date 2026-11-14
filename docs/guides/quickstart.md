@@ -65,4 +65,4 @@ python -m stream_pipeline experiment --config runs/candidate-config.json --out r
 
 模型和负载保持一致，换的是被测引擎。程序会记录源码版本及修改痕迹。也可以改变并发、帧保留策略等配置，或使用 `workload`/`suite` 安排多种情况；请明确这时哪些实验条件发生了变化。
 
-Qwen3-VL 的这些入口已通过真实 GPU 验证。同机标准 NCCL PD 见 [Serving 指南](serving.md)；其他模型、原生双工与新策略见[当前状态](../status.md)。
+Qwen3-VL 的这些入口已通过真实 GPU 验证。同机标准 PD 见 [Serving](serving.md)，验证范围和限制见[实验结果](../benchmark-results.md)。
