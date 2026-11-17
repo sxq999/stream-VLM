@@ -29,6 +29,7 @@ Mock 检查数据流和日志，不执行模型。真实 GPU 的托管部署需�
 | 持续负载、指标与结果导出 | [压力测试](docs/guides/stress.md) |
 | 多组实验与 GPU trace | [实验与 Profiling](docs/guides/experiments.md) |
 | 已测配置、结果与限制 | [实验结果](docs/benchmark-results.md) |
+| 实验相关的已有研究 | [相关工作与引用](docs/related-work.md) |
 
 ## 支持范围
 
