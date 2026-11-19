@@ -1,0 +1,1875 @@
+{
+  "schema_version": 1,
+  "scope": "Existing upstream batch_vision_feed option, same hidden-only baseline and two GPUs; not a new method or PD",
+  "plan": {
+    "schema_version": 1,
+    "units": 188,
+    "families": [
+      "listen",
+      "talk"
+    ],
+    "repeats": 3,
+    "questions": {
+      "60": "What do you see in the video so far?",
+      "128": "What is the color of the cooler labeled PRIME near the team bench?"
+    },
+    "period_s": 1,
+    "queue_capacity": 256,
+    "max_wait_s": 10,
+    "max_allocated_gib": 22,
+    "max_source_lateness_p95_s": 0.05,
+    "workload_fields": [
+      "is_listen",
+      "end_of_turn",
+      "n_tokens",
+      "n_tts_tokens",
+      "waveform_samples",
+      "kv_tokens"
+    ],
+    "timing_gate": "Both full-length families must match workload fields at every unit; otherwise no timing or speedup claim",
+    "repeat_gate": "Each timed variant must exactly reproduce its own frozen gate output signatures",
+    "ordering": "Family order reversed on odd repeats; variant order alternates across pairs",
+    "scope": "Existing upstream batch_vision_feed option, same hidden-only baseline and two GPUs; not a new method or PD",
+    "quality_scope": "Text and waveform hash differences logged separately; no task quality or audio equivalence claim"
+  },
+  "gate": {
+    "passed": false,
+    "units_per_variant_family": 188,
+    "total_units": 752,
+    "workload_changes": [
+      {
+        "family": "talk",
+        "unit": 71,
+        "fields": [
+          "end_of_turn",
+          "n_tokens",
+          "waveform_samples",
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "end_of_turn": true,
+          "n_tokens": 1,
+          "waveform_samples": 30720,
+          "kv_tokens": 5746
+        },
+        "batch": {
+          "end_of_turn": false,
+          "n_tokens": 4,
+          "waveform_samples": 24000,
+          "kv_tokens": 5749
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 72,
+        "fields": [
+          "is_listen",
+          "n_tokens",
+          "n_tts_tokens",
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "is_listen": true,
+          "n_tokens": 0,
+          "n_tts_tokens": 0,
+          "kv_tokens": 5825
+        },
+        "batch": {
+          "is_listen": false,
+          "n_tokens": 4,
+          "n_tts_tokens": 25,
+          "kv_tokens": 5833
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 73,
+        "fields": [
+          "is_listen",
+          "n_tokens",
+          "n_tts_tokens",
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "is_listen": true,
+          "n_tokens": 0,
+          "n_tts_tokens": 0,
+          "kv_tokens": 5904
+        },
+        "batch": {
+          "is_listen": false,
+          "n_tokens": 4,
+          "n_tts_tokens": 25,
+          "kv_tokens": 5917
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 74,
+        "fields": [
+          "is_listen",
+          "n_tokens",
+          "n_tts_tokens",
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "is_listen": true,
+          "n_tokens": 0,
+          "n_tts_tokens": 0,
+          "kv_tokens": 5983
+        },
+        "batch": {
+          "is_listen": false,
+          "n_tokens": 4,
+          "n_tts_tokens": 25,
+          "kv_tokens": 6001
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 75,
+        "fields": [
+          "is_listen",
+          "n_tokens",
+          "n_tts_tokens",
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "is_listen": true,
+          "n_tokens": 0,
+          "n_tts_tokens": 0,
+          "kv_tokens": 6062
+        },
+        "batch": {
+          "is_listen": false,
+          "n_tokens": 2,
+          "n_tts_tokens": 25,
+          "kv_tokens": 6083
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 76,
+        "fields": [
+          "is_listen",
+          "end_of_turn",
+          "n_tokens",
+          "n_tts_tokens",
+          "waveform_samples",
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "is_listen": true,
+          "end_of_turn": false,
+          "n_tokens": 0,
+          "n_tts_tokens": 0,
+          "waveform_samples": 24000,
+          "kv_tokens": 6141
+        },
+        "batch": {
+          "is_listen": false,
+          "end_of_turn": true,
+          "n_tokens": 1,
+          "n_tts_tokens": 25,
+          "waveform_samples": 30720,
+          "kv_tokens": 6164
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 77,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 6220
+        },
+        "batch": {
+          "kv_tokens": 6243
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 78,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 6299
+        },
+        "batch": {
+          "kv_tokens": 6322
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 79,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 6378
+        },
+        "batch": {
+          "kv_tokens": 6401
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 80,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 6457
+        },
+        "batch": {
+          "kv_tokens": 6480
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 81,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 6536
+        },
+        "batch": {
+          "kv_tokens": 6559
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 82,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 6615
+        },
+        "batch": {
+          "kv_tokens": 6638
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 83,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 6694
+        },
+        "batch": {
+          "kv_tokens": 6717
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 84,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 6773
+        },
+        "batch": {
+          "kv_tokens": 6796
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 85,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 6852
+        },
+        "batch": {
+          "kv_tokens": 6875
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 86,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 6931
+        },
+        "batch": {
+          "kv_tokens": 6954
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 87,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 7010
+        },
+        "batch": {
+          "kv_tokens": 7033
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 88,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 7089
+        },
+        "batch": {
+          "kv_tokens": 7112
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 89,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 7168
+        },
+        "batch": {
+          "kv_tokens": 7191
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 90,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 7247
+        },
+        "batch": {
+          "kv_tokens": 7270
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 91,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 7326
+        },
+        "batch": {
+          "kv_tokens": 7349
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 92,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 7405
+        },
+        "batch": {
+          "kv_tokens": 7428
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 93,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 7484
+        },
+        "batch": {
+          "kv_tokens": 7507
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 94,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 7563
+        },
+        "batch": {
+          "kv_tokens": 7586
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 95,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 7642
+        },
+        "batch": {
+          "kv_tokens": 7665
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 96,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 7721
+        },
+        "batch": {
+          "kv_tokens": 7744
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 97,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 7800
+        },
+        "batch": {
+          "kv_tokens": 7823
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 98,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 7879
+        },
+        "batch": {
+          "kv_tokens": 7902
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 99,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 7958
+        },
+        "batch": {
+          "kv_tokens": 7981
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 100,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 8037
+        },
+        "batch": {
+          "kv_tokens": 8060
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 101,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 8116
+        },
+        "batch": {
+          "kv_tokens": 8139
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 102,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 8195
+        },
+        "batch": {
+          "kv_tokens": 8218
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 103,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 8274
+        },
+        "batch": {
+          "kv_tokens": 8297
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 104,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 8353
+        },
+        "batch": {
+          "kv_tokens": 8376
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 105,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 8432
+        },
+        "batch": {
+          "kv_tokens": 8455
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 106,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 8511
+        },
+        "batch": {
+          "kv_tokens": 8534
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 107,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 8590
+        },
+        "batch": {
+          "kv_tokens": 8613
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 108,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 8669
+        },
+        "batch": {
+          "kv_tokens": 8692
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 109,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 8748
+        },
+        "batch": {
+          "kv_tokens": 8771
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 110,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 8827
+        },
+        "batch": {
+          "kv_tokens": 8850
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 111,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 8906
+        },
+        "batch": {
+          "kv_tokens": 8929
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 112,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 8985
+        },
+        "batch": {
+          "kv_tokens": 9008
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 113,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 9064
+        },
+        "batch": {
+          "kv_tokens": 9087
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 114,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 9143
+        },
+        "batch": {
+          "kv_tokens": 9166
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 115,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 9222
+        },
+        "batch": {
+          "kv_tokens": 9245
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 116,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 9301
+        },
+        "batch": {
+          "kv_tokens": 9324
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 117,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 9380
+        },
+        "batch": {
+          "kv_tokens": 9403
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 118,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 9459
+        },
+        "batch": {
+          "kv_tokens": 9482
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 119,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 9538
+        },
+        "batch": {
+          "kv_tokens": 9561
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 120,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 9617
+        },
+        "batch": {
+          "kv_tokens": 9640
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 121,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 9696
+        },
+        "batch": {
+          "kv_tokens": 9719
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 122,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 9775
+        },
+        "batch": {
+          "kv_tokens": 9798
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 123,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 9854
+        },
+        "batch": {
+          "kv_tokens": 9877
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 124,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 9933
+        },
+        "batch": {
+          "kv_tokens": 9956
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 125,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 10012
+        },
+        "batch": {
+          "kv_tokens": 10035
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 126,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 10091
+        },
+        "batch": {
+          "kv_tokens": 10114
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 127,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 10170
+        },
+        "batch": {
+          "kv_tokens": 10193
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 128,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 10269
+        },
+        "batch": {
+          "kv_tokens": 10292
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 129,
+        "fields": [
+          "n_tokens",
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "n_tokens": 5,
+          "kv_tokens": 10354
+        },
+        "batch": {
+          "n_tokens": 4,
+          "kv_tokens": 10376
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 130,
+        "fields": [
+          "end_of_turn",
+          "n_tokens",
+          "n_tts_tokens",
+          "waveform_samples",
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "end_of_turn": true,
+          "n_tokens": 1,
+          "n_tts_tokens": 15,
+          "waveform_samples": 21120,
+          "kv_tokens": 10435
+        },
+        "batch": {
+          "end_of_turn": false,
+          "n_tokens": 4,
+          "n_tts_tokens": 25,
+          "waveform_samples": 24000,
+          "kv_tokens": 10460
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 131,
+        "fields": [
+          "is_listen",
+          "end_of_turn",
+          "n_tokens",
+          "n_tts_tokens",
+          "waveform_samples",
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "is_listen": true,
+          "end_of_turn": false,
+          "n_tokens": 0,
+          "n_tts_tokens": 0,
+          "waveform_samples": 24000,
+          "kv_tokens": 10514
+        },
+        "batch": {
+          "is_listen": false,
+          "end_of_turn": true,
+          "n_tokens": 1,
+          "n_tts_tokens": 10,
+          "waveform_samples": 16320,
+          "kv_tokens": 10541
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 132,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 10593
+        },
+        "batch": {
+          "kv_tokens": 10620
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 133,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 10672
+        },
+        "batch": {
+          "kv_tokens": 10699
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 134,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 10751
+        },
+        "batch": {
+          "kv_tokens": 10778
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 135,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 10830
+        },
+        "batch": {
+          "kv_tokens": 10857
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 136,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 10909
+        },
+        "batch": {
+          "kv_tokens": 10936
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 137,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 10988
+        },
+        "batch": {
+          "kv_tokens": 11015
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 138,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 11067
+        },
+        "batch": {
+          "kv_tokens": 11094
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 139,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 11146
+        },
+        "batch": {
+          "kv_tokens": 11173
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 140,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 11225
+        },
+        "batch": {
+          "kv_tokens": 11252
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 141,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 11304
+        },
+        "batch": {
+          "kv_tokens": 11331
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 142,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 11383
+        },
+        "batch": {
+          "kv_tokens": 11410
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 143,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 11462
+        },
+        "batch": {
+          "kv_tokens": 11489
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 144,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 11541
+        },
+        "batch": {
+          "kv_tokens": 11568
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 145,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 11620
+        },
+        "batch": {
+          "kv_tokens": 11647
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 146,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 11699
+        },
+        "batch": {
+          "kv_tokens": 11726
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 147,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 11778
+        },
+        "batch": {
+          "kv_tokens": 11805
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 148,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 11857
+        },
+        "batch": {
+          "kv_tokens": 11884
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 149,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 11936
+        },
+        "batch": {
+          "kv_tokens": 11963
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 150,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 12015
+        },
+        "batch": {
+          "kv_tokens": 12042
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 151,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 12094
+        },
+        "batch": {
+          "kv_tokens": 12121
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 152,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 12173
+        },
+        "batch": {
+          "kv_tokens": 12200
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 153,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 12252
+        },
+        "batch": {
+          "kv_tokens": 12279
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 154,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 12331
+        },
+        "batch": {
+          "kv_tokens": 12358
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 155,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 12410
+        },
+        "batch": {
+          "kv_tokens": 12437
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 156,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 12489
+        },
+        "batch": {
+          "kv_tokens": 12516
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 157,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 12568
+        },
+        "batch": {
+          "kv_tokens": 12595
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 158,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 12647
+        },
+        "batch": {
+          "kv_tokens": 12674
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 159,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 12726
+        },
+        "batch": {
+          "kv_tokens": 12753
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 160,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 12805
+        },
+        "batch": {
+          "kv_tokens": 12832
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 161,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 12884
+        },
+        "batch": {
+          "kv_tokens": 12911
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 162,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 12963
+        },
+        "batch": {
+          "kv_tokens": 12990
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 163,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 13042
+        },
+        "batch": {
+          "kv_tokens": 13069
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 164,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 13121
+        },
+        "batch": {
+          "kv_tokens": 13148
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 165,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 13200
+        },
+        "batch": {
+          "kv_tokens": 13227
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 166,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 13279
+        },
+        "batch": {
+          "kv_tokens": 13306
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 167,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 13358
+        },
+        "batch": {
+          "kv_tokens": 13385
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 168,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 13437
+        },
+        "batch": {
+          "kv_tokens": 13464
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 169,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 13516
+        },
+        "batch": {
+          "kv_tokens": 13543
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 170,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 13595
+        },
+        "batch": {
+          "kv_tokens": 13622
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 171,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 13674
+        },
+        "batch": {
+          "kv_tokens": 13701
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 172,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 13753
+        },
+        "batch": {
+          "kv_tokens": 13780
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 173,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 13832
+        },
+        "batch": {
+          "kv_tokens": 13859
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 174,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 13911
+        },
+        "batch": {
+          "kv_tokens": 13938
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 175,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 13990
+        },
+        "batch": {
+          "kv_tokens": 14017
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 176,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 14069
+        },
+        "batch": {
+          "kv_tokens": 14096
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 177,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 14148
+        },
+        "batch": {
+          "kv_tokens": 14175
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 178,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 14227
+        },
+        "batch": {
+          "kv_tokens": 14254
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 179,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 14306
+        },
+        "batch": {
+          "kv_tokens": 14333
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 180,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 14385
+        },
+        "batch": {
+          "kv_tokens": 14412
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 181,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 14464
+        },
+        "batch": {
+          "kv_tokens": 14491
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 182,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 14543
+        },
+        "batch": {
+          "kv_tokens": 14570
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 183,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 14622
+        },
+        "batch": {
+          "kv_tokens": 14649
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 184,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 14701
+        },
+        "batch": {
+          "kv_tokens": 14728
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 185,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 14780
+        },
+        "batch": {
+          "kv_tokens": 14807
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 186,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 14859
+        },
+        "batch": {
+          "kv_tokens": 14886
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 187,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 14938
+        },
+        "batch": {
+          "kv_tokens": 14965
+        }
+      },
+      {
+        "family": "talk",
+        "unit": 188,
+        "fields": [
+          "kv_tokens"
+        ],
+        "unbatched": {
+          "kv_tokens": 15017
+        },
+        "batch": {
+          "kv_tokens": 15044
+        }
+      }
+    ],
+    "numerical_or_text_changes": [
+      {
+        "family": "talk",
+        "unit": 64,
+        "fields": [
+          "waveform_sha256"
+        ]
+      },
+      {
+        "family": "talk",
+        "unit": 65,
+        "fields": [
+          "text",
+          "waveform_sha256"
+        ]
+      },
+      {
+        "family": "talk",
+        "unit": 66,
+        "fields": [
+          "waveform_sha256"
+        ]
+      },
+      {
+        "family": "talk",
+        "unit": 67,
+        "fields": [
+          "waveform_sha256"
+        ]
+      },
+      {
+        "family": "talk",
+        "unit": 68,
+        "fields": [
+          "waveform_sha256"
+        ]
+      },
+      {
+        "family": "talk",
+        "unit": 69,
+        "fields": [
+          "text",
+          "waveform_sha256"
+        ]
+      },
+      {
+        "family": "talk",
+        "unit": 70,
+        "fields": [
+          "text",
+          "waveform_sha256"
+        ]
+      },
+      {
+        "family": "talk",
+        "unit": 71,
+        "fields": [
+          "text",
+          "waveform_sha256"
+        ]
+      },
+      {
+        "family": "talk",
+        "unit": 72,
+        "fields": [
+          "text",
+          "waveform_sha256"
+        ]
+      },
+      {
+        "family": "talk",
+        "unit": 73,
+        "fields": [
+          "text",
+          "waveform_sha256"
+        ]
+      },
+      {
+        "family": "talk",
+        "unit": 74,
+        "fields": [
+          "text",
+          "waveform_sha256"
+        ]
+      },
+      {
+        "family": "talk",
+        "unit": 75,
+        "fields": [
+          "text",
+          "waveform_sha256"
+        ]
+      },
+      {
+        "family": "talk",
+        "unit": 76,
+        "fields": [
+          "waveform_sha256"
+        ]
+      },
+      {
+        "family": "talk",
+        "unit": 128,
+        "fields": [
+          "text",
+          "waveform_sha256"
+        ]
+      },
+      {
+        "family": "talk",
+        "unit": 129,
+        "fields": [
+          "text",
+          "waveform_sha256"
+        ]
+      },
+      {
+        "family": "talk",
+        "unit": 130,
+        "fields": [
+          "text",
+          "waveform_sha256"
+        ]
+      },
+      {
+        "family": "talk",
+        "unit": 131,
+        "fields": [
+          "waveform_sha256"
+        ]
+      }
+    ],
+    "unbatched_matches_frozen": true,
+    "strict_byte_equivalence_claimed": false,
+    "quality_evaluated": false
+  },
+  "completion": {
+    "complete": true,
+    "workload_gate_passed": false,
+    "timing_performed": false,
+    "decision": "workload drift; performance comparison withheld",
+    "unix": 1795103328.6561284
+  },
+  "source_sha256": {
+    "vision_batch_comparison.py": "eb2706ce377c86e41465d4ba82725b3a613e97250fd6284a9810d394e2d0be05",
+    "vision-batch-comparison.json": "eb14464aec1231078af40ca1f4319f507b6273b682d333f34050c7992af02a33",
+    "venus_state.py": "328275263aef40a103e68352f465d9b9b72fd982ff43abe758c9ced71873ea95",
+    "venus_fastpath.py": "6cd1f1e23d1dd17507bb202746f69f489b305b3924ba69b27c5ec50deae2441d",
+    "baseline-comparison.json": "db454952091ae93a87cdfcb00c5c7b04afe06dc9995adfc2e3a38424fd06e76a",
+    "session_probe.py": "d23fae02b442f2a07602de3c1bae8536f23367c6d00bc6ca45a7a79c53a98523",
+    "single_probe.py": "72a85a78ff6154683758770d212849af110271f755831b045496e7fec332e1a8"
+  },
+  "runtime": {
+    "torch": "2.4.1+cu121",
+    "cuda": "12.1",
+    "source_sha256": "e3c3cdee80976fb4473edc830301a0cefda62ad2b4f554a9182ea857549dc34c"
+  },
+  "provenance": {
+    "archive_sha256": "385ee3b2b2b542860b8522e52b9790ad44807aae0e2025de60ad2f44548f1529",
+    "verified_files": 27,
+    "foreign_process_samples": 0,
+    "monitor_errors": 0
+  },
+  "limits": [
+    "Single clip, fixed seed and voice, window off",
+    "No task-quality or audio-equivalence claim",
+    "Existing upstream option, no PD"
+  ],
+  "gate_run_summaries": [
+    {
+      "family": "listen",
+      "variant": "unbatched",
+      "units": 188,
+      "speak_units": 0,
+      "language_tokens": 0,
+      "tts_tokens": 0,
+      "waveform_samples": 4512000,
+      "final_kv_tokens": 14922
+    },
+    {
+      "family": "listen",
+      "variant": "batch",
+      "units": 188,
+      "speak_units": 0,
+      "language_tokens": 0,
+      "tts_tokens": 0,
+      "waveform_samples": 4512000,
+      "final_kv_tokens": 14922
+    },
+    {
+      "family": "talk",
+      "variant": "unbatched",
+      "units": 188,
+      "speak_units": 15,
+      "language_tokens": 55,
+      "tts_tokens": 353,
+      "waveform_samples": 4515840,
+      "final_kv_tokens": 15017
+    },
+    {
+      "family": "talk",
+      "variant": "batch",
+      "units": 188,
+      "speak_units": 21,
+      "language_tokens": 76,
+      "tts_tokens": 498,
+      "waveform_samples": 4511040,
+      "final_kv_tokens": 15044
+    }
+  ]
+}
