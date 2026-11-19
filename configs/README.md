@@ -7,6 +7,7 @@
 | [venus/characterization.json](venus/characterization.json) | 参考核验、单会话定位与传输微测 | `scripts/venus/characterize.py` |
 | [venus/session-pressure.json](venus/session-pressure.json) | 会话隔离、到达负载与停止门槛 | `scripts/venus/session_probe.py` |
 | [venus/baseline-comparison.json](venus/baseline-comparison.json) | 原生／改进路径的成对比较 | `scripts/venus/baseline_probe.py` |
+| [venus/single-session.json](venus/single-session.json) | 单会话逐秒输入、三次重复与 trace 区间 | `scripts/venus/single_probe.py` |
 
 执行顺序和必需环境见 [Venus 主线](../docs/venus/README.md)。
 

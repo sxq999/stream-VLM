@@ -25,6 +25,7 @@
 | 1. 单会话定位 | 参考输出是否一致，计算与状态开销在哪里 | [定位方法](characterization.md) | [单会话结果](results/characterization.md) |
 | 2. 多会话压力 | 状态是否串扰，持续到达后是否积压 | [状态与压力](sessions.md) | [压力初筛](results/sessions.md) |
 | 3. 共置基线清理 | 去掉重复投影后，实际延迟改善多少 | [执行路径与成对比较](baseline.md) | [复测结果](results/baseline.md) |
+| 4. 单会话内部定位 | 输入和说话各耗时多少，具体 feed 怎样执行 | [实时回放与 trace](single-session.md) | [最新结果](results/single-session.md) |
 
 这些脚本需要已准备好的 Venus 模型环境、官方参考目录和两张可用 GPU；目前不是从零下载部署的一键安装器。运行时显式指定模型、参考目录、GPU 和新的输出目录。
 
@@ -36,11 +37,13 @@
 | 共享权重、独立会话状态 | [venus_state.py](../../src/stream_pipeline/venus_state.py) | 随压力入口创建会话 |
 | 持续到达、压力与结果统计 | [session_probe.py](../../scripts/venus/session_probe.py)、[session_analysis.py](../../scripts/venus/session_analysis.py) | [session-pressure.json](../../configs/venus/session-pressure.json) |
 | 重复投影清理与配对复测 | [venus_fastpath.py](../../src/stream_pipeline/venus_fastpath.py)、[baseline_probe.py](../../scripts/venus/baseline_probe.py)、[baseline_analysis.py](../../scripts/venus/baseline_analysis.py) | [baseline-comparison.json](../../configs/venus/baseline-comparison.json) |
+| 单会话实时性与内部时间线 | [single_probe.py](../../scripts/venus/single_probe.py)、[single_analysis.py](../../scripts/venus/single_analysis.py) | [single-session.json](../../configs/venus/single-session.json) |
 
 ## 当前结论与边界
 
 - 所测固定片段上的共享状态隔离检查通过；已完成持续到达压力初筛和成对复测。
 - 重复投影清理在六对短时比较中的调用均值比为 1.015—1.024，排队仍然明显；这不是完整服务吞吐加速比。
+- 新单会话复测完成 1,128 单元；带问题时最大排队约 1.48—2.02 秒。内部 trace 进一步区分长历史 LLM 执行与说话路径，见[最新结果](results/single-session.md)。
 - 当前两卡分别放主体模型和波形模块，语言模型 P／D 仍共置。Venus PD、优化批处理和硬件最大容量尚未完成验证。
 
 下一门槛是更细执行粒度／合理批处理的共置基线，再做等资源 PD 对照。完整计划在[定位与研究步骤](characterization.md)中。

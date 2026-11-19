@@ -7,7 +7,7 @@
 | 你想了解什么 | 入口 |
 |---|---|
 | 当前主线怎么运行、代码在哪里 | [Venus 实验](docs/venus/README.md) |
-| 最近测了什么、结论是什么 | [基线清理与成对复测](docs/venus/results/baseline.md) |
+| 最近测了什么、结论是什么 | [单会话实时性与内部执行定位](docs/venus/results/single-session.md) |
 | 使用 Qwen3-VL／vLLM 做快照式测试 | [快照测试工具](docs/harness/README.md) |
 | 相关研究与引用 | [论文索引](docs/related-work.md) |
 
@@ -18,7 +18,7 @@
 | **Venus：当前主线** | 连续画面与声音 → 逐单元增量输入／生成 → 保留会话状态 | 官方 Venus 原生接口、PyTorch／CUDA |
 | Qwen：通用测试工具 | 帧与问题 → 冻结查询快照 → 直接调用或经过 Serving 网关 | vLLM 或 Transformers |
 
-Venus 已完成单会话定位、共享权重会话隔离、压力初筛和重复词表投影清理。当前仍按完整输入单元串行执行；**Venus 的 PD 和优化批处理尚未实现，也未测定 GPU 最大服务容量**。Qwen 路径已验证的标准 PD 见其[独立结果](docs/harness/results.md)。
+Venus 已完成单会话定位、共享权重会话隔离、压力初筛和重复词表投影清理，新增六组单会话实时复测及内部时间线。当前仍按完整输入单元串行执行；**Venus 的 PD 和优化批处理尚未实现，也未测定 GPU 最大服务容量**。Qwen 路径已验证的标准 PD 见其[独立结果](docs/harness/results.md)。
 
 ## 不用 GPU，检查基本数据流
 

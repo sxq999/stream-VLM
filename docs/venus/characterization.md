@@ -6,6 +6,8 @@
 
 阶段 0／1 的首次执行已完成，见[结果与限制](results/characterization.md)。阶段 2 已完成[会话隔离与压力初筛](results/sessions.md)，并补充[原生执行清理的成对复测](results/baseline.md)；强共置调度和后续 PD 仍按下述门槛推进。
 
+单会话的进一步执行定位见[最新实时回放与 trace 结果](results/single-session.md)，包括上游已有视觉合并选项的预检。
+
 ## 当前边界
 
 - 使用官方原生 `duplex_chat.py` / `RealtimeVenusOmniDuplex`，不通过现有按查询提交快照的 vLLM HTTP 路径。
