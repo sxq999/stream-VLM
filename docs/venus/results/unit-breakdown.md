@@ -33,4 +33,6 @@
 
 应优先解释说话阶段的剩余路径，并在明确固定工作量／质量口径后测试完整优化路径。官方视觉合并应作为强基线候选；其自由生成工作量变化仍保留。当前没有新增 PD、硬件饱和证明或新颖性结论。
 
+后续已完成预热后的[生成接口内部定位](generate-breakdown.md)，区分语言模型、语音 token、波形和控制范围，并提供独立 GPU 时间线。
+
 [聚合数据、逐单元三遍均值和哈希](../../data/venus-unit-breakdown.json) · [固定配置](../../../configs/venus/unit-breakdown.json) · [固定历史微测](vision-compute.md) · [自由生成检查](vision-batch.md)

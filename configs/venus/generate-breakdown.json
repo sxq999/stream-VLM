@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "units": 188,
+  "warmup_passes": 1,
+  "measured_passes": 3,
+  "questions": {"60": "What do you see in the video so far?", "128": "What is the color of the cooler labeled PRIME near the team bench?"},
+  "trace_window": {"first_unit": 55, "last_unit": 76, "require_spoken_units": 12},
+  "max_allocated_gib": 22,
+  "variant": "hidden-only baseline; visual merge disabled; native canonical generation",
+  "timing": "Host component inclusive and exclusive elapsed times; synchronize devices only at unit boundaries; warmed independent Nsight trace excluded from normal timing",
+  "limits": ["Exclusive host time includes submission and waits, not pure CPU computation", "Trace GPU kernel sums are not wall time", "One prerecorded clip and seed; no quality, PD or capacity claim"]
+}
