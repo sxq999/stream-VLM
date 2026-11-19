@@ -2,14 +2,14 @@
 
 本主线研究持续会话的 GPU 执行与状态放置。保持 Venus 权重、网络计算、输入单元边界和因果顺序；先测量，再建立等资源 PD 对照，最后验证候选机制。
 
-阶段 0／1 的首次执行已完成，见[结果与限制](venus-characterization-results.md)。后续多会话与 PD 阶段仍按下述门槛推进。
+阶段 0／1 的首次执行已完成，见[结果与限制](venus-characterization-results.md)。阶段 2 已完成[会话隔离与压力初筛](venus-sessions-results.md)，并补充[原生执行清理的成对复测](venus-baseline-results.md)；强共置调度和后续 PD 仍按下述门槛推进。
 
 ## 当前边界
 
 - 使用官方原生 `duplex_chat.py` / `RealtimeVenusOmniDuplex`，不通过现有按查询提交快照的 vLLM HTTP 路径。
 - 每秒输入后调用 prefill、generate，持续保留会话状态。
 - 两卡的主体／波形模块放置属于部署适配，不是语言模型 PD。
-- 已有单会话 W1—W4 与部分 trace；多会话共享权重及状态隔离需要另行实现、验证。
+- 已有单会话 W1—W4 与部分 trace；已验证所测范围内的多会话共享权重及状态隔离，当前完整输入单元仍串行执行。
 
 ## 固定阶段与验收
 

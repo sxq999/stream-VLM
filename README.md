@@ -32,6 +32,7 @@ Mock 检查数据流和日志，不执行模型。真实 GPU 的托管部署需�
 | 实验相关的已有研究 | [相关工作与引用](docs/related-work.md) |
 | Venus 原生流式负载与 PD 研究步骤 | [执行计划](docs/guides/venus-characterization.md) · [阶段 0／1 结果](docs/guides/venus-characterization-results.md) |
 | Venus 共享权重会话与持续到达初筛 | [实现方法](docs/guides/venus-sessions.md) · [阶段 2 初步结果](docs/guides/venus-sessions-results.md) |
+| Venus 共置基线执行清理与成对比较 | [执行路径](docs/guides/venus-baseline.md) · [复测结果](docs/guides/venus-baseline-results.md) |
 
 ## 支持范围
 
