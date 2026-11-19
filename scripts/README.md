@@ -13,6 +13,7 @@
 | 上游视觉合并选项预检 | [venus/vision_batch_probe.py](venus/vision_batch_probe.py) | 输出／数值与工作量诊断，不是性能测量 |
 | 视觉合并完整片段检查 | [venus/vision_batch_comparison.py](venus/vision_batch_comparison.py) | [工作量门槛与条件配对测时](../docs/venus/vision-batch.md) |
 | 固定历史的视觉计算对照 | [venus/vision_feed_compute.py](venus/vision_feed_compute.py) | [相同 KV／输入的重放和计时](../docs/venus/vision-compute.md) |
+| 完整单元的耗时定位 | [venus/unit_breakdown.py](venus/unit_breakdown.py) | [边界完成计时和视觉区间](../docs/venus/unit-breakdown.md) |
 | 短 trace／来源核验 | [venus/session_trace.py](venus/session_trace.py)、[venus/verify_provenance.py](venus/verify_provenance.py) | 诊断用途，独立于正常延迟统计 |
 
 参数与执行顺序见 [Venus 实验入口](../docs/venus/README.md)。

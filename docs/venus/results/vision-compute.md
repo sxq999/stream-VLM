@@ -22,4 +22,6 @@
 
 正式结论应结合局部计时、原生轨迹里该段占比和自由生成行为。若继续报告端到端收益，必须同时处理工作量和交互质量可比性。
 
+后续已测原生轨迹下视觉范围与完整单元的时间尺度，见[完整单元耗时定位](unit-breakdown.md)。该测量也不是合并路径的端到端加速比。
+
 [逐次数据、配置与哈希](../../data/venus-vision-compute.json) · [配置](../../../configs/venus/vision-feed-compute.json) · [此前自由生成检查](vision-batch.md)

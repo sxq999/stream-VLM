@@ -10,6 +10,7 @@
 | [venus/single-session.json](venus/single-session.json) | 单会话逐秒输入、三次重复与 trace 区间 | `scripts/venus/single_probe.py` |
 | [venus/vision-batch-comparison.json](venus/vision-batch-comparison.json) | 官方视觉合并开关的全程工作量门槛与条件配对测试 | `scripts/venus/vision_batch_comparison.py` |
 | [venus/vision-feed-compute.json](venus/vision-feed-compute.json) | 固定实际历史和视觉向量的 GPU 完成计时 | `scripts/venus/vision_feed_compute.py` |
+| [venus/unit-breakdown.json](venus/unit-breakdown.json) | 原生轨迹完整单元和视觉 feed 的耗时定位 | `scripts/venus/unit_breakdown.py` |
 
 执行顺序和必需环境见 [Venus 主线](../docs/venus/README.md)。
 
