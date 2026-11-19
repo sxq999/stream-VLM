@@ -31,6 +31,7 @@ Mock 检查数据流和日志，不执行模型。真实 GPU 的托管部署需�
 | 已测配置、结果与限制 | [实验结果](docs/benchmark-results.md) |
 | 实验相关的已有研究 | [相关工作与引用](docs/related-work.md) |
 | Venus 原生流式负载与 PD 研究步骤 | [执行计划](docs/guides/venus-characterization.md) · [阶段 0／1 结果](docs/guides/venus-characterization-results.md) |
+| Venus 共享权重会话与持续到达初筛 | [实现方法](docs/guides/venus-sessions.md) · [阶段 2 初步结果](docs/guides/venus-sessions-results.md) |
 
 ## 支持范围
 
@@ -38,7 +39,7 @@ Mock 检查数据流和日志，不执行模型。真实 GPU 的托管部署需�
 
 主 CLI 的 vLLM 路径按查询提交完整输入快照，不提供持久会话增量 prefill、中途插帧、音视频双工或动态 PD 算法。其他模型需单独适配和验证。SSE 首文本与块间隔是客户端观察值，不直接等同于引擎 TTFT／TPOT。
 
-Venus 原生性能定位是独立的实验入口：直接复用已部署的官方流式模型接口，核验单会话输出并分析 GPU trace。它不经过上述快照／HTTP 路径，尚不提供多会话 Venus serving 或新的 PD 策略。
+Venus 原生实验直接复用官方流式模型接口，不经过上述快照／HTTP 路径。已验证共享权重下的会话状态隔离，并完成 14 组持续到达压力初筛；当前按完整输入单元串行执行，尚无优化批处理、硬件最大容量或新 PD 策略结论。
 
 ## 项目结构
 
