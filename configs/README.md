@@ -12,6 +12,7 @@
 | [venus/vision-feed-compute.json](venus/vision-feed-compute.json) | 固定实际历史和视觉向量的 GPU 完成计时 | `scripts/venus/vision_feed_compute.py` |
 | [venus/unit-breakdown.json](venus/unit-breakdown.json) | 原生轨迹完整单元和视觉 feed 的耗时定位 | `scripts/venus/unit_breakdown.py` |
 | [venus/generate-breakdown.json](venus/generate-breakdown.json) | 预热后的生成接口分解与独立 GPU 时间线 | `scripts/venus/generate_breakdown.py` |
+| [venus/wave-overlap.json](venus/wave-overlap.json) | 原生／串行适配／波形重叠的严格核验和逐秒回放 | `scripts/venus/wave_overlap_probe.py` |
 
 执行顺序和必需环境见 [Venus 主线](../docs/venus/README.md)。
 

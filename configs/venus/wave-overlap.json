@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "gate_units": 188,
+  "performance_units": 72,
+  "questions": {"60": "What do you see in the video so far?", "128": "What is the color of the cooler labeled PRIME near the team bench?"},
+  "variants": ["native", "serial_adapter", "overlap"],
+  "orders": [["native", "serial_adapter", "overlap"], ["serial_adapter", "overlap", "native"], ["overlap", "native", "serial_adapter"]],
+  "period_s": 1,
+  "queue_capacity": 256,
+  "wave_job_capacity": 4,
+  "max_wait_s": 10,
+  "max_allocated_gib": 22,
+  "max_source_lateness_p95_s": 0.05,
+  "model_file_sha256": "e3c3cdee80976fb4473edc830301a0cefda62ad2b4f554a9182ea857549dc34c",
+  "strict_gate": "All 188 units for each variant match native text, controls, counts, wave hashes and KV lengths; sampled language KV at 1/71/188 also matches between variants",
+  "scope": "One continuous session; wave worker owns waveform buffer/reset/cache; no per-unit full-state/RNG restore during concurrency; same main/wave GPUs",
+  "limits": ["Existing asynchronous staging pattern, not novelty or language PD", "Delegate/muted speech unsupported and rejected", "Only one clip and seed; 72-unit performance prefix covers first turn, not a capacity bound", "Host overlap records alone do not prove GPU kernel overlap", "No actual audio playback measured"]
+}

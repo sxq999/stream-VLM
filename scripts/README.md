@@ -15,6 +15,7 @@
 | 固定历史的视觉计算对照 | [venus/vision_feed_compute.py](venus/vision_feed_compute.py) | [相同 KV／输入的重放和计时](../docs/venus/vision-compute.md) |
 | 完整单元的耗时定位 | [venus/unit_breakdown.py](venus/unit_breakdown.py) | [边界完成计时和视觉区间](../docs/venus/unit-breakdown.md) |
 | 生成接口内部定位 | [venus/generate_breakdown.py](venus/generate_breakdown.py) | [主机范围分解和独立时间线](../docs/venus/generate-breakdown.md) |
+| 波形重叠原型核验 | [venus/wave_overlap_probe.py](venus/wave_overlap_probe.py)、[venus/wave_overlap_trace.py](venus/wave_overlap_trace.py) | [单会话状态归属、严格输出和GPU交集](../docs/venus/wave-overlap.md) |
 | 短 trace／来源核验 | [venus/session_trace.py](venus/session_trace.py)、[venus/verify_provenance.py](venus/verify_provenance.py) | 诊断用途，独立于正常延迟统计 |
 
 参数与执行顺序见 [Venus 实验入口](../docs/venus/README.md)。
