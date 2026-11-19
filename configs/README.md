@@ -9,6 +9,7 @@
 | [venus/baseline-comparison.json](venus/baseline-comparison.json) | 原生／改进路径的成对比较 | `scripts/venus/baseline_probe.py` |
 | [venus/single-session.json](venus/single-session.json) | 单会话逐秒输入、三次重复与 trace 区间 | `scripts/venus/single_probe.py` |
 | [venus/vision-batch-comparison.json](venus/vision-batch-comparison.json) | 官方视觉合并开关的全程工作量门槛与条件配对测试 | `scripts/venus/vision_batch_comparison.py` |
+| [venus/vision-feed-compute.json](venus/vision-feed-compute.json) | 固定实际历史和视觉向量的 GPU 完成计时 | `scripts/venus/vision_feed_compute.py` |
 
 执行顺序和必需环境见 [Venus 主线](../docs/venus/README.md)。
 

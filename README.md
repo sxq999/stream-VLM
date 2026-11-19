@@ -7,7 +7,7 @@
 | 你想了解什么 | 入口 |
 |---|---|
 | 当前主线怎么运行、代码在哪里 | [Venus 实验](docs/venus/README.md) |
-| 最近测了什么、结论是什么 | [视觉合并的完整片段检查](docs/venus/results/vision-batch.md)、[单会话实时性](docs/venus/results/single-session.md) |
+| 最近测了什么、结论是什么 | [固定历史的计算对照](docs/venus/results/vision-compute.md)、[自由生成工作量检查](docs/venus/results/vision-batch.md)、[单会话实时性](docs/venus/results/single-session.md) |
 | 使用 Qwen3-VL／vLLM 做快照式测试 | [快照测试工具](docs/harness/README.md) |
 | 相关研究与引用 | [论文索引](docs/related-work.md) |
 

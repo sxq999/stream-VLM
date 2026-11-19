@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "capture_units": [1, 71, 176],
+  "trajectory_family": "talk",
+  "questions": {"60": "What do you see in the video so far?", "128": "What is the color of the cooler labeled PRIME near the team bench?"},
+  "visual_feed_lengths": [1, 64, 1],
+  "warmup_pairs": 2,
+  "measured_pairs": 7,
+  "alternate_pair_order": true,
+  "max_allocated_gib": 22,
+  "timed_scope": "visual LLM feed only: 3 calls versus concatenate plus 1 call; no logits or sampling",
+  "untimed_scope": "canonical trajectory, CPU snapshots, independent KV restore to GPU, input upload, numerical diagnostics",
+  "invariants": "same captured prefix KV bytes, same 66 input embedding vectors and positions, same weights and precision; discard each replay state",
+  "limits": ["Controlled compute microbenchmark, not end-to-end latency or serving capacity", "Existing upstream grouping option, not novelty or PD", "Snapshots follow one canonical trajectory; numerical outputs may differ"]
+}
