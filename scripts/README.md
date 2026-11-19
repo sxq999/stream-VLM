@@ -1,17 +1,32 @@
-# 实验工具
+# 实验入口
 
-从仓库根目录执行。普通回放使用 `python -m stream_pipeline`，GPU 实验使用以下工具：
+所有命令从仓库根目录执行。先选择 [Venus 持续会话](../docs/venus/README.md)或 [Qwen／vLLM 快照工具](../docs/harness/README.md)。
 
-| 工具 | 用途 |
+## Venus：当前主线
+
+| 任务 | 运行 | 分析 |
+|---|---|---|
+| 单会话核验与定位 | [venus/characterize.py](venus/characterize.py) | [venus/analyze.py](venus/analyze.py) |
+| 会话隔离与持续压力 | [venus/session_probe.py](venus/session_probe.py) | [venus/session_analysis.py](venus/session_analysis.py) |
+| 重复投影清理的成对比较 | [venus/baseline_probe.py](venus/baseline_probe.py) | [venus/baseline_analysis.py](venus/baseline_analysis.py) |
+| 短 trace／来源核验 | [venus/session_trace.py](venus/session_trace.py)、[venus/verify_provenance.py](venus/verify_provenance.py) | 诊断用途，独立于正常延迟统计 |
+
+参数与执行顺序见 [Venus 实验入口](../docs/venus/README.md)。
+
+## 快照测试工具
+
+| 任务 | 入口 |
 |---|---|
-| `benchmark.py` | 单卡／双副本／NCCL PD 的冒烟、视频与持续压测 |
-| `setup/configure_local.py` | 生成自己的模型、环境与 GPU 配置 |
-| `setup/probe_transport.py` | 检查 GPU 拓扑与通信条件 |
-| `analysis/export_stress_timeline.py` | 核验并导出持续压测结果 |
-| `analysis/inspect_trace.py` | 检查 GPU trace |
-| `analysis/inspect_serving_failures.py` | 汇总请求失败 |
-| `validation/make_visual_example.py` | 重新生成小型颜色图像示例 |
-| `validation/runtime_smoke.py` | 在 GPU 环境检查 CUDA 与依赖 |
-| `validation/check_repository.py` | 检查文档引用与代码语法 |
+| 普通回放、Serving、持续压测 | `python -m stream_pipeline`，见[使用文档](../docs/harness/README.md) |
+| 单卡／副本／NCCL PD 实验矩阵 | [benchmark.py](benchmark.py) |
+| 生成机器专用配置／检查通信 | [setup/configure_local.py](setup/configure_local.py)、[setup/probe_transport.py](setup/probe_transport.py) |
+| 检查压测、trace、失败记录 | [analysis/export_stress_timeline.py](analysis/export_stress_timeline.py)、[analysis/inspect_trace.py](analysis/inspect_trace.py)、[analysis/inspect_serving_failures.py](analysis/inspect_serving_failures.py) |
 
-各工具的参数见 `--help`（`runtime_smoke.py` 和 `make_visual_example.py` 为直接执行脚本）。运行步骤见 [Serving](../docs/guides/serving.md) 与[压力测试](../docs/guides/stress.md)。
+## 仓库检查
+
+```bash
+python scripts/validation/check_repository.py
+python -m stream_pipeline validate --suite tests
+```
+
+`validation/runtime_smoke.py` 检查 GPU 环境；`validation/make_visual_example.py` 生成颜色图像示例。它们直接执行，其余工具可查看 `--help`。

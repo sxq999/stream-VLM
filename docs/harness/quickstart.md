@@ -1,3 +1,5 @@
+[项目首页](../../README.md) · [快照测试工具](README.md)
+
 # 中文快速入门：用同一个测试台测不同实现
 
 本项目有两个角色：部署工具启动你选择的引擎；实验程序发送负载并测量。修改版 vLLM/CUDA 算子在被测引擎中安装，实验程序通过配置选择它。
@@ -48,7 +50,7 @@ python -m stream_pipeline profile --config runs/my-config.json --out runs/profil
 python scripts/analysis/inspect_trace.py runs/profile-001/traces --engine
 ```
 
-此命令启动被测 vLLM 的 profiler，捕获真实 GPU 活动；不是只测发送 HTTP 的 Python 客户端。trace 可以用兼容的查看器打开。原生 Transformers 路径还提供视觉编码、prefill、decode 的模块标记，见英文 runbook。
+此命令启动被测 vLLM 的 profiler，捕获真实 GPU 活动；不是只测发送 HTTP 的 Python 客户端。trace 可以用兼容的查看器打开。原生 Transformers 路径还提供视觉编码、prefill、decode 的模块标记，见[进阶运行手册](experiments.md)。
 
 Profiling 会干扰性能，独立保存，不把它的耗时直接当普通推理性能。
 
@@ -65,4 +67,4 @@ python -m stream_pipeline experiment --config runs/candidate-config.json --out r
 
 模型和负载保持一致，换的是被测引擎。程序会记录源码版本及修改痕迹。也可以改变并发、帧保留策略等配置，或使用 `workload`/`suite` 安排多种情况；请明确这时哪些实验条件发生了变化。
 
-Qwen3-VL 的这些入口已通过真实 GPU 验证。同机标准 PD 见 [Serving](serving.md)，验证范围和限制见[实验结果](../benchmark-results.md)。
+Qwen3-VL 的这些入口已通过真实 GPU 验证。同机标准 PD 见 [Serving](serving.md)，验证范围和限制见[实验结果](results.md)。

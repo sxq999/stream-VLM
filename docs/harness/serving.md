@@ -1,3 +1,5 @@
+[项目首页](../../README.md) · [快照测试工具](README.md)
+
 # Serving 与标准 PD
 
 支持三种 Qwen3-VL 部署方式：

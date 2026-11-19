@@ -1,8 +1,8 @@
+[项目首页](../../README.md) · [Venus 主线](README.md)
+
 # Venus 共享会话：状态隔离与压力初筛
 
-本轮实测与限制见[阶段 2 初步结果](venus-sessions-results.md)。
-
-后续常规基线清理见[执行路径](venus-baseline.md)与[成对复测结果](venus-baseline-results.md)，不改变本页共享会话入口的默认原生行为。
+本轮实测与限制见[阶段 2 初步结果](results/sessions.md)。
 
 这是一个复用原生模型计算的实验适配层。一个模型对象和一套权重服务多个会话；每个会话持有自己的状态。原生执行按完整输入单元串行推进，尚未实现 continuous batching 或 PD。
 
@@ -66,7 +66,7 @@ with bank.activate("B", 0) as model:
 
 ## 运行
 
-使用已有 Venus 模型环境。公共参数与[阶段 0／1](venus-characterization.md)相同，另加会话配置：
+使用已有 Venus 模型环境。公共参数与[阶段 0／1](characterization.md)相同，另加会话配置：
 
 ```bash
 python scripts/venus/session_probe.py \

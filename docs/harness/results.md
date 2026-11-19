@@ -1,3 +1,5 @@
+[项目首页](../../README.md) · [快照测试工具](README.md)
+
 # Qwen3-VL Serving 实验结果
 
 以下为真实视频快照负载下的 Serving 与同机 NCCL PD 基线。模型仍为 Qwen3-VL-8B-Instruct，vLLM 0.11.0；不含新的调度算法或模型训练。
@@ -47,6 +49,6 @@ CUDA 预检显示 GPU 2→3、3→2 的 peer access 均为 false；NCCL 实际�
 
 ## 复现方法与数据
 
-运行方法见 [Serving](guides/serving.md)，持续负载见[压力测试](guides/stress.md)。完整结果与条件汇总在 [benchmark-results.json](benchmark-results.json)。
+运行方法见 [Serving](serving.md)，持续负载见[压力测试](stress.md)。完整结果与条件汇总在 [qwen-serving.json](../data/qwen-serving.json)。
 
 本实验使用本地 12 秒体育片段，原视频不随仓库分发；汇总 JSON 保留源文件哈希。使用自己的片段可以复现流程，但不能视为对表中数值的精确复现。默认矩阵配置位于 `scripts/benchmark.py`，每次运行会保存实际配置、源码身份、请求日志、引擎日志与采样。

@@ -1,3 +1,5 @@
+[项目首页](../../README.md) · [快照测试工具](README.md)
+
 # GPU architecture experiment runbook
 
 The harness controls requests and deployments. The tested system is the installed engine plus its operators. Keep modifications to that system in a separately identified checkout/environment; do not rewrite input handling to make a candidate appear faster.

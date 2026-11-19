@@ -1,52 +1,45 @@
-# StreamVLM Experiment Harness
+# Stream-VLM
 
-流式视觉语言模型的实验与测量工具：按事件时间回放视频帧和问题，调用推理后端，测量延迟、吞吐与排队，并保存可复现的运行记录。
+面向流式视觉语言模型的 GPU 实验工具。当前主线是 **Realtime-Venus 的持续音视频会话、性能定位与并发压力测试**，为后续体系结构与 PD 优化建立可核验的基线。
 
-```text
-帧与问题 → 因果回放／历史选帧 → 后端适配器 → 推理引擎 → GPU
-                                   └→ 可选 Serving 网关 → 单实例／副本／P-D
-```
+## 从这里开始
 
-## 快速开始
+| 你想了解什么 | 入口 |
+|---|---|
+| 当前主线怎么运行、代码在哪里 | [Venus 实验](docs/venus/README.md) |
+| 最近测了什么、结论是什么 | [基线清理与成对复测](docs/venus/results/baseline.md) |
+| 使用 Qwen3-VL／vLLM 做快照式测试 | [快照测试工具](docs/harness/README.md) |
+| 相关研究与引用 | [论文索引](docs/related-work.md) |
 
-Python 3.11+。以下示例不需要 GPU：
+## 两条执行路径
 
-```sh
+| 路径 | 输入与执行方式 | 引擎 |
+|---|---|---|
+| **Venus：当前主线** | 连续画面与声音 → 逐单元增量输入／生成 → 保留会话状态 | 官方 Venus 原生接口、PyTorch／CUDA |
+| Qwen：通用测试工具 | 帧与问题 → 冻结查询快照 → 直接调用或经过 Serving 网关 | vLLM 或 Transformers |
+
+Venus 已完成单会话定位、共享权重会话隔离、压力初筛和重复词表投影清理。当前仍按完整输入单元串行执行；**Venus 的 PD 和优化批处理尚未实现，也未测定 GPU 最大服务容量**。Qwen 路径已验证的标准 PD 见其[独立结果](docs/harness/results.md)。
+
+## 不用 GPU，检查基本数据流
+
+在仓库根目录执行，要求 Python 3.11+：
+
+```bash
 python -m pip install -e .
-python -m stream_pipeline validate --suite tests
 python -m stream_pipeline run --config configs/mock.json --out runs/mock-001
 ```
 
-Mock 检查数据流和日志，不执行模型。真实 GPU 的托管部署需要 Linux；模型与 vLLM 使用独立环境。
+这是快照工具的 Mock 自检：返回固定文字，检查输入组织和结果记录。真实 GPU 实验按对应入口操作；Venus 需要已准备好的官方模型环境和参考数据。
 
-## 文档
+## 目录
 
-| 主题 | 入口 |
+| 目录 | 内容 |
 |---|---|
-| 安装、真实 GPU 执行与输出 | [快速开始](docs/guides/quickstart.md) |
-| 输入协议与模块边界 | [管线设计](docs/design.md) |
-| 单卡、副本与标准 PD | [Serving](docs/guides/serving.md) |
-| 持续负载、指标与结果导出 | [压力测试](docs/guides/stress.md) |
-| 多组实验与 GPU trace | [实验与 Profiling](docs/guides/experiments.md) |
-| 已测配置、结果与限制 | [实验结果](docs/benchmark-results.md) |
-| 实验相关的已有研究 | [相关工作与引用](docs/related-work.md) |
-| Venus 原生流式负载与 PD 研究步骤 | [执行计划](docs/guides/venus-characterization.md) · [阶段 0／1 结果](docs/guides/venus-characterization-results.md) |
-| Venus 共享权重会话与持续到达初筛 | [实现方法](docs/guides/venus-sessions.md) · [阶段 2 初步结果](docs/guides/venus-sessions-results.md) |
-| Venus 共置基线执行清理与成对比较 | [执行路径](docs/guides/venus-baseline.md) · [复测结果](docs/guides/venus-baseline-results.md) |
+| [`src/stream_pipeline/`](src/stream_pipeline/) | 会话状态、执行适配、回放、Serving 与测量 |
+| [`scripts/`](scripts/README.md) | 实验和分析入口 |
+| [`configs/`](configs/README.md) | 固定实验计划与配置模板 |
+| [`docs/venus/`](docs/venus/README.md) | 当前主线的方法与结果 |
+| [`docs/harness/`](docs/harness/README.md) | 快照测试工具的使用文档 |
+| [`tests/`](tests/) | 自动化检查 |
 
-## 支持范围
-
-已在 RTX 3090 上验证 Qwen3-VL-8B、vLLM 0.11.0、单卡／双副本／同机 NCCL PD。持续压测工具已通过本地 HTTP 测试，尚无持续 GPU 容量结论。
-
-主 CLI 的 vLLM 路径按查询提交完整输入快照，不提供持久会话增量 prefill、中途插帧、音视频双工或动态 PD 算法。其他模型需单独适配和验证。SSE 首文本与块间隔是客户端观察值，不直接等同于引擎 TTFT／TPOT。
-
-Venus 原生实验直接复用官方流式模型接口，不经过上述快照／HTTP 路径。已验证共享权重下的会话状态隔离，并完成 14 组持续到达压力初筛；当前按完整输入单元串行执行，尚无优化批处理、硬件最大容量或新 PD 策略结论。
-
-## 项目结构
-
-- `src/stream_pipeline/`：回放、后端、部署、Serving 与测量。
-- `configs/`、`examples/`：配置模板和小型输入示例。
-- `scripts/`：实验入口、配置准备和结果分析。
-- `tests/`：自动化测试；`docs/`：使用与实验说明。
-
-运行输出统一写入 `runs/`。模型权重、视频原件、机器配置和大型 trace 不提交 Git。
+运行输出放在 `runs/` 或显式指定的新目录。仓库保留代码、配置、汇总数据与图；模型、原视频、机器配置和大型 trace 保存在实验环境中。

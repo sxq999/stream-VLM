@@ -1,3 +1,5 @@
+[项目首页](../../README.md) · [快照测试工具](README.md)
+
 # 压力测试
 
 闭环测试固定客户端并发，服务变慢时到达率也会降低；开环测试按预定时间继续产生请求，用来观察排队、拒绝与延迟增长。
@@ -58,4 +60,4 @@ python scripts/analysis/export_stress_timeline.py \
 
 首文本是客户端 TTFT 近似值；SSE 文本块不等于 token，块间隔不是 TPOT。含排空时间的吞吐不等于稳定期完成速率。P 服务往返包含处理、通信和采样，不能解释为纯 GPU prefill。Profiling 应单独运行，见[实验指南](experiments.md)。
 
-工具行为已通过本地 HTTP 测试；公开的[GPU 结果](../benchmark-results.md)是短时快照实验，不是持续容量结论。
+工具行为已通过本地 HTTP 测试；公开的[GPU 结果](results.md)是短时快照实验，不是持续容量结论。

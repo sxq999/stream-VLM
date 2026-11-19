@@ -1,8 +1,10 @@
+[项目首页](../../README.md) · [Venus 主线](README.md)
+
 # Venus：先定位瓶颈，再研究 PD
 
 本主线研究持续会话的 GPU 执行与状态放置。保持 Venus 权重、网络计算、输入单元边界和因果顺序；先测量，再建立等资源 PD 对照，最后验证候选机制。
 
-阶段 0／1 的首次执行已完成，见[结果与限制](venus-characterization-results.md)。阶段 2 已完成[会话隔离与压力初筛](venus-sessions-results.md)，并补充[原生执行清理的成对复测](venus-baseline-results.md)；强共置调度和后续 PD 仍按下述门槛推进。
+阶段 0／1 的首次执行已完成，见[结果与限制](results/characterization.md)。阶段 2 已完成[会话隔离与压力初筛](results/sessions.md)，并补充[原生执行清理的成对复测](results/baseline.md)；强共置调度和后续 PD 仍按下述门槛推进。
 
 ## 当前边界
 
@@ -24,7 +26,7 @@
 
 前一阶段的证据决定后一阶段是否继续或调整，不把“PD 接通”本身当作新贡献。
 
-## 本次可执行入口：阶段 0／1
+## 运行单会话定位
 
 要求：已有且跑通过的 Venus 原生 checkout 和模型环境；Linux、两张空闲 NVIDIA GPU、PyTorch、Nsight Systems。脚本不会安装依赖或修改模型源码。
 
@@ -73,7 +75,7 @@ python scripts/venus/analyze.py \
 
 ## 后续压力测试契约
 
-当前进展：[共享会话实现](venus-sessions.md)已完成初步隔离验证和 14 组短时压力；[结果与边界](venus-sessions-results.md)单独记录。以下完整契约仍包含尚未完成的长期与更广负载验证。
+当前进展：[共享会话实现](sessions.md)已完成初步隔离验证和 14 组短时压力；[结果与边界](results/sessions.md)单独记录。以下完整契约仍包含尚未完成的长期与更广负载验证。
 
 各会话按自己的预定时间持续产生输入。先分别测试错峰与同步突发，再改变输入量、输出状态、历史长度。到达不跟随完成反向减速。
 
