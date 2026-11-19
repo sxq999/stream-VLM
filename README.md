@@ -30,12 +30,15 @@ Mock 检查数据流和日志，不执行模型。真实 GPU 的托管部署需�
 | 多组实验与 GPU trace | [实验与 Profiling](docs/guides/experiments.md) |
 | 已测配置、结果与限制 | [实验结果](docs/benchmark-results.md) |
 | 实验相关的已有研究 | [相关工作与引用](docs/related-work.md) |
+| Venus 原生流式负载与 PD 研究步骤 | [执行计划](docs/guides/venus-characterization.md) · [阶段 0／1 结果](docs/guides/venus-characterization-results.md) |
 
 ## 支持范围
 
 已在 RTX 3090 上验证 Qwen3-VL-8B、vLLM 0.11.0、单卡／双副本／同机 NCCL PD。持续压测工具已通过本地 HTTP 测试，尚无持续 GPU 容量结论。
 
-当前按查询提交完整输入快照，不提供持久会话增量 prefill、中途插帧、音视频双工或动态 PD 算法。其他模型需单独适配和验证。SSE 首文本与块间隔是客户端观察值，不直接等同于引擎 TTFT／TPOT。
+主 CLI 的 vLLM 路径按查询提交完整输入快照，不提供持久会话增量 prefill、中途插帧、音视频双工或动态 PD 算法。其他模型需单独适配和验证。SSE 首文本与块间隔是客户端观察值，不直接等同于引擎 TTFT／TPOT。
+
+Venus 原生性能定位是独立的实验入口：直接复用已部署的官方流式模型接口，核验单会话输出并分析 GPU trace。它不经过上述快照／HTTP 路径，尚不提供多会话 Venus serving 或新的 PD 策略。
 
 ## 项目结构
 

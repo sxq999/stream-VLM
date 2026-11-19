@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "scope": "single persistent Venus session, unchanged native model semantics",
+  "logical_devices": [0, 1],
+  "cases": [
+    {"id": "native_repeat_1", "profile": false},
+    {"id": "native_repeat_2", "profile": false},
+    {"id": "long_history_profile", "profile": true, "capture_units": [165, 176]}
+  ],
+  "reference_config": "workloads_v1/configs/W1_gate.json",
+  "reference_metrics": "eval_v1/gate_W1b/result/metrics.jsonl",
+  "transport_mib": [1, 16, 64, 256],
+  "transport_repeats": 9,
+  "timeout_per_case_s": 1800,
+  "idle_min_free_mib": 23800,
+  "idle_max_utilization_percent": 5,
+  "limits": [
+    "No multi-session or PD capacity claim",
+    "Profile timings are not normal-runtime speedup measurements",
+    "Transport is a buffer-copy microbenchmark, not an integrated KV connector",
+    "No assumptions about NVLink or P2P support",
+    "Full output return is not first-token or physical playback time"
+  ]
+}
