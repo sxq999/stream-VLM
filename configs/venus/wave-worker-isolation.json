@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "trajectory_units": 188,
+  "capture_units": [60, 65, 71],
+  "questions": {"60": "What do you see in the video so far?", "128": "What is the color of the cooler labeled PRIME near the team bench?"},
+  "warmup_jobs_per_control": 2,
+  "measured_pairs": 7,
+  "orders": [["native_main", "fresh_worker", "warm_worker"], ["fresh_worker", "warm_worker", "native_main"], ["warm_worker", "native_main", "fresh_worker"]],
+  "model_file_sha256": "e3c3cdee80976fb4473edc830301a0cefda62ad2b4f554a9182ea857549dc34c",
+  "max_allocated_gib": 22,
+  "strict_gate": "Every warmup and measured job must reproduce the captured native waveform hash and shape; snapshot hashes immutable",
+  "timed_scope": "Isolated native waveform call through GPU1 completion; main GPU has no concurrent model work; same tokens/cache/RNG restored before each job",
+  "variants": {"native_main": "native call on the already-used main thread", "fresh_worker": "new wave thread for every measured job", "warm_worker": "one thread retained through two warmup jobs and seven measured jobs per snapshot"},
+  "limits": ["Compute diagnostic, not full pipeline or playback latency", "GPU active from other test calls: does not isolate long device-idle wakeup effects", "CPU snapshot restoration and thread creation excluded from native-call elapsed; queue/API overhead recorded separately", "Existing waveform algorithm and same two GPUs; no new PD or quality claim"]
+}

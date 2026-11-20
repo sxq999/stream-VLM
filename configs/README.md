@@ -13,6 +13,7 @@
 | [venus/unit-breakdown.json](venus/unit-breakdown.json) | 原生轨迹完整单元和视觉 feed 的耗时定位 | `scripts/venus/unit_breakdown.py` |
 | [venus/generate-breakdown.json](venus/generate-breakdown.json) | 预热后的生成接口分解与独立 GPU 时间线 | `scripts/venus/generate_breakdown.py` |
 | [venus/wave-overlap.json](venus/wave-overlap.json) | 原生／串行适配／波形重叠的严格核验和逐秒回放 | `scripts/venus/wave_overlap_probe.py` |
+| [venus/wave-worker-isolation.json](venus/wave-worker-isolation.json) | 同一波形状态的主线程／新线程／预热线程隔离 | `scripts/venus/wave_worker_isolation.py` |
 
 执行顺序和必需环境见 [Venus 主线](../docs/venus/README.md)。
 

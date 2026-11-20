@@ -7,7 +7,7 @@
 | 你想了解什么 | 入口 |
 |---|---|
 | 当前主线怎么运行、代码在哪里 | [Venus 实验](docs/venus/README.md) |
-| 最近测了什么、结论是什么 | [波形重叠原型验证](docs/venus/results/wave-overlap.md)、[生成接口内部定位](docs/venus/results/generate-breakdown.md) |
+| 最近测了什么、结论是什么 | [波形线程首次使用隔离](docs/venus/results/worker-isolation.md)、[波形重叠原型验证](docs/venus/results/wave-overlap.md) |
 | 使用 Qwen3-VL／vLLM 做快照式测试 | [快照测试工具](docs/harness/README.md) |
 | 相关研究与引用 | [论文索引](docs/related-work.md) |
 
