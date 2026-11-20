@@ -34,6 +34,7 @@
 | 8. 生成接口内部定位 | 语言模型、语音 token、波形和控制工作各占多少 | [范围与时间线](generate-breakdown.md) | [内部定位结果](results/generate-breakdown.md) |
 | 9. 波形重叠原型 | 保持输出时，上一波形能否与下一输入重叠 | [状态归属与运行](wave-overlap.md) | [原型结果](results/wave-overlap.md) |
 | 10. 线程首次使用隔离 | 预热是否能解释波形执行者开销 | [固定状态隔离](worker-isolation.md) | [隔离结果](results/worker-isolation.md) |
+| 11. 等待与状态规模归因 | 输入在等语言、语音 token 还是波形；历史长度怎样影响计算 | [方法与固定条件](bottleneck-attribution.md) | [本轮结果](results/bottleneck-attribution.md) |
 
 这些脚本需要已准备好的 Venus 模型环境、官方参考目录和两张可用 GPU；目前不是从零下载部署的一键安装器。运行时显式指定模型、参考目录、GPU 和新的输出目录。
 
