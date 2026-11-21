@@ -1,6 +1,10 @@
 # 实验配置
 
-## Venus：固定实验计划
+## MiniCPM-o：当前主线
+
+[minicpmo/campaign.json](minicpmo/campaign.json) 固定部署验收、单会话优先、正式重复和 PD 候选策略。版本字段在实际兼容预检后锁定；空字段不代表已经部署。
+
+## Venus：历史固定实验计划
 
 | 配置 | 用途 | 运行入口 |
 |---|---|---|

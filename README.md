@@ -1,21 +1,23 @@
 # Stream-VLM
 
-面向流式视觉语言模型的 GPU 实验工具。当前主线是 **Realtime-Venus 的持续音视频会话、性能定位与并发压力测试**，为后续体系结构与 PD 优化建立可核验的基线。
+面向流式视觉语言模型的 GPU 实验工具。当前主线调整为 **官方 MiniCPM-o 4.5 + vLLM-Omni**：先部署双工基线、测清瓶颈，再评估 PD 分批 KV 传输。旧 Venus 实验保留为历史参考。
 
 ## 从这里开始
 
 | 你想了解什么 | 入口 |
 |---|---|
-| 当前主线怎么运行、代码在哪里 | [Venus 实验](docs/venus/README.md) |
+| 当前主线与执行计划 | [MiniCPM-o + vLLM-Omni](docs/minicpmo/README.md) |
+| 旧 Venus 实验、代码与结果 | [Venus 实验](docs/venus/README.md) |
 | 最近测了什么、结论是什么 | [波形线程首次使用隔离](docs/venus/results/worker-isolation.md)、[波形重叠原型验证](docs/venus/results/wave-overlap.md) |
 | 使用 Qwen3-VL／vLLM 做快照式测试 | [快照测试工具](docs/harness/README.md) |
 | 相关研究与引用 | [论文索引](docs/related-work.md) |
 
-## 两条执行路径
+## 执行路径
 
 | 路径 | 输入与执行方式 | 引擎 |
 |---|---|---|
-| **Venus：当前主线** | 连续画面与声音 → 逐单元增量输入／生成 → 保留会话状态 | 官方 Venus 原生接口、PyTorch／CUDA |
+| **MiniCPM-o：当前主线，部署预检中** | 连续音视频 → 官方双工会话 → 语言／语音 token／波形 | vLLM-Omni，尚未通过本机部署验收 |
+| Venus：历史实验 | 连续画面与声音 → 逐单元增量输入／生成 → 保留会话状态 | 官方 Venus 原生接口、PyTorch／CUDA |
 | Qwen：通用测试工具 | 帧与问题 → 冻结查询快照 → 直接调用或经过 Serving 网关 | vLLM 或 Transformers |
 
 Venus 已完成单会话定位、共享权重会话隔离、压力初筛和重复词表投影清理，新增实时复测、内部时间线及单会话波形重叠原型。默认基线按完整输入单元串行执行；重叠原型因收益跨轮不一致保持实验状态。**Venus 的语言 PD 和优化批处理尚未实现，也未测定 GPU 最大服务容量**。Qwen 路径已验证的标准 PD 见其[独立结果](docs/harness/results.md)。
@@ -38,7 +40,8 @@ python -m stream_pipeline run --config configs/mock.json --out runs/mock-001
 | [`src/stream_pipeline/`](src/stream_pipeline/) | 会话状态、执行适配、回放、Serving 与测量 |
 | [`scripts/`](scripts/README.md) | 实验和分析入口 |
 | [`configs/`](configs/README.md) | 固定实验计划与配置模板 |
-| [`docs/venus/`](docs/venus/README.md) | 当前主线的方法与结果 |
+| [`docs/minicpmo/`](docs/minicpmo/README.md) | 当前主线的部署、测试计划与进度 |
+| [`docs/venus/`](docs/venus/README.md) | 历史 Venus 实验的方法与结果 |
 | [`docs/harness/`](docs/harness/README.md) | 快照测试工具的使用文档 |
 | [`tests/`](tests/) | 自动化检查 |
 

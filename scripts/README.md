@@ -1,8 +1,18 @@
 # 实验入口
 
-所有命令从仓库根目录执行。先选择 [Venus 持续会话](../docs/venus/README.md)或 [Qwen／vLLM 快照工具](../docs/harness/README.md)。
+所有命令从仓库根目录执行。当前主线见 [MiniCPM-o + vLLM-Omni](../docs/minicpmo/README.md)；[Venus 持续会话](../docs/venus/README.md)保留作历史实验，[Qwen／vLLM 快照工具](../docs/harness/README.md)是独立工具。
 
-## Venus：当前主线
+## MiniCPM-o：部署预检
+
+| 入口 | 用途 |
+|---|---|
+| [minicpmo/runtime_probe.py](minicpmo/runtime_probe.py) | 环境、GPU 与包版本证据；可选小型 GPU 运算检查 |
+| [minicpmo/download_model.py](minicpmo/download_model.py) | 先记录模型 revision，再下载并检查文件清单/大小 |
+| [minicpmo/verify_download.py](minicpmo/verify_download.py) | 独立复核文件大小与源 LFS SHA256；不会加载模型代码 |
+
+上述工具不是完整双工执行程序。部署与测试验收见[固定计划](../docs/minicpmo/plan.md)。
+
+## Venus：历史实验
 
 | 任务 | 运行 | 分析 |
 |---|---|---|
