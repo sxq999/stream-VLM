@@ -100,6 +100,8 @@ def summarize(directory):
         (session / 'engine-snapshots.json').write_text(json.dumps({'samples': metadata,
             'warning': 'context lengths and stage timings can be cumulative; do not sum as new tokens or GPU kernel duration'}, indent=2))
         sessions.append({'session': session.name, 'official_ok': result.get('ok'), 'errors': result.get('errors'),
+            'sent_audio_packets': analysis['sent_audio_packets'], 'sent_video_only_packets': analysis['sent_video_only_packets'],
+            'sent_pcm_seconds': analysis['sent_pcm_seconds'], 'sent_wire_video_images': analysis['sent_wire_video_images'],
             'event_counts': analysis['event_counts'], 'input_span_s': analysis['input_span_s'],
             'sender_relative_drift_ms': analysis['sender_relative_drift_ms'],
             'send_block_ms_max': analysis['send_block_ms_max'], 'audio_chunks': sum(x['audio_chunks'] for x in turns),

@@ -11,6 +11,7 @@ from datetime import datetime, timezone
 import hashlib
 import importlib.util
 import json
+import math
 from pathlib import Path
 import queue
 import subprocess
@@ -80,6 +81,31 @@ def progress_stalled(now, state, timeout):
                 now - last < 2 and now - progress > timeout)
 
 
+def input_media_clock(event, video_only_ms):
+    """Analysis clock for fixed 1fps replay, including a video-only prefix.
+
+    Does not change protocol timestamps. Tail PCM starts at zero on the wire
+    after video-only input; offset that tail for client pacing analysis only.
+    """
+    audio_bytes = len(base64.b64decode(event.get('audio') or ''))
+    duration_ms = audio_bytes / 32
+    raw_end = event.get('audio_end_ms')
+    next_video_ms = video_only_ms
+    if raw_end is not None:
+        end = video_only_ms + raw_end
+        source = 'wire_audio_end_ms_plus_video_only_prefix'
+    elif event.get('type') == 'input_audio_buffer.append' and event.get('video_frames') and not audio_bytes:
+        duration_ms = 1000
+        next_video_ms = end = video_only_ms + duration_ms
+        source = 'derived_1fps_video_index'
+    else:
+        end, source = None, None
+    return {'audio_bytes': audio_bytes, 'media_end_ms': end,
+            'media_start_ms': end - duration_ms if end is not None else None,
+            'next_video_only_ms': next_video_ms, 'media_clock_source': source,
+            'wire_audio_end_ms': raw_end}
+
+
 def redact(value, key=''):
     if key in {'audio', 'delta'} and isinstance(value, str) and len(value) > 1024:
         return {'length': len(value), 'sha256': hashlib.sha256(value.encode()).hexdigest()}
@@ -97,6 +123,30 @@ def percentile(values, p):
         return None
     values = sorted(values)
     return values[round((len(values) - 1) * p)]
+
+
+def session_settings(root, video, sessions, stack_frames=1, plan_path=None, input_delay_s=0, join_delay_s=0):
+    """Resolve a finite input plan; delays change clients, never the engine."""
+    rows = json.loads(plan_path.read_text()) if plan_path else [{} for _ in range(sessions)]
+    if not isinstance(rows, list) or len(rows) != sessions:
+        raise ValueError('session plan must contain exactly one object per session')
+    result = []
+    for row in rows:
+        if not isinstance(row, dict) or set(row) - {'video', 'input_delay_s', 'join_delay_s', 'stack_frames'}:
+            raise ValueError('unknown session plan fields')
+        source = Path(row.get('video', str(video)))
+        source = source if source.is_absolute() else root / source
+        if not source.is_file():
+            raise ValueError('session media is missing: ' + str(source))
+        values = {k: float(row.get(k, default)) for k, default in
+                  (('input_delay_s', input_delay_s), ('join_delay_s', join_delay_s))}
+        if any(not math.isfinite(v) or not 0 <= v <= 120 for v in values.values()):
+            raise ValueError('client delays must be finite, within 0..120 seconds')
+        stack = row.get('stack_frames', stack_frames)
+        if type(stack) is not int or stack not in (1, 2):
+            raise ValueError('this bounded campaign supports stack_frames 1 or 2')
+        result.append({'video': str(source.resolve()), 'stack_frames': stack, **values})
+    return result
 
 
 def analyze(rows):
@@ -162,7 +212,11 @@ def analyze(rows):
         'scope': 'observable listen/output/done events, not exact input consumption; input pacing must be validated separately'}
     collector_times = [(r['end_s'] - r['start_s']) * 1000 for r in rows if r['kind'] == 'collector_complete']
     return {'event_counts': dict(Counter(r['event'].get('type') for r in receives)),
-        'sent_audio_packets': len(sends), 'input_span_s': sends[-1]['end_s'] - sends[0]['start_s'] if sends else None,
+        'sent_audio_packets': sum(r.get('audio_bytes', 0) > 0 for r in sends),
+        'sent_video_only_packets': sum(r.get('media_clock_source') == 'derived_1fps_video_index' for r in sends),
+        'sent_pcm_seconds': sum(r.get('audio_bytes', 0) for r in sends) / 32000,
+        'sent_wire_video_images': sum(r.get('video_frames', 0) for r in sends),
+        'input_span_s': sends[-1]['end_s'] - sends[0]['start_s'] if sends else None,
         'sender_relative_drift_ms': {'p50': percentile(drift, .5), 'p95': percentile(drift, .95), 'max': max(drift) if drift else None},
         'send_block_ms_max': max(((r['end_s'] - r['start_s']) * 1000 for r in sends), default=None),
         'send_block_scope': 'whole client wrapper, including local audit I/O; not just transport',
@@ -203,17 +257,30 @@ def child(args):
     spec.loader.exec_module(demo)
     original_client, original_collector = demo._TimedInputClient, demo._StreamingEventCollector
 
+    async def barrier_start():
+        deadline = time.monotonic() + args.timeout
+        while not args.go.exists():
+            if time.monotonic() > deadline:
+                raise TimeoutError('input start barrier timed out')
+            await asyncio.sleep(.05)
+        return json.loads(args.go.read_text())['start_s']
+
     class Client(original_client):
         async def __aenter__(self):
+            start = None
+            if args.join_delay_s:
+                # Media preparation precedes this method. Do not open the late
+                # user's session until its scheduled join time.
+                (args.out / 'prepared.json').write_text(json.dumps({'at_s': time.monotonic()}))
+                start = await barrier_start()
+                await asyncio.sleep(max(0, start + args.join_delay_s - time.monotonic()))
+            opening = time.monotonic()
             result = await super().__aenter__()
             (args.out / 'ready.json').write_text(json.dumps({'session_id': self.session_info.get('id')}))
-            deadline = time.monotonic() + args.timeout
-            while not args.go.exists():
-                if time.monotonic() > deadline:
-                    raise TimeoutError('input start barrier timed out')
-                await asyncio.sleep(.05)
-            start = json.loads(args.go.read_text())['start_s']
-            await asyncio.sleep(max(0, start - time.monotonic()))
+            write_audit({'kind': 'session_open', 'start_s': opening, 'end_s': time.monotonic(),
+                         'join_delay_s': args.join_delay_s, 'input_delay_s': args.input_delay_s})
+            start = await barrier_start() if start is None else start
+            await asyncio.sleep(max(0, start + args.join_delay_s + args.input_delay_s - time.monotonic()))
             return result
 
         async def send(self, event):
@@ -228,18 +295,17 @@ def child(args):
                 return eid
             finally:
                 wire_end = time.monotonic()
-                audio = event.get('audio', '')
-                duration_ms = len(base64.b64decode(audio)) / 32 if audio else 0
-                end_ms = event.get('audio_end_ms')
-                if ok and end_ms is not None:
+                clock = input_media_clock(event, getattr(self, '_audit_video_only_ms', 0))
+                if ok and clock['media_end_ms'] is not None:
+                    self._audit_video_only_ms = clock['next_video_only_ms']
                     if progress['first_input_s'] is None:
                         progress['first_input_s'] = wire_end
                     progress['last_sent_s'] = wire_end
                 write_audit({'kind': 'send', 'start_s': start, 'end_s': time.monotonic(), 'ok': ok,
                     'wire_start_s': wire_start, 'wire_end_s': wire_end,
-                    'event_id': eid, 'type': event.get('type'), 'media_end_ms': end_ms,
-                    'media_start_ms': end_ms - duration_ms if end_ms is not None else None,
-                    'audio_bytes': round(duration_ms * 32), 'video_frames': len(event.get('video_frames') or [])})
+                    'event_id': eid, 'type': event.get('type'),
+                    **{k: v for k, v in clock.items() if k != 'next_video_only_ms'},
+                    'video_frames': len(event.get('video_frames') or [])})
 
     class Collector(original_collector):
         def add(self, event, *, received_at_s=None):
@@ -263,7 +329,7 @@ def child(args):
     demo._TimedInputClient, demo._StreamingEventCollector = Client, Collector
     sys.argv = [str(source), '--url', args.url, '--input-video', str(args.video),
         '--ref-audio', str(args.root / 'model/assets/HT_ref_audio.wav'), '--output-dir', str(args.out / 'official'),
-        '--model', 'openbmb/MiniCPM-o-4_5', '--video-fps', '1', '--stack-frames', '1',
+        '--model', 'openbmb/MiniCPM-o-4_5', '--video-fps', '1', '--stack-frames', str(args.stack_frames),
         '--sliding-window-mode', 'basic', '--tail-silence-s', '5', '--timeout-s', '120']
     writer = QueuedAudit(audit) if args.audit_mode == 'thread' else None
     exit_code = 0
@@ -328,11 +394,14 @@ def snapshot(directory, label, gpu_ids, port):
 
 
 def run(args):
+    settings = session_settings(args.root, args.video, args.sessions, args.stack_frames, args.session_plan,
+                                args.input_delay_s, args.join_delay_s)
     args.out.mkdir(parents=True, exist_ok=False)
     manifest = {'created_utc': datetime.now(timezone.utc).isoformat(), 'sessions': args.sessions,
         'repeats': args.repeats, 'video': str(args.video), 'video_sha256': hashlib.sha256(args.video.read_bytes()).hexdigest(),
         'gpu_ids': args.gpus, 'window': {'mode': 'basic', 'high': 8000, 'low': 6000},
         'audit_mode': args.audit_mode, 'no_progress_timeout_s': args.no_progress_timeout_s,
+        'session_plan': [dict(row, video_sha256=hashlib.sha256(Path(row['video']).read_bytes()).hexdigest()) for row in settings],
         'measurement_script_sha256': hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
         'upstream_replay_sha256': hashlib.sha256((args.root / 'sources/vllm-omni/examples/online_serving/minicpmo/realtime_duplex_demo.py').read_bytes()).hexdigest(),
         'scope': 'client audit and bounded long-concurrency diagnostic; not full T1/T2, SLO or saturated capacity', 'runs': []}
@@ -344,20 +413,24 @@ def run(args):
         go = directory / 'go.json'
         try:
             snapshot(directory, 'before', args.gpus, args.port)
-            for n in range(args.sessions):
+            for n, setting in enumerate(settings):
                 log = (directory / f'session-{n + 1}.log').open('w', encoding='utf-8')
                 logs.append(log)
                 command = [sys.executable, str(Path(__file__).resolve()), 'child', '--root', str(args.root),
-                    '--out', str(directory / f'session-{n + 1}'), '--video', str(args.video), '--go', str(go),
+                    '--out', str(directory / f'session-{n + 1}'), '--video', setting['video'], '--go', str(go),
                     '--url', args.url, '--timeout', str(args.timeout), '--audit-mode', args.audit_mode,
-                    '--no-progress-timeout-s', str(args.no_progress_timeout_s)]
+                    '--no-progress-timeout-s', str(args.no_progress_timeout_s),
+                    '--stack-frames', str(setting['stack_frames']), '--input-delay-s', str(setting['input_delay_s']),
+                    '--join-delay-s', str(setting['join_delay_s'])]
                 processes.append(subprocess.Popen(command, stdout=log, stderr=subprocess.STDOUT))
             deadline = time.monotonic() + args.timeout
             sample = 0
             while any(p.poll() is None for p in processes):
                 if time.monotonic() > deadline:
                     raise TimeoutError('campaign repeat timed out')
-                if not go.exists() and all((directory / f'session-{n + 1}/ready.json').exists() for n in range(args.sessions)):
+                if not go.exists() and all((directory / f'session-{n + 1}' /
+                    ('prepared.json' if setting['join_delay_s'] else 'ready.json')).exists()
+                    for n, setting in enumerate(settings)):
                     temporary = directory / 'go.tmp'
                     temporary.write_text(json.dumps({'start_s': time.monotonic() + 1}), encoding='utf-8')
                     temporary.replace(go)
@@ -399,6 +472,10 @@ def main():
     parser.add_argument('--out', type=Path, required=True)
     parser.add_argument('--video', type=Path, required=True)
     parser.add_argument('--go', type=Path)
+    parser.add_argument('--session-plan', type=Path, help='JSON list: per-client video, join/input delay and stack_frames')
+    parser.add_argument('--stack-frames', type=int, choices=(1, 2), default=1)
+    parser.add_argument('--input-delay-s', type=float, default=0)
+    parser.add_argument('--join-delay-s', type=float, default=0)
     parser.add_argument('--sessions', type=int, default=1)
     parser.add_argument('--repeats', type=int, default=1)
     parser.add_argument('--timeout', type=float, default=240)
@@ -412,6 +489,8 @@ def main():
         parser.error('validated campaign supports 1..4 sessions, positive repeats and timeout')
     if args.mode == 'child' and args.go is None:
         parser.error('child requires --go')
+    if any(not math.isfinite(v) or not 0 <= v <= 120 for v in (args.input_delay_s, args.join_delay_s)):
+        parser.error('client delays must be finite and within 0..120 seconds')
     return child(args) if args.mode == 'child' else run(args)
 
 

@@ -37,6 +37,34 @@ Linux示例（先把 `$ROOT` 设置为实验根目录；`$OUT` 是尚不存在�
 
 接收回调耗时记录目前仅通过离线契约测试，尚未完成真实模型回放验证；已归档实验没有这项记录，不能用它解释既有停顿的具体原因。
 
+### 有限输入清单与执行
+
+[stress_cases.json](../configs/minicpmo/stress_cases.json)冻结9个条件、3轮次序；原四路长测故障和单流600秒结果直接引用，不重复施压。短内容/密度/相位检查不冒充长期容量测试。[素材清单](../docs/minicpmo/evidence/input-inventory-20261122.json)包含固定来源与SHA256；原始视频不进Git。
+
+`characterize.py --session-plan "$PLAN"` 接受每条用户流的输入安排，例如：
+
+```json
+[
+  {"video": "model/assets/omni_duplex1.mp4"},
+  {"video": "model/assets/omni_duplex1.mp4", "join_delay_s": 100}
+]
+```
+
+`join_delay_s`推迟创建会话；`input_delay_s`让已经创建的会话推迟开始输入，两者不同。各流仍按自己的原速媒体时钟输入，日志记录实际打开会话和发送时刻。`stack_frames=2`沿用官方“基帧+子帧合成图”输入形式，不改变引擎策略，也不把它称为2次请求。
+
+无音轨视频沿用官方视频输入分支。其分析时钟按固定1fps的帧序号推导；随后5秒静音的音频时钟仅在分析中加上视频前缀偏移，线上协议不变。音频包数、视频单独发送次数、线上图像数和PCM秒数分别统计。
+
+在已核验的原两卡服务上、通过互斥入口执行：
+
+```bash
+python scripts/minicpmo/experiment_access.py --lock-file "$ROOT/control/web-experiment.lock" run -- \
+  python scripts/minicpmo/run_stress_cases.py --root "$ROOT" --out "$OUT" \
+  --cases configs/minicpmo/stress_cases.json \
+  --input-inventory docs/minicpmo/evidence/input-inventory-20261122.json --gpus 5,6
+```
+
+执行器核对配置/脚本哈希、素材哈希、服务所属用户和选中GPU的进程身份；发生外部进程、服务不健康或配置变化就停，不调参或重启模型。每个条件最多确认2次失败；完整清单结束记为`finished_with_observations`，不等于所有条件或实时性通过。预先指定的200ms最大发送迟到是客户端施压时钟检查，不是用户延迟SLO。
+
 指标限制：`response.created→首音频`不是用户提问结束→首音频；发送漂移不是服务端积压；模拟缺口不是实测播放器断音；Prometheus计数必须核验双工路径覆盖后才能作token/KV结论。详见[实验执行指导](../docs/minicpmo/stress-guide.md)。
 
 `send_block_ms_max` 是整个客户端审计包装的耗时，包含本地日志，不等于纯传输阻塞。新增 `wire_send_block_ms_max` 只计官方客户端底层发送方法（仍包括其序列化），`audit_before_send_ms_max` 单列前置审计。旧日志没有这两个时间戳时写 null，不反推。新运行清单保存测量脚本与官方回放脚本哈希。

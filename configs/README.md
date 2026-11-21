@@ -3,6 +3,7 @@
 | 文件 | 用途 |
 |---|---|
 | [campaign.json](minicpmo/campaign.json) | 模型/引擎版本、验收顺序、负载候选与 PD 候选策略；其中后续实验参数不代表已实现 |
+| [stress_cases.json](minicpmo/stress_cases.json) | 本轮剩余9个固定输入条件、3轮次序、施压时钟检查及停止规则；不改模型/调度/窗口 |
 | [two_gpu_four_sessions.yaml](minicpmo/two_gpu_four_sessions.yaml) | 当前两卡、最多接入4会话；Talker预算0.25；短测通过，4路长测停滞，不能当作长期容量配置 |
 | [two_gpu_smoke.yaml](minicpmo/two_gpu_smoke.yaml) | 保留首次单会话证据对应的冻结配置，供哈希复核，不是另一条实验主线 |
 

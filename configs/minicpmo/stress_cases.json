@@ -1,0 +1,234 @@
+{
+  "schema_version": 1,
+  "frozen_date": "2026-11-22",
+  "scope": "finite remaining fixed-two-GPU pressure and coverage campaign; no tuning",
+  "baseline_config": "configs/minicpmo/two_gpu_four_sessions.yaml",
+  "config_sha256": "021a2bca71f77a578fa8d70d705918ebeb7b36bf7fa921b133a4a86eb0244027",
+  "window": {
+    "mode": "basic",
+    "high": 8000,
+    "low": 6000
+  },
+  "tail_silence_s": 5,
+  "audit_mode": "thread",
+  "no_progress_timeout_s": 60,
+  "client_clock_validation": {
+    "max_send_lateness_ms": 200,
+    "scope": "input-clock validation, not user latency SLO"
+  },
+  "reference_audio": "HT_ref_audio.wav",
+  "round_orders": [
+    [
+      "F00",
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F06",
+      "F07",
+      "F08"
+    ],
+    [
+      "F08",
+      "F07",
+      "F06",
+      "F05",
+      "F04",
+      "F03",
+      "F02",
+      "F01",
+      "F00"
+    ],
+    [
+      "F03",
+      "F04",
+      "F05",
+      "F06",
+      "F07",
+      "F08",
+      "F00",
+      "F01",
+      "F02"
+    ]
+  ],
+  "max_same_condition_failures": 2,
+  "stop_whole_campaign_on": [
+    "foreign_gpu_process",
+    "unhealthy_backend",
+    "baseline_config_change"
+  ],
+  "cases": [
+    {
+      "id": "F00",
+      "label": "????????",
+      "kind": "coverage_probe",
+      "coverage": [
+        "T1"
+      ],
+      "sessions": [
+        {
+          "media": "omni1"
+        }
+      ],
+      "planned_repeats": 3
+    },
+    {
+      "id": "F01",
+      "label": "??180???",
+      "kind": "sustained_pressure",
+      "coverage": [
+        "T2",
+        "T3",
+        "T8",
+        "S6"
+      ],
+      "sessions": [
+        {
+          "media": "omni1_loop180"
+        }
+      ],
+      "planned_repeats": 3
+    },
+    {
+      "id": "F02",
+      "label": "????180???",
+      "kind": "sustained_pressure",
+      "coverage": [
+        "T2",
+        "T8",
+        "S2",
+        "S6"
+      ],
+      "sessions": [
+        {
+          "media": "omni1_loop180"
+        },
+        {
+          "media": "omni1_loop180"
+        }
+      ],
+      "planned_repeats": 3
+    },
+    {
+      "id": "F03",
+      "label": "????????????",
+      "kind": "coverage_probe",
+      "coverage": [
+        "T1"
+      ],
+      "sessions": [
+        {
+          "media": "omni2"
+        }
+      ],
+      "planned_repeats": 3
+    },
+    {
+      "id": "F04",
+      "label": "???????????????",
+      "kind": "coverage_probe",
+      "coverage": [
+        "T1"
+      ],
+      "sessions": [
+        {
+          "media": "skiing"
+        }
+      ],
+      "planned_repeats": 3
+    },
+    {
+      "id": "F05",
+      "label": "??????????stack_frames=2",
+      "kind": "input_density_probe",
+      "coverage": [
+        "T4"
+      ],
+      "sessions": [
+        {
+          "media": "omni1",
+          "stack_frames": 2
+        }
+      ],
+      "planned_repeats": 3
+    },
+    {
+      "id": "F06",
+      "label": "????????",
+      "kind": "phase_probe",
+      "coverage": [
+        "T5",
+        "T7",
+        "S3"
+      ],
+      "sessions": [
+        {
+          "media": "omni1"
+        },
+        {
+          "media": "omni1"
+        }
+      ],
+      "planned_repeats": 3
+    },
+    {
+      "id": "F07",
+      "label": "??????15?",
+      "kind": "phase_probe",
+      "coverage": [
+        "T5",
+        "S3"
+      ],
+      "sessions": [
+        {
+          "media": "omni1"
+        },
+        {
+          "media": "omni1",
+          "input_delay_s": 15
+        }
+      ],
+      "planned_repeats": 3
+    },
+    {
+      "id": "F08",
+      "label": "???????????",
+      "kind": "arrival_probe",
+      "coverage": [
+        "T6",
+        "T7"
+      ],
+      "sessions": [
+        {
+          "media": "omni1_loop180"
+        },
+        {
+          "media": "omni1",
+          "join_delay_s": 100
+        }
+      ],
+      "planned_repeats": 3
+    }
+  ],
+  "reuse_existing_evidence": [
+    {
+      "case": "four-stream-long-stall",
+      "evidence": "docs/minicpmo/evidence/long-concurrency-20261121.json",
+      "action": "retain_two_observed_failures_no_rerun"
+    },
+    {
+      "case": "single-stream-600s",
+      "evidence": "docs/minicpmo/evidence/preliminary-load-20261121.json",
+      "action": "retain_lifecycle_result_and_unterminated_response_limitation"
+    }
+  ],
+  "speech_interpretation": "Only actual observed speech is counted. No speech is not Talker/W capacity; upstream stalls censor downstream pressure. No independent stage replay in this task.",
+  "limitations": [
+    "mechanical loops are not long-video semantic benchmarks",
+    "short probes do not establish sustained capacity",
+    "no question-end annotations or guaranteed long answers",
+    "source-separated model tokens and per-stage queues remain incompletely instrumented",
+    "partial-session departure recovery not implemented in this campaign; all-session close followed by next case is observed"
+  ]
+}

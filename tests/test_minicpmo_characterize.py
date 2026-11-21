@@ -20,6 +20,42 @@ def event(at, kind, rid, duration=0, **extra):
 
 
 class MeasurementTests(unittest.TestCase):
+    def test_video_only_input_and_audio_tail_have_separate_wire_and_analysis_clocks(self):
+        frame = {'type': 'input_audio_buffer.append', 'video_frames': ['jpeg']}
+        first = audit.input_media_clock(frame, 0)
+        self.assertEqual(first['media_end_ms'], 1000)
+        self.assertEqual(first['audio_bytes'], 0)
+        self.assertIsNone(first['wire_audio_end_ms'])
+        second = audit.input_media_clock(frame, first['next_video_only_ms'])
+        tail = audit.input_media_clock({'audio': 'AAAA', 'audio_end_ms': .09375}, second['next_video_only_ms'])
+        self.assertAlmostEqual(tail['media_start_ms'], 2000)
+        self.assertEqual(tail['wire_audio_end_ms'], .09375)
+        self.assertEqual(tail['next_video_only_ms'], 2000)
+
+    def test_session_plan_keeps_join_and_input_delays_distinct(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / 'a.mp4').write_bytes(b'fixture')
+            plan = root / 'plan.json'
+            plan.write_text(json.dumps([{}, {'video': 'a.mp4', 'join_delay_s': 100,
+                                            'input_delay_s': 15, 'stack_frames': 2}]))
+            rows = audit.session_settings(root, root / 'a.mp4', 2, plan_path=plan)
+            self.assertEqual(rows[0]['join_delay_s'], 0)
+            self.assertEqual(rows[1]['join_delay_s'], 100)
+            self.assertEqual(rows[1]['input_delay_s'], 15)
+            self.assertEqual(rows[1]['stack_frames'], 2)
+
+    def test_session_plan_rejects_engine_changes_or_invalid_schedule(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            video = root / 'a.mp4'; video.write_bytes(b'fixture')
+            plan = root / 'plan.json'
+            for invalid in ([{'gpu_memory_utilization': .5}], [{'join_delay_s': float('nan')}],
+                            [{'input_delay_s': -1}], [{'stack_frames': 3}], []):
+                plan.write_text(json.dumps(invalid))
+                with self.assertRaises(ValueError):
+                    audit.session_settings(root, video, 1, plan_path=plan)
+
     def test_background_audit_flushes_every_accepted_record(self):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / 'audit.jsonl'

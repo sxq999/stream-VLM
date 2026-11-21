@@ -1,0 +1,53 @@
+{
+  "model_revision": "fb09628e98b1f55d8d5b863e0eccfcdd11bff499",
+  "purpose": "local input preparation only; not a GPU experiment",
+  "files": [
+    {
+      "file": "omni_duplex1.mp4",
+      "source_url": "https://huggingface.co/openbmb/MiniCPM-o-4_5/resolve/fb09628e98b1f55d8d5b863e0eccfcdd11bff499/assets/omni_duplex1.mp4",
+      "source_sha256": "31622e1efd9a7b197a340266037b45aeec13b3b27f010f1ea1d22d9c6e69405f",
+      "sha256": "31622e1efd9a7b197a340266037b45aeec13b3b27f010f1ea1d22d9c6e69405f",
+      "bytes": 7295040,
+      "duration_s": 35.333333,
+      "fps": 30.00000028301887,
+      "video_frames": 1060,
+      "width": 540,
+      "height": 960,
+      "audio_track_present": true,
+      "speech_content_verified": false,
+      "question_end_annotations_available": false
+    },
+    {
+      "file": "omni_duplex2.mp4",
+      "source_url": "https://huggingface.co/openbmb/MiniCPM-o-4_5/resolve/fb09628e98b1f55d8d5b863e0eccfcdd11bff499/assets/omni_duplex2.mp4",
+      "source_sha256": "c04eaef27a821e18db3686fdcc9d4b1dafd441e08f6a0e12d4075b81cb04517e",
+      "sha256": "c04eaef27a821e18db3686fdcc9d4b1dafd441e08f6a0e12d4075b81cb04517e",
+      "bytes": 29285216,
+      "duration_s": 52.4,
+      "fps": 30.0,
+      "video_frames": 1572,
+      "width": 1920,
+      "height": 1080,
+      "audio_track_present": false,
+      "speech_content_verified": false,
+      "question_end_annotations_available": false
+    },
+    {
+      "file": "Skiing.mp4",
+      "source_url": "https://huggingface.co/openbmb/MiniCPM-o-4_5/resolve/fb09628e98b1f55d8d5b863e0eccfcdd11bff499/assets/Skiing.mp4",
+      "source_sha256": "479ace116d6ac92487ad90f415b3ef817cd019bba4521043ef0d5faaa1a8415d",
+      "sha256": "479ace116d6ac92487ad90f415b3ef817cd019bba4521043ef0d5faaa1a8415d",
+      "bytes": 8534409,
+      "duration_s": 9.4094,
+      "fps": 29.97002997002997,
+      "video_frames": 282,
+      "width": 960,
+      "height": 540,
+      "audio_track_present": true,
+      "speech_content_verified": false,
+      "question_end_annotations_available": false
+    }
+  ],
+  "date": "2026-11-22",
+  "scope": "source media inventory only; not GPU execution or speech-content validation"
+}
