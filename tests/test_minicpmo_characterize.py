@@ -86,6 +86,11 @@ class MeasurementTests(unittest.TestCase):
         self.assertAlmostEqual(result['no_progress_at_input_end_s'], 70.01)
         self.assertEqual(result['last_model_progress_relative_s'], 20)
 
+    def test_receive_callback_cost_stays_separate_from_gpu_time(self):
+        measured = audit.analyze([{'kind': 'collector_complete', 'start_s': 10, 'end_s': 12}])
+        self.assertEqual(measured['official_collector_work_ms']['max'], 2000)
+        self.assertIsNone(audit.analyze([])['official_collector_work_ms']['max'])
+
     def test_packet_start_pacing_and_blocking_are_distinct(self):
         rows = [{'kind': 'send', 'ok': True, 'start_s': 10 + i * .2, 'end_s': 10 + i * .2 + .01,
                  'media_start_ms': i * 200, 'media_end_ms': (i + 1) * 200} for i in range(4)]

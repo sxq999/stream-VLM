@@ -160,6 +160,7 @@ def analyze(rows):
         'no_progress_at_input_end_s': last_input - (during_input[-1] if during_input else first_input) if sends else None,
         'max_no_progress_within_input_span_s': max((b - a for a, b in zip(checkpoints, checkpoints[1:])), default=None),
         'scope': 'observable listen/output/done events, not exact input consumption; input pacing must be validated separately'}
+    collector_times = [(r['end_s'] - r['start_s']) * 1000 for r in rows if r['kind'] == 'collector_complete']
     return {'event_counts': dict(Counter(r['event'].get('type') for r in receives)),
         'sent_audio_packets': len(sends), 'input_span_s': sends[-1]['end_s'] - sends[0]['start_s'] if sends else None,
         'sender_relative_drift_ms': {'p50': percentile(drift, .5), 'p95': percentile(drift, .95), 'max': max(drift) if drift else None},
@@ -173,6 +174,10 @@ def analyze(rows):
         'audit_before_send_ms_max': max(((r['wire_start_s'] - r['start_s']) * 1000 for r in wire), default=None)
                                    if wire_complete else None,
         'observable_progress': progress_summary,
+        'official_collector_work_ms': {'samples': len(collector_times), 'p95': percentile(collector_times, .95),
+            'max': max(collector_times, default=None),
+            'missing_reason': None if collector_times else 'no callback intervals recorded; legacy log or no callbacks',
+            'scope': 'upstream synchronous receive callback including output handling; not model compute'},
         'responses': turns,
         'completed_responses': sum(d['terminal_status'] == 'completed' for d in turns),
         'unterminated_responses': sum(d['terminal_status'] is None for d in turns),
@@ -248,7 +253,12 @@ def child(args):
                 pcm = base64.b64decode(raw.get('delta') or raw.get('audio') or '')
                 row['audio_seconds'] = len(pcm) / (2 * (raw.get('sample_rate_hz') or 24000))
             write_audit(row)
-            super().add(event, received_at_s=at)
+            started = time.monotonic()
+            try:
+                super().add(event, received_at_s=at)
+            finally:
+                write_audit({'kind': 'collector_complete', 'start_s': started, 'end_s': time.monotonic(),
+                             'event_type': raw.get('type')})
 
     demo._TimedInputClient, demo._StreamingEventCollector = Client, Collector
     sys.argv = [str(source), '--url', args.url, '--input-video', str(args.video),
@@ -325,7 +335,7 @@ def run(args):
         'audit_mode': args.audit_mode, 'no_progress_timeout_s': args.no_progress_timeout_s,
         'measurement_script_sha256': hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
         'upstream_replay_sha256': hashlib.sha256((args.root / 'sources/vllm-omni/examples/online_serving/minicpmo/realtime_duplex_demo.py').read_bytes()).hexdigest(),
-        'scope': 'E1/E2 client audit, not full T1/T2 or saturation', 'runs': []}
+        'scope': 'client audit and bounded long-concurrency diagnostic; not full T1/T2, SLO or saturated capacity', 'runs': []}
     (args.out / 'manifest.json').write_text(json.dumps(manifest, indent=2), encoding='utf-8')
     for i in range(args.repeats):
         directory = args.out / f'repeat-{i + 1}'

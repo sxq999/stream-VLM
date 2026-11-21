@@ -109,6 +109,7 @@ def summarize(directory):
             'wire_send_block_ms_max': analysis['wire_send_block_ms_max'],
             'audit_before_send_ms_max': analysis['audit_before_send_ms_max'],
             'observable_progress': analysis['observable_progress'],
+            'official_collector_work_ms': analysis['official_collector_work_ms'],
             'audit_writer': json.loads((session / 'audit-writer.json').read_text()) if (session / 'audit-writer.json').exists() else None,
             'failure': json.loads((session / 'failure.json').read_text()) if (session / 'failure.json').exists() else None,
             'audio_seconds': sum(x['audio_seconds'] for x in turns), 'responses': len(turns),

@@ -73,7 +73,7 @@
   },
   "stress_guide": "docs/minicpmo/stress-guide.md",
   "gpu_budget": 4,
-  "measurement_phase": "two_gpu_long_stall_reproduced_three_gpu_thinker_tp2_capacity_validation_running",
+  "measurement_phase": "two_gpu_long_stall_reproduced_thinker_tp2_long_results_await_remote_verification",
   "thinker_experiments": [
     "T1",
     "T2",
@@ -144,13 +144,14 @@
     "speech_isolated_replay_and_colocation_comparisons": "pending",
     "saturated_capacity": "not_established_two_gpu_KV_pool_capacity_failure_observed",
     "sender_timing_calibration": "three_threaded_audit_short_repeats_pass_four_stream_failure_has_p95_send_drift_1_15_to_1_36_ms",
-    "no_progress_failure_detection": "verified_60s_continuing_input_without_listen_output_done"
+    "no_progress_failure_detection": "verified_60s_continuing_input_without_listen_output_done",
+    "upstream_receive_callback_timing": "offline_contract_tested_real_model_validation_pending_not_in_archived_runs"
   },
   "capacity_configuration_candidate": {
     "thinker_tp": 2,
     "total_gpus": 3,
     "speech_placement": "one_shared_gpu",
     "preserve_window": true,
-    "status": "running_not_PD_or_method_benefit"
+    "status": "last_observed_warmup_and_four_short_pass_long_repeats_submitted_remote_status_unverified_after_ssh_timeout"
   }
 }
