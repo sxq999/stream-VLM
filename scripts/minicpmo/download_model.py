@@ -8,6 +8,7 @@ from pathlib import Path
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--model", default="openbmb/MiniCPM-o-4_5")
+    parser.add_argument("--revision", required=True, help="Explicit source revision; use the campaign model_revision")
     parser.add_argument("--endpoint", default="https://huggingface.co")
     parser.add_argument("--out", type=Path, required=True)
     parser.add_argument("--cache", type=Path, required=True)
@@ -16,7 +17,7 @@ def main():
     from huggingface_hub import HfApi, snapshot_download
     args.out.mkdir(parents=True, exist_ok=True)
     api = HfApi(endpoint=args.endpoint)
-    info = api.model_info(args.model, files_metadata=True)
+    info = api.model_info(args.model, revision=args.revision, files_metadata=True)
     receipt = {
         "created_utc": datetime.now(timezone.utc).isoformat(),
         "repo_id": args.model,

@@ -1,49 +1,50 @@
 # Stream-VLM
 
-面向流式视觉语言模型的 GPU 实验工具。当前主线调整为 **官方 MiniCPM-o 4.5 + vLLM-Omni**：先部署双工基线、测清瓶颈，再评估 PD 分批 KV 传输。旧 Venus 实验保留为历史参考。
+基于 **MiniCPM-o 4.5 + vLLM-Omni** 的流式音视频实验 testbench。唯一主线：跑通官方双工基线 → 测清瓶颈与压力边界 → 研究 PD 分批 KV 传输。
 
-## 从这里开始
-
-| 你想了解什么 | 入口 |
-|---|---|
-| 当前主线与执行计划 | [MiniCPM-o + vLLM-Omni](docs/minicpmo/README.md) |
-| 旧 Venus 实验、代码与结果 | [Venus 实验](docs/venus/README.md) |
-| 最近测了什么、结论是什么 | [MiniCPM-o 部署、音视频回放与当前边界](docs/minicpmo/progress.md) |
-| 网页交互与实验独占 | [交互入口与接入互斥](docs/minicpmo/interaction.md) |
-| 使用 Qwen3-VL／vLLM 做快照式测试 | [快照测试工具](docs/harness/README.md) |
-| 相关研究与引用 | [论文索引](docs/related-work.md) |
-
-## 执行路径
-
-| 路径 | 输入与执行方式 | 引擎 |
-|---|---|---|
-| **MiniCPM-o：当前主线，短回放通过** | 连续音视频 → 官方双工会话 → 语言／语音 token／波形 | vLLM-Omni，两张 3090；完整功能验收与压测待完成 |
-| Venus：历史实验 | 连续画面与声音 → 逐单元增量输入／生成 → 保留会话状态 | 官方 Venus 原生接口、PyTorch／CUDA |
-| Qwen：通用测试工具 | 帧与问题 → 冻结查询快照 → 直接调用或经过 Serving 网关 | vLLM 或 Transformers |
-
-Venus 已完成单会话定位、共享权重会话隔离、压力初筛和重复词表投影清理，新增实时复测、内部时间线及单会话波形重叠原型。默认基线按完整输入单元串行执行；重叠原型因收益跨轮不一致保持实验状态。**Venus 的语言 PD 和优化批处理尚未实现，也未测定 GPU 最大服务容量**。Qwen 路径已验证的标准 PD 见其[独立结果](docs/harness/results.md)。
-
-## 不用 GPU，检查基本数据流
-
-在仓库根目录执行，要求 Python 3.11+：
-
-```bash
-python -m pip install -e .
-python -m stream_pipeline run --config configs/mock.json --out runs/mock-001
+```text
+自动实验：录制音视频 → 官方流式客户端 ─┐
+                                    ├→ vLLM-Omni → 服务器 GPU → 文字和声音
+人工体验：麦克风、摄像头 → 官方网页 ───┘
+本项目：固定配置、实验启动、接入互斥、检查与结果归档
 ```
 
-这是快照工具的 Mock 自检：返回固定文字，检查输入组织和结果记录。真实 GPU 实验按对应入口操作；Venus 需要已准备好的官方模型环境和参考数据。
+## 当前状态
 
-## 目录
+| 已完成 | 尚未完成 |
+|---|---|
+| 两张 RTX 3090 上音视频短回放通过，预热后重复 3 次通过 | 长会话、打断恢复与完整功能验收 |
+| 官方网页可通过 SSH 转发访问；网页与实验互斥已验证 | 正式瓶颈分析、充分压力测试 |
+| 模型/引擎版本、配置和精简证据固定 | 普通 PD 基线、分批 KV 传输及收益评估 |
+
+当前配置最多 1 个活跃会话，Thinker 使用 eager、上下文上限 8192。这是部署验证配置，不能当作最优性能或 GPU 最大容量结论。网页与模型仅监听回环地址，通过 SSH 访问；不开放新的公网入口。
+
+## 按需要进入
+
+| 目的 | 入口 |
+|---|---|
+| 部署与运行 | [环境、模型、启动和短回放](docs/minicpmo/setup.md) |
+| 网页体验、分享给有 SSH 权限的人、实验独占 | [交互说明](docs/minicpmo/interaction.md) |
+| 已有实验、结果和边界 | [结果](docs/minicpmo/results.md) |
+| 下一步做什么、怎样验收 | [实验计划](docs/minicpmo/plan.md) |
+| 模型与依赖来源 | [固定版本与官方源码](docs/minicpmo/sources.md) |
+
+## 仓库内容
 
 | 目录 | 内容 |
 |---|---|
-| [`src/stream_pipeline/`](src/stream_pipeline/) | 会话状态、执行适配、回放、Serving 与测量 |
-| [`scripts/`](scripts/README.md) | 实验和分析入口 |
-| [`configs/`](configs/README.md) | 固定实验计划与配置模板 |
-| [`docs/minicpmo/`](docs/minicpmo/README.md) | 当前主线的部署、测试计划与进度 |
-| [`docs/venus/`](docs/venus/README.md) | 历史 Venus 实验的方法与结果 |
-| [`docs/harness/`](docs/harness/README.md) | 快照测试工具的使用文档 |
-| [`tests/`](tests/) | 自动化检查 |
+| [scripts/](scripts/README.md) | 预检、固定版本下载、完整性检查、官方回放入口、网页/实验互斥 |
+| [configs/](configs/README.md) | 唯一实验计划与已验证两卡配置 |
+| [docs/minicpmo/](docs/minicpmo/setup.md) | 运行说明、计划、结果与 3 份精简证据 |
+| [tests/](tests/) | 完整性、部署门槛与 Linux 真实文件锁测试 |
 
-运行输出放在 `runs/` 或显式指定的新目录。仓库保留代码、配置、汇总数据与图；模型、原视频、机器配置和大型 trace 保存在实验环境中。
+本仓库是脚本工具集，Python 3.11+，无需安装本项目为 Python 包。模型计算、双工会话和输入回放复用官方程序；目前尚无完整压测套件。模型权重、原始音视频、环境、日志及完整 trace 放在实验目录，不提交到仓库。
+
+离线检查（不启动模型、不占用 GPU）：
+
+```bash
+python scripts/validation/check_repository.py
+python -m unittest discover -s tests -v
+```
+
+Linux 文件锁测试在 Windows 上跳过。GPU 功能测试按部署与实验计划单独执行。

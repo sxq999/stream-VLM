@@ -1,4 +1,0 @@
-# Tested Qwen3-VL / NCCL connector version pins. Install in a separate Linux GPU environment.
-torch==2.8.0
-vllm==0.11.0
-transformers==4.57.1

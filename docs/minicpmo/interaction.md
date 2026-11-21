@@ -30,14 +30,17 @@ python scripts/minicpmo/experiment_access.py \
   --ref-audio /path/to/model/assets/HT_ref_audio.wav
 ```
 
-本机另开终端建立 SSH 转发，并保持该进程运行：
+本机另开终端建立 SSH 转发，并保持该进程运行（以下单行适用于 PowerShell 或 Bash）：
 
-```bash
-ssh -N -o ExitOnForwardFailure=yes -o ServerAliveInterval=20 \
-  -L 127.0.0.1:17862:127.0.0.1:17862 YOUR_SSH_ALIAS
+```text
+ssh -N -o ExitOnForwardFailure=yes -o ServerAliveInterval=20 -L 127.0.0.1:17862:127.0.0.1:17862 YOUR_SSH_ALIAS
 ```
 
 浏览器打开 `http://127.0.0.1:17862/`。页面和模型服务均仅监听服务器回环地址，浏览器通过 SSH 转发访问。网络中断后可能需要重建转发。当前容量配置只允许一个活跃会话，体验时不同时开展实验回放。
+
+分享给别人时，对方需使用自己能登录这台服务器的 SSH 账号建立转发；仅转发 `127.0.0.1` 链接无效。本项目维持 SSH 访问，不新增公网入口。网页打不开时先分别检查本机转发、网页 `/healthz`、模型 `/health` 和 `/experiment-status`；接入允许不代表浏览器权限和音频设备已配置好。
+
+固定版本的上游两卡配置设定 `max_sessions: 4`，各阶段 `max_num_seqs: 4`。本项目为先跑通而改为 1；上游接纳上限不代表本硬件的实测容量。后续从 2 会话开始核验缓存隔离、显存和实时性，再逐步增加。
 
 ## 实验期间禁止网页接入
 
@@ -63,8 +66,8 @@ python scripts/minicpmo/experiment_access.py \
 
 实际检查见[接入互斥证据](evidence/web-experiment-exclusion.json)：覆盖网页阻止实验、实验阻止网页、页面仍可打开以及释放后官方会话握手恢复。它不是压力测试结果。
 
-## 与我们旧管线的关系
+## 与实验脚本的关系
 
-本次没有使用旧的 JSONL 快照回放管线，也没有运行 Venus 的原生 Python 循环。输入回放、双工会话和网页复用 vLLM-Omni 官方实现；本项目的脚本负责固定配置、部署检查、测试启动和结果归档。
+输入回放、双工会话和网页复用 vLLM-Omni 官方实现；本项目的脚本负责固定配置、部署检查、测试启动和结果归档。
 
 后续研究保留自己的实验负载控制与测量工具，并接入这套官方双工协议。不能把旧管线发送独立图片问答请求的方式直接当作持久流式会话。
