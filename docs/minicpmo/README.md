@@ -6,6 +6,7 @@
 - [官方来源与支持边界](sources.md)
 - [固定实验参数](../../configs/minicpmo/campaign.json)
 - [执行记录与当前边界](progress.md)
+- [模型如何运行、流式回放和网页交互](interaction.md)
 
 状态：两张 RTX 3090 上已通过一份官方音视频短回放，实际收到文字及非静音声音；[配置](../../configs/minicpmo/two_gpu_smoke.yaml)和[结果摘要](evidence/smoke-av-20261121.json)已保存。完整双工验收进行中；尚未完成此新模型/引擎组合的压力测试或 PD 性能比较。
 
