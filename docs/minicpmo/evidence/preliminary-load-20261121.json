@@ -1,0 +1,571 @@
+{
+  "date": "2026-11-21",
+  "scope": "preliminary input/output measurement, not capacity or bottleneck conclusion",
+  "model_revision": "fb09628e98b1f55d8d5b863e0eccfcdd11bff499",
+  "omni_revision": "5917730a4b02aedb44d374173cdc1b10484ccd52",
+  "baseline": {
+    "gpu": "RTX 3090",
+    "gpus": 2,
+    "link": "same NUMA, PIX; no NVLink",
+    "layout": "Thinker on one GPU; Talker and Code2Wav on the other",
+    "config": "configs/minicpmo/two_gpu_four_sessions.yaml",
+    "server_config_sha256": "021a2bca71f77a578fa8d70d705918ebeb7b36bf7fa921b133a4a86eb0244027",
+    "timing_hooks_in_engine": false,
+    "gpu_resource_sample_interval_s": 2
+  },
+  "input": {
+    "source": "pinned model assets/omni_duplex1.mp4 and original audio",
+    "sha256": "31622e1efd9a7b197a340266037b45aeec13b3b27f010f1ea1d22d9c6e69405f",
+    "fps": 1,
+    "audio_packet_ms": 200,
+    "tail_silence_s": 5,
+    "speed": 1.0,
+    "reference_audio": "pinned model assets/HT_ref_audio.wav",
+    "window": "basic, high=8000 low=6000",
+    "playback_ack": "upstream offline demo assumption, not physical playback"
+  },
+  "short_scans": [
+    {
+      "sessions": 1,
+      "repeats": [
+        {
+          "repeat": "repeat-1",
+          "common_input_overlap_s": 40.81936400686391,
+          "per_session": [
+            {
+              "stream": 1,
+              "official_ok": true,
+              "input_span_s": 40.81936400686391,
+              "sender_relative_drift_ms": {
+                "p50": 0.7909898180518127,
+                "p95": 2.431340981274843,
+                "max": 5.337511980904708
+              },
+              "send_block_ms_max": 17.233649967238307,
+              "audio_chunks": 9,
+              "audio_seconds": 6.24,
+              "responses": 3,
+              "completed_responses": 3,
+              "unterminated_responses": 0
+            }
+          ],
+          "sampled_gpu_peaks": {
+            "5": {
+              "sampled_peak_memory_mib": 21922.0,
+              "sampled_peak_utilization_percent": 43.0
+            },
+            "6": {
+              "sampled_peak_memory_mib": 17335.0,
+              "sampled_peak_utilization_percent": 11.0
+            }
+          }
+        },
+        {
+          "repeat": "repeat-2",
+          "common_input_overlap_s": 40.815788574982435,
+          "per_session": [
+            {
+              "stream": 1,
+              "official_ok": true,
+              "input_span_s": 40.815788574982435,
+              "sender_relative_drift_ms": {
+                "p50": 0.9050959721208507,
+                "p95": 1.8974899779991006,
+                "max": 2.333199977876177
+              },
+              "send_block_ms_max": 17.360539874061942,
+              "audio_chunks": 9,
+              "audio_seconds": 6.24,
+              "responses": 3,
+              "completed_responses": 3,
+              "unterminated_responses": 0
+            }
+          ],
+          "sampled_gpu_peaks": {
+            "5": {
+              "sampled_peak_memory_mib": 21922.0,
+              "sampled_peak_utilization_percent": 56.0
+            },
+            "6": {
+              "sampled_peak_memory_mib": 17335.0,
+              "sampled_peak_utilization_percent": 26.0
+            }
+          }
+        },
+        {
+          "repeat": "repeat-3",
+          "common_input_overlap_s": 40.819136932026595,
+          "per_session": [
+            {
+              "stream": 1,
+              "official_ok": true,
+              "input_span_s": 40.819136932026595,
+              "sender_relative_drift_ms": {
+                "p50": 0.9447001852080916,
+                "p95": 2.5389800779507254,
+                "max": 4.848226113246312
+              },
+              "send_block_ms_max": 21.56787202693522,
+              "audio_chunks": 9,
+              "audio_seconds": 6.24,
+              "responses": 3,
+              "completed_responses": 3,
+              "unterminated_responses": 0
+            }
+          ],
+          "sampled_gpu_peaks": {
+            "5": {
+              "sampled_peak_memory_mib": 21922.0,
+              "sampled_peak_utilization_percent": 57.0
+            },
+            "6": {
+              "sampled_peak_memory_mib": 17335.0,
+              "sampled_peak_utilization_percent": 12.0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "sessions": 2,
+      "repeats": [
+        {
+          "repeat": "repeat-1",
+          "common_input_overlap_s": 40.81745200813748,
+          "per_session": [
+            {
+              "stream": 1,
+              "official_ok": true,
+              "input_span_s": 40.81816164916381,
+              "sender_relative_drift_ms": {
+                "p50": 0.9172560181482936,
+                "p95": 1.9514220301068974,
+                "max": 2.7886890806243514
+              },
+              "send_block_ms_max": 21.813947008922696,
+              "audio_chunks": 9,
+              "audio_seconds": 6.28,
+              "responses": 3,
+              "completed_responses": 3,
+              "unterminated_responses": 0
+            },
+            {
+              "stream": 2,
+              "official_ok": true,
+              "input_span_s": 40.81753962812945,
+              "sender_relative_drift_ms": {
+                "p50": 0.9167441166937351,
+                "p95": 77.77066510170715,
+                "max": 2061.131284153089
+              },
+              "send_block_ms_max": 2260.1201629731804,
+              "audio_chunks": 9,
+              "audio_seconds": 6.6,
+              "responses": 3,
+              "completed_responses": 3,
+              "unterminated_responses": 0
+            }
+          ],
+          "sampled_gpu_peaks": {
+            "5": {
+              "sampled_peak_memory_mib": 21922.0,
+              "sampled_peak_utilization_percent": 57.0
+            },
+            "6": {
+              "sampled_peak_memory_mib": 17335.0,
+              "sampled_peak_utilization_percent": 36.0
+            }
+          }
+        },
+        {
+          "repeat": "repeat-2",
+          "common_input_overlap_s": 40.81663104984909,
+          "per_session": [
+            {
+              "stream": 1,
+              "official_ok": true,
+              "input_span_s": 40.81683782488108,
+              "sender_relative_drift_ms": {
+                "p50": 0.9621630422769201,
+                "p95": 2.1149080246658514,
+                "max": 5.192191014065983
+              },
+              "send_block_ms_max": 19.60504986345768,
+              "audio_chunks": 9,
+              "audio_seconds": 6.24,
+              "responses": 3,
+              "completed_responses": 3,
+              "unterminated_responses": 0
+            },
+            {
+              "stream": 2,
+              "official_ok": true,
+              "input_span_s": 40.81826194189489,
+              "sender_relative_drift_ms": {
+                "p50": 0.9661249350756407,
+                "p95": 1.975635811689358,
+                "max": 3.3808659762115667
+              },
+              "send_block_ms_max": 18.741620937362313,
+              "audio_chunks": 9,
+              "audio_seconds": 6.24,
+              "responses": 3,
+              "completed_responses": 3,
+              "unterminated_responses": 0
+            }
+          ],
+          "sampled_gpu_peaks": {
+            "5": {
+              "sampled_peak_memory_mib": 21922.0,
+              "sampled_peak_utilization_percent": 56.0
+            },
+            "6": {
+              "sampled_peak_memory_mib": 17335.0,
+              "sampled_peak_utilization_percent": 36.0
+            }
+          }
+        },
+        {
+          "repeat": "repeat-3",
+          "common_input_overlap_s": 40.81842902721837,
+          "per_session": [
+            {
+              "stream": 1,
+              "official_ok": true,
+              "input_span_s": 40.81869133817963,
+              "sender_relative_drift_ms": {
+                "p50": 0.9513980243358588,
+                "p95": 2.27006603963531,
+                "max": 3.079754952338476
+              },
+              "send_block_ms_max": 19.417846109718084,
+              "audio_chunks": 10,
+              "audio_seconds": 7.96,
+              "responses": 3,
+              "completed_responses": 3,
+              "unterminated_responses": 0
+            },
+            {
+              "stream": 2,
+              "official_ok": true,
+              "input_span_s": 40.81844572513364,
+              "sender_relative_drift_ms": {
+                "p50": 0.9272911585895827,
+                "p95": 1.9380230922259045,
+                "max": 2.642471995201845
+              },
+              "send_block_ms_max": 19.73137096501887,
+              "audio_chunks": 9,
+              "audio_seconds": 6.28,
+              "responses": 3,
+              "completed_responses": 3,
+              "unterminated_responses": 0
+            }
+          ],
+          "sampled_gpu_peaks": {
+            "5": {
+              "sampled_peak_memory_mib": 21922.0,
+              "sampled_peak_utilization_percent": 69.0
+            },
+            "6": {
+              "sampled_peak_memory_mib": 17335.0,
+              "sampled_peak_utilization_percent": 34.0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "sessions": 4,
+      "repeats": [
+        {
+          "repeat": "repeat-1",
+          "common_input_overlap_s": 40.817911837017164,
+          "per_session": [
+            {
+              "stream": 1,
+              "official_ok": true,
+              "input_span_s": 40.819563766010106,
+              "sender_relative_drift_ms": {
+                "p50": 0.931839039548521,
+                "p95": 2.4806868750602007,
+                "max": 92.51406793482619
+              },
+              "send_block_ms_max": 291.75225901417434,
+              "audio_chunks": 9,
+              "audio_seconds": 6.28,
+              "responses": 3,
+              "completed_responses": 3,
+              "unterminated_responses": 0
+            },
+            {
+              "stream": 2,
+              "official_ok": true,
+              "input_span_s": 40.818347370950505,
+              "sender_relative_drift_ms": {
+                "p50": 0.9825478307909918,
+                "p95": 1.8378439359381105,
+                "max": 92.13343383744376
+              },
+              "send_block_ms_max": 290.87141901254654,
+              "audio_chunks": 9,
+              "audio_seconds": 6.040000000000001,
+              "responses": 3,
+              "completed_responses": 3,
+              "unterminated_responses": 0
+            },
+            {
+              "stream": 3,
+              "official_ok": true,
+              "input_span_s": 40.81799413985573,
+              "sender_relative_drift_ms": {
+                "p50": 0.9614738635690401,
+                "p95": 1.6343879513414095,
+                "max": 91.76382799632864
+              },
+              "send_block_ms_max": 291.2221180740744,
+              "audio_chunks": 9,
+              "audio_seconds": 6.28,
+              "responses": 3,
+              "completed_responses": 3,
+              "unterminated_responses": 0
+            },
+            {
+              "stream": 4,
+              "official_ok": true,
+              "input_span_s": 40.81863246508874,
+              "sender_relative_drift_ms": {
+                "p50": 0.9615469258292819,
+                "p95": 2.1847011055768917,
+                "max": 92.12944009341317
+              },
+              "send_block_ms_max": 290.7911688089371,
+              "audio_chunks": 9,
+              "audio_seconds": 6.16,
+              "responses": 3,
+              "completed_responses": 3,
+              "unterminated_responses": 0
+            }
+          ],
+          "sampled_gpu_peaks": {
+            "5": {
+              "sampled_peak_memory_mib": 21922.0,
+              "sampled_peak_utilization_percent": 88.0
+            },
+            "6": {
+              "sampled_peak_memory_mib": 17335.0,
+              "sampled_peak_utilization_percent": 73.0
+            }
+          }
+        },
+        {
+          "repeat": "repeat-2",
+          "common_input_overlap_s": 40.81587876798585,
+          "per_session": [
+            {
+              "stream": 1,
+              "official_ok": true,
+              "input_span_s": 40.81587876798585,
+              "sender_relative_drift_ms": {
+                "p50": 0.9041519835584211,
+                "p95": 2.2156610153629686,
+                "max": 3.2707040198118875
+              },
+              "send_block_ms_max": 18.425882095471025,
+              "audio_chunks": 9,
+              "audio_seconds": 6.48,
+              "responses": 3,
+              "completed_responses": 3,
+              "unterminated_responses": 0
+            },
+            {
+              "stream": 2,
+              "official_ok": true,
+              "input_span_s": 40.81830547307618,
+              "sender_relative_drift_ms": {
+                "p50": 0.9875691030174494,
+                "p95": 1.9946780055768443,
+                "max": 4.852296970785375
+              },
+              "send_block_ms_max": 18.42919597402215,
+              "audio_chunks": 10,
+              "audio_seconds": 7.64,
+              "responses": 3,
+              "completed_responses": 3,
+              "unterminated_responses": 0
+            },
+            {
+              "stream": 3,
+              "official_ok": true,
+              "input_span_s": 40.82434676005505,
+              "sender_relative_drift_ms": {
+                "p50": 0.9147630538777207,
+                "p95": 2.402265137064319,
+                "max": 2.7594000101061056
+              },
+              "send_block_ms_max": 21.944494917988777,
+              "audio_chunks": 9,
+              "audio_seconds": 6.16,
+              "responses": 3,
+              "completed_responses": 3,
+              "unterminated_responses": 0
+            },
+            {
+              "stream": 4,
+              "official_ok": true,
+              "input_span_s": 40.81811390607618,
+              "sender_relative_drift_ms": {
+                "p50": 0.8741240948442197,
+                "p95": 2.1139290183782578,
+                "max": 2.7280491311074684
+              },
+              "send_block_ms_max": 16.429656883701682,
+              "audio_chunks": 10,
+              "audio_seconds": 7.800000000000001,
+              "responses": 3,
+              "completed_responses": 3,
+              "unterminated_responses": 0
+            }
+          ],
+          "sampled_gpu_peaks": {
+            "5": {
+              "sampled_peak_memory_mib": 21922.0,
+              "sampled_peak_utilization_percent": 79.0
+            },
+            "6": {
+              "sampled_peak_memory_mib": 17335.0,
+              "sampled_peak_utilization_percent": 49.0
+            }
+          }
+        },
+        {
+          "repeat": "repeat-3",
+          "common_input_overlap_s": 40.81603892915882,
+          "per_session": [
+            {
+              "stream": 1,
+              "official_ok": true,
+              "input_span_s": 40.818916355026886,
+              "sender_relative_drift_ms": {
+                "p50": 0.8660640101894046,
+                "p95": 2.0541091915227128,
+                "max": 166.6782871820036
+              },
+              "send_block_ms_max": 365.3161181136966,
+              "audio_chunks": 10,
+              "audio_seconds": 7.119999999999999,
+              "responses": 3,
+              "completed_responses": 3,
+              "unterminated_responses": 0
+            },
+            {
+              "stream": 2,
+              "official_ok": true,
+              "input_span_s": 40.81879271194339,
+              "sender_relative_drift_ms": {
+                "p50": 0.9248469956215644,
+                "p95": 2.39885803311779,
+                "max": 166.60539512522553
+              },
+              "send_block_ms_max": 22.88525807671249,
+              "audio_chunks": 9,
+              "audio_seconds": 6.48,
+              "responses": 3,
+              "completed_responses": 3,
+              "unterminated_responses": 0
+            },
+            {
+              "stream": 3,
+              "official_ok": true,
+              "input_span_s": 40.81931418413296,
+              "sender_relative_drift_ms": {
+                "p50": 0.867514126002833,
+                "p95": 1.9826710689816451,
+                "max": 167.15178904123638
+              },
+              "send_block_ms_max": 365.70060113444924,
+              "audio_chunks": 9,
+              "audio_seconds": 6.28,
+              "responses": 3,
+              "completed_responses": 3,
+              "unterminated_responses": 0
+            },
+            {
+              "stream": 4,
+              "official_ok": true,
+              "input_span_s": 40.81660816818476,
+              "sender_relative_drift_ms": {
+                "p50": 0.8627841249104762,
+                "p95": 1.51986898854517,
+                "max": 166.38205512426828
+              },
+              "send_block_ms_max": 130.53425098769367,
+              "audio_chunks": 9,
+              "audio_seconds": 6.28,
+              "responses": 3,
+              "completed_responses": 3,
+              "unterminated_responses": 0
+            }
+          ],
+          "sampled_gpu_peaks": {
+            "5": {
+              "sampled_peak_memory_mib": 21922.0,
+              "sampled_peak_utilization_percent": 93.0
+            },
+            "6": {
+              "sampled_peak_memory_mib": 17335.0,
+              "sampled_peak_utilization_percent": 13.0
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "long_mechanical_loop": {
+    "source_media_duration_s": 600.051,
+    "sent_audio_packets": 3030,
+    "official_ok": true,
+    "errors": [],
+    "input_span_s": 605.8213298870251,
+    "sender_relative_drift_ms": {
+      "p50": 0.8537329267710447,
+      "p95": 1.3390190433710814,
+      "max": 1779.6410900074982
+    },
+    "send_block_ms_max": 1978.163893101737,
+    "audio_chunks": 172,
+    "audio_seconds": 135.79999999999998,
+    "responses": 51,
+    "completed_responses": 50,
+    "unterminated_responses": 1,
+    "sampled_gpu_peaks": {
+      "5": {
+        "sampled_peak_memory_mib": 21922.0,
+        "sampled_peak_utilization_percent": 60.0
+      },
+      "6": {
+        "sampled_peak_memory_mib": 17335.0,
+        "sampled_peak_utilization_percent": 32.0
+      }
+    },
+    "acceptance": "lifecycle pass; full response drain and real-time SLO not accepted"
+  },
+  "measurement_findings": [
+    "stage0 prompt_tokens_total increased only 147 per session, including the 600s run; it does not cover all incremental input",
+    "response.created is emitted late; 2-12ms response.created-to-audio values are not user TTFT",
+    "one final response lacked response.done at client close; report separately rather than count as completed"
+  ],
+  "unavailable": {
+    "source_separated_model_input_tokens": "requires worker-side embedding/token mapping",
+    "gpu_phase_durations": "separate profiler trace required",
+    "actual_media_freshness": "server consumption correlation missing",
+    "saturated_capacity": "no stable overload boundary yet",
+    "speech_interference": "controlled isolated/replay comparisons pending"
+  },
+  "limitations": [
+    "one clip repeated across users; no independent content diversity",
+    "600s input loops the same clip; no long-video understanding claim",
+    "sampled GPU memory can miss transient peaks and is not per-session KV",
+    "same-GPU-number budget and configuration must be controlled in future layout comparisons"
+  ]
+}

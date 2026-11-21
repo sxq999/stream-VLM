@@ -1,0 +1,524 @@
+{
+  "scope": "diagnostic scheduler metadata, not uninstrumented performance",
+  "covered_stages": [
+    0,
+    1
+  ],
+  "event_counts": {
+    "0:initial_admission": 2,
+    "0:schedule": 889,
+    "0:streaming_update": 285,
+    "1:initial_admission": 2,
+    "1:schedule": 1527,
+    "1:streaming_update": 75
+  },
+  "requests": [
+    {
+      "stage": 0,
+      "request": 1,
+      "initial_positions": 147,
+      "update_events": 40,
+      "received_update_positions": 3160,
+      "scheduled_positions": 3382,
+      "scheduled_steps": 116,
+      "kv_block_samples": 116,
+      "max_prompt_positions": 3341,
+      "max_computed_positions": 3342,
+      "max_kv_blocks_by_group": [
+        209
+      ],
+      "reanchors": [],
+      "prompt_reductions": [],
+      "kv_block_decreases": [],
+      "observed_span_s": 40.14168952102773
+    },
+    {
+      "stage": 0,
+      "request": 2,
+      "initial_positions": 147,
+      "update_events": 245,
+      "received_update_positions": 19355,
+      "scheduled_positions": 20029,
+      "scheduled_steps": 773,
+      "kv_block_samples": 773,
+      "max_prompt_positions": 7994,
+      "max_computed_positions": 7995,
+      "max_kv_blocks_by_group": [
+        500
+      ],
+      "reanchors": [
+        {
+          "relative_s": 99.00039261300117,
+          "counter_before": 0,
+          "counter_after": 1,
+          "prompt_before": 7994,
+          "prompt_after": 2633
+        },
+        {
+          "relative_s": 166.00131422490813,
+          "counter_before": 1,
+          "counter_after": 2,
+          "prompt_before": 7932,
+          "prompt_after": 5291
+        },
+        {
+          "relative_s": 199.99925239081495,
+          "counter_before": 2,
+          "counter_after": 3,
+          "prompt_before": 7939,
+          "prompt_after": 5378
+        },
+        {
+          "relative_s": 232.99483684892766,
+          "counter_before": 3,
+          "counter_after": 4,
+          "prompt_before": 7947,
+          "prompt_after": 5850
+        }
+      ],
+      "prompt_reductions": [
+        {
+          "relative_s": 99.00039261300117,
+          "before": 7994,
+          "after": 2633
+        },
+        {
+          "relative_s": 166.00131422490813,
+          "before": 7932,
+          "after": 5291
+        },
+        {
+          "relative_s": 199.99925239081495,
+          "before": 7939,
+          "after": 5378
+        },
+        {
+          "relative_s": 232.99483684892766,
+          "before": 7947,
+          "after": 5850
+        }
+      ],
+      "kv_block_decreases": [
+        {
+          "relative_s": 99.00119662587531,
+          "before": [
+            500
+          ],
+          "after": [
+            165
+          ]
+        },
+        {
+          "relative_s": 166.00204646983184,
+          "before": [
+            496
+          ],
+          "after": [
+            331
+          ]
+        },
+        {
+          "relative_s": 200.0001240898855,
+          "before": [
+            497
+          ],
+          "after": [
+            337
+          ]
+        },
+        {
+          "relative_s": 232.99561009090394,
+          "before": [
+            497
+          ],
+          "after": [
+            366
+          ]
+        }
+      ],
+      "observed_span_s": 245.12434721691534
+    },
+    {
+      "stage": 1,
+      "request": 3,
+      "initial_positions": 3,
+      "update_events": 8,
+      "received_update_positions": 34,
+      "scheduled_positions": 193,
+      "scheduled_steps": 165,
+      "kv_block_samples": 165,
+      "max_prompt_positions": 54,
+      "max_computed_positions": 70,
+      "max_kv_blocks_by_group": [
+        5
+      ],
+      "reanchors": [],
+      "prompt_reductions": [
+        {
+          "relative_s": 10.066568379057571,
+          "before": 41,
+          "after": 3
+        },
+        {
+          "relative_s": 25.093958632089198,
+          "before": 44,
+          "after": 4
+        }
+      ],
+      "kv_block_decreases": [
+        {
+          "relative_s": 10.067394089885056,
+          "before": [
+            3
+          ],
+          "after": [
+            1
+          ]
+        },
+        {
+          "relative_s": 25.094709946075454,
+          "before": [
+            5
+          ],
+          "after": [
+            1
+          ]
+        }
+      ],
+      "observed_span_s": 27.16367128305137
+    },
+    {
+      "stage": 1,
+      "request": 4,
+      "initial_positions": 3,
+      "update_events": 67,
+      "received_update_positions": 299,
+      "scheduled_positions": 1596,
+      "scheduled_steps": 1362,
+      "kv_block_samples": 1362,
+      "max_prompt_positions": 108,
+      "max_computed_positions": 114,
+      "max_kv_blocks_by_group": [
+        8
+      ],
+      "reanchors": [],
+      "prompt_reductions": [
+        {
+          "relative_s": 8.173834046116099,
+          "before": 41,
+          "after": 5
+        },
+        {
+          "relative_s": 25.043742132140324,
+          "before": 50,
+          "after": 3
+        },
+        {
+          "relative_s": 35.07175822905265,
+          "before": 77,
+          "after": 3
+        },
+        {
+          "relative_s": 46.21833746298216,
+          "before": 41,
+          "after": 5
+        },
+        {
+          "relative_s": 60.209940331056714,
+          "before": 50,
+          "after": 3
+        },
+        {
+          "relative_s": 70.2038385621272,
+          "before": 108,
+          "after": 3
+        },
+        {
+          "relative_s": 80.48408277798444,
+          "before": 59,
+          "after": 7
+        },
+        {
+          "relative_s": 96.28994794609025,
+          "before": 59,
+          "after": 4
+        },
+        {
+          "relative_s": 106.28965904400684,
+          "before": 88,
+          "after": 4
+        },
+        {
+          "relative_s": 115.5797212170437,
+          "before": 46,
+          "after": 9
+        },
+        {
+          "relative_s": 131.4462314939592,
+          "before": 66,
+          "after": 3
+        },
+        {
+          "relative_s": 141.4714576639235,
+          "before": 98,
+          "after": 4
+        },
+        {
+          "relative_s": 151.84381992998533,
+          "before": 46,
+          "after": 10
+        },
+        {
+          "relative_s": 166.53636232600547,
+          "before": 66,
+          "after": 3
+        },
+        {
+          "relative_s": 177.68563490291126,
+          "before": 104,
+          "after": 4
+        },
+        {
+          "relative_s": 187.91819445695728,
+          "before": 18,
+          "after": 9
+        },
+        {
+          "relative_s": 202.64313177694567,
+          "before": 40,
+          "after": 4
+        },
+        {
+          "relative_s": 212.8883752829861,
+          "before": 88,
+          "after": 4
+        },
+        {
+          "relative_s": 223.11032765102573,
+          "before": 18,
+          "after": 10
+        },
+        {
+          "relative_s": 236.88867939193733,
+          "before": 65,
+          "after": 5
+        }
+      ],
+      "kv_block_decreases": [
+        {
+          "relative_s": 8.174764700001106,
+          "before": [
+            3
+          ],
+          "after": [
+            1
+          ]
+        },
+        {
+          "relative_s": 25.04445709194988,
+          "before": [
+            5
+          ],
+          "after": [
+            1
+          ]
+        },
+        {
+          "relative_s": 35.072501328075305,
+          "before": [
+            6
+          ],
+          "after": [
+            1
+          ]
+        },
+        {
+          "relative_s": 46.219061760930344,
+          "before": [
+            4
+          ],
+          "after": [
+            1
+          ]
+        },
+        {
+          "relative_s": 60.21077192295343,
+          "before": [
+            5
+          ],
+          "after": [
+            1
+          ]
+        },
+        {
+          "relative_s": 70.20418150001206,
+          "before": [
+            8
+          ],
+          "after": [
+            1
+          ]
+        },
+        {
+          "relative_s": 80.48444281006232,
+          "before": [
+            4
+          ],
+          "after": [
+            1
+          ]
+        },
+        {
+          "relative_s": 96.29116364801303,
+          "before": [
+            5
+          ],
+          "after": [
+            1
+          ]
+        },
+        {
+          "relative_s": 106.29039031499997,
+          "before": [
+            7
+          ],
+          "after": [
+            1
+          ]
+        },
+        {
+          "relative_s": 115.58044879510999,
+          "before": [
+            4
+          ],
+          "after": [
+            1
+          ]
+        },
+        {
+          "relative_s": 131.44754595309496,
+          "before": [
+            5
+          ],
+          "after": [
+            1
+          ]
+        },
+        {
+          "relative_s": 141.47216433705762,
+          "before": [
+            7
+          ],
+          "after": [
+            1
+          ]
+        },
+        {
+          "relative_s": 151.84483256097883,
+          "before": [
+            4
+          ],
+          "after": [
+            1
+          ]
+        },
+        {
+          "relative_s": 166.5370951751247,
+          "before": [
+            5
+          ],
+          "after": [
+            1
+          ]
+        },
+        {
+          "relative_s": 177.68636722001247,
+          "before": [
+            7
+          ],
+          "after": [
+            1
+          ]
+        },
+        {
+          "relative_s": 187.91852834494784,
+          "before": [
+            3
+          ],
+          "after": [
+            1
+          ]
+        },
+        {
+          "relative_s": 202.643662099028,
+          "before": [
+            4
+          ],
+          "after": [
+            1
+          ]
+        },
+        {
+          "relative_s": 212.88931053807028,
+          "before": [
+            7
+          ],
+          "after": [
+            1
+          ]
+        },
+        {
+          "relative_s": 223.11103961593471,
+          "before": [
+            3
+          ],
+          "after": [
+            1
+          ]
+        },
+        {
+          "relative_s": 236.88942672894336,
+          "before": [
+            5
+          ],
+          "after": [
+            1
+          ]
+        }
+      ],
+      "observed_span_s": 239.04005291708745
+    }
+  ],
+  "errors": [],
+  "limitations": [
+    "received positions may contain control or placeholder tokens; modalities are not separated",
+    "scheduled positions can contain recomputation and are not new-input counts",
+    "KV groups report blocks, not bytes or all model-side memory",
+    "scheduler computed-position counts can include in-flight work; they are not a GPU completion fence",
+    "these AR hooks do not instrument the Code2Wav generation scheduler",
+    "window counters and block decreases prove mechanics, not retained-context quality",
+    "CPU hook timestamps are not GPU kernel durations or complete input-freshness measurements"
+  ],
+  "date": "2026-11-21",
+  "model_revision": "fb09628e98b1f55d8d5b863e0eccfcdd11bff499",
+  "omni_revision": "5917730a4b02aedb44d374173cdc1b10484ccd52",
+  "deployment": {
+    "gpu": "RTX 3090",
+    "gpus": 2,
+    "physical_pair_topology": "same NUMA, PXB; different physical pair from baseline, not a timing comparison",
+    "config_sha256": "021a2bca71f77a578fa8d70d705918ebeb7b36bf7fa921b133a4a86eb0244027"
+  },
+  "diagnostic": {
+    "scheduler_original_sha256": "865dbf68d1a2297fb11ae873300839018dff8b816592091d1572c77fce22ac34",
+    "hook_tool_sha256": "29c802ddd5f0a637c5dcbd10ce6dcb8426f05d00c7f12559b2400e5c1ced5b30",
+    "baseline_source_clean": true,
+    "run_status": "pass"
+  },
+  "workloads": {
+    "request_1_and_3": "official short asset plus 5s tail",
+    "request_2_and_4": "240s mechanical loop plus 5s tail",
+    "basic_window_high": 8000,
+    "basic_window_low": 6000,
+    "speed": 1.0
+  }
+}

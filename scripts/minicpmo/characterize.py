@@ -52,11 +52,13 @@ def analyze(rows):
         rid = event.get('response_id') or (event.get('response') or {}).get('id')
         if not rid:
             continue
-        d = response.setdefault(rid, {'response_id': rid, 'chunks': [], 'created_s': None, 'cancelled': False})
+        d = response.setdefault(rid, {'response_id': rid, 'chunks': [], 'created_s': None,
+                                     'cancelled': False, 'terminal_status': None})
         if event.get('type') == 'response.created':
             d['created_s'] = r['at_s']
         if event.get('type') == 'response.done':
-            d['cancelled'] = (event.get('response') or {}).get('status') == 'cancelled'
+            d['terminal_status'] = (event.get('response') or {}).get('status')
+            d['cancelled'] = d['terminal_status'] == 'cancelled'
         if r.get('audio_seconds', 0) > 0:
             d['chunks'].append((r['at_s'], r['audio_seconds']))
     turns = []
@@ -64,6 +66,7 @@ def analyze(rows):
         chunks = d.pop('chunks')
         d['audio_chunks'] = len(chunks)
         d['audio_seconds'] = sum(length for _, length in chunks)
+        d['playback_aggregate_eligible'] = d['terminal_status'] == 'completed'
         d['response_created_to_first_audio_ms'] = ((chunks[0][0] - d['created_s']) * 1000
                                                    if chunks and d['created_s'] is not None else None)
         d['simulated_underflow'] = []
@@ -88,7 +91,10 @@ def analyze(rows):
         'sent_audio_packets': len(sends), 'input_span_s': sends[-1]['end_s'] - sends[0]['start_s'] if sends else None,
         'sender_relative_drift_ms': {'p50': percentile(drift, .5), 'p95': percentile(drift, .95), 'max': max(drift) if drift else None},
         'send_block_ms_max': max(((r['end_s'] - r['start_s']) * 1000 for r in sends), default=None),
-        'responses': turns, 'question_end_to_first_text_ms': None,
+        'responses': turns,
+        'completed_responses': sum(d['terminal_status'] == 'completed' for d in turns),
+        'unterminated_responses': sum(d['terminal_status'] is None for d in turns),
+        'question_end_to_first_text_ms': None,
         'missing': {'question_end_to_first_text_ms': 'no annotated question-end association',
             'gpu_phase_durations': 'client audit is not a GPU trace',
             'per_session_tokens_and_kv': 'requires verified stage instrumentation',

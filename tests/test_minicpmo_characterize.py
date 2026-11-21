@@ -40,6 +40,15 @@ class MeasurementTests(unittest.TestCase):
         self.assertTrue(r['responses'][0]['cancelled'])
         self.assertTrue(r['responses'][0]['simulated_underflow'][0]['excluded_from_aggregate_if_cancelled'])
 
+    def test_session_close_does_not_complete_an_open_response(self):
+        r = audit.analyze([event(1, 'response.created', 'a'),
+            event(2, 'response.output_audio.delta', 'a', .1),
+            event(3, 'session.closed', None)])
+        self.assertEqual(r['unterminated_responses'], 1)
+        self.assertEqual(r['completed_responses'], 0)
+        self.assertFalse(r['responses'][0]['playback_aggregate_eligible'])
+        self.assertAlmostEqual(r['responses'][0]['audio_seconds'], .1)
+
     def test_packet_start_pacing_and_blocking_are_distinct(self):
         rows = [{'kind': 'send', 'ok': True, 'start_s': 10 + i * .2, 'end_s': 10 + i * .2 + .01,
                  'media_start_ms': i * 200, 'media_end_ms': (i + 1) * 200} for i in range(4)]

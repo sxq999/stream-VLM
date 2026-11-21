@@ -73,7 +73,7 @@
   },
   "stress_guide": "docs/minicpmo/stress-guide.md",
   "gpu_budget": 4,
-  "measurement_phase": "instrumentation_preflight",
+  "measurement_phase": "preliminary_scan_and_long_lifecycle_recorded_engine_window_verified_gpu_trace_running",
   "thinker_experiments": [
     "T1",
     "T2",
@@ -95,23 +95,23 @@
   "execution_queue": [
     {
       "id": "E0",
-      "status": "pending"
+      "status": "pass_resource_and_health_preflight"
     },
     {
       "id": "E1",
-      "status": "pending"
+      "status": "pass_client_audit_warmup_and_three_single_repeats"
     },
     {
       "id": "E2",
-      "status": "pending"
+      "status": "pass_preliminary_same_clip_1_2_4_three_repeats_not_saturation"
     },
     {
       "id": "E3",
-      "status": "pending"
+      "status": "lifecycle_pass_single_600s_loop_one_unterminated_response_drain_pending"
     },
     {
       "id": "E4",
-      "status": "pending"
+      "status": "partial_ar_metadata_and_four_reclaims_verified_gpu_trace_running"
     },
     {
       "id": "E5",

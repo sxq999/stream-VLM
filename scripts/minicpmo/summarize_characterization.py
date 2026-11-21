@@ -87,9 +87,12 @@ def summarize(directory):
             'sender_relative_drift_ms': analysis['sender_relative_drift_ms'],
             'send_block_ms_max': analysis['send_block_ms_max'], 'audio_chunks': sum(x['audio_chunks'] for x in turns),
             'audio_seconds': sum(x['audio_seconds'] for x in turns), 'responses': len(turns),
+            'completed_responses': analysis['completed_responses'],
+            'unterminated_responses': analysis['unterminated_responses'],
             'response_created_to_first_audio_ms': {'p50': audit.percentile(latency, .5), 'p95': audit.percentile(latency, .95)},
-            'simulated_playback': [{'startup_buffer_ms': b, 'gaps': sum(x['simulated_underflow'][i]['gaps'] for x in turns if not x['cancelled']),
-                'total_gap_ms': sum(x['simulated_underflow'][i]['total_ms'] for x in turns if not x['cancelled'])}
+            'simulated_playback': [{'startup_buffer_ms': b, 'completed_responses_only': True,
+                'gaps': sum(x['simulated_underflow'][i]['gaps'] for x in turns if x['playback_aggregate_eligible']),
+                'total_gap_ms': sum(x['simulated_underflow'][i]['total_ms'] for x in turns if x['playback_aggregate_eligible'])}
                 for i, b in enumerate((0, 100, 300))], 'engine_snapshot_count': len(metadata),
             'model_decision': result.get('model_decision')})
     return {'repeat': directory.name, 'sessions': sessions,
@@ -97,6 +100,7 @@ def summarize(directory):
         'sampled_gpu_peaks': peaks, 'engine_reported_counters': counters,
         'limitations': ['sampled peaks can miss transients', 'response.created may be emitted late; this is not question-end TTFT',
             'offline playback ACK follows upstream demo, not a physical player', 'same-clip measurement validation is not saturation or diverse workload evaluation',
+            'lifecycle success does not guarantee every response reached response.done; unterminated responses are reported separately',
             'kernel timing, actual input freshness, per-session KV and source-separated token counts remain unavailable']}
 
 
