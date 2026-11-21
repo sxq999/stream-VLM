@@ -37,9 +37,7 @@
   "finer_concurrency_only_after_capacity_gate": true,
   "arrival_mode": "open_loop_media_clock",
   "arrival_speed_factors": [
-    1.0,
-    1.25,
-    1.5
+    1.0
   ],
   "overload_policy": "bounded_queue_record_rejection_and_backlog",
   "pd": {
@@ -72,5 +70,63 @@
     "all_directions_history_protocol_fixed": true,
     "require_gpu_ready_and_receive_installed": true,
     "require_source_blocks_alive_until_completion": true
+  },
+  "stress_guide": "docs/minicpmo/stress-guide.md",
+  "gpu_budget": 4,
+  "measurement_phase": "instrumentation_preflight",
+  "thinker_experiments": [
+    "T1",
+    "T2",
+    "T3",
+    "T4",
+    "T5",
+    "T6",
+    "T7",
+    "T8"
+  ],
+  "speech_experiments": [
+    "S1",
+    "S2",
+    "S3",
+    "S4",
+    "S5",
+    "S6"
+  ],
+  "execution_queue": [
+    {
+      "id": "E0",
+      "status": "pending"
+    },
+    {
+      "id": "E1",
+      "status": "pending"
+    },
+    {
+      "id": "E2",
+      "status": "pending"
+    },
+    {
+      "id": "E3",
+      "status": "pending"
+    },
+    {
+      "id": "E4",
+      "status": "pending"
+    },
+    {
+      "id": "E5",
+      "status": "pending"
+    },
+    {
+      "id": "E6",
+      "status": "pending"
+    }
+  ],
+  "metric_policy": {
+    "missing_is_null_with_reason": true,
+    "cpu_wall_is_not_gpu_kernel_time": true,
+    "session_created_is_not_user_question_end": true,
+    "same_clip_is_not_diverse_workload": true,
+    "cross_hardware_requires_remeasurement": true
   }
 }

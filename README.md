@@ -28,6 +28,7 @@
 | 网页体验、分享给有 SSH 权限的人、实验独占 | [交互说明](docs/minicpmo/interaction.md) |
 | 已有实验、结果和边界 | [结果](docs/minicpmo/results.md) |
 | 下一步做什么、怎样验收 | [实验计划](docs/minicpmo/plan.md) |
+| 压测对比什么、采哪些指标、执行顺序 | [实验执行指导：Thinker与语音侧](docs/minicpmo/stress-guide.md) |
 | 模型与依赖来源 | [固定版本与官方源码](docs/minicpmo/sources.md) |
 
 ## 仓库内容
