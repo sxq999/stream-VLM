@@ -1,0 +1,53 @@
+{
+  "scope": "three_sequential_warm_sessions_same_official_clip_not_three_independent_workloads",
+  "status": "pass",
+  "runs": [
+    {
+      "repeat": 1,
+      "ok": true,
+      "errors": [],
+      "video_frames_sent": 36,
+      "tail_video_frames_sent": 5,
+      "audio_chunks": 9,
+      "audio_bytes": 301440,
+      "audio_duration_s": 6.28,
+      "listen_events": 32,
+      "speak_events": 3,
+      "session_created": 1,
+      "session_closed": 1,
+      "wav_sha256": "ab3f5a7ee2b52bb7ed38f64744d425ae262bbe28a55fa6df59ba35f16ac4fe8e"
+    },
+    {
+      "repeat": 2,
+      "ok": true,
+      "errors": [],
+      "video_frames_sent": 36,
+      "tail_video_frames_sent": 5,
+      "audio_chunks": 9,
+      "audio_bytes": 301440,
+      "audio_duration_s": 6.28,
+      "listen_events": 32,
+      "speak_events": 3,
+      "session_created": 1,
+      "session_closed": 1,
+      "wav_sha256": "933af59b68c152a5ebfeb32e431d68acf007712bfab9637a5d211d54f09f63a5"
+    },
+    {
+      "repeat": 3,
+      "ok": true,
+      "errors": [],
+      "video_frames_sent": 36,
+      "tail_video_frames_sent": 5,
+      "audio_chunks": 9,
+      "audio_bytes": 301440,
+      "audio_duration_s": 6.28,
+      "listen_events": 32,
+      "speak_events": 3,
+      "session_created": 1,
+      "session_closed": 1,
+      "wav_sha256": "9f80fdd3402abfaff2497c1b1d60188e01687ba57eafcb4074936e3e5d48f0b3"
+    }
+  ],
+  "full_duplex_acceptance": "pending",
+  "pressure_test": false
+}

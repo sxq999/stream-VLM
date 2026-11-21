@@ -4,6 +4,8 @@
 
 [minicpmo/campaign.json](minicpmo/campaign.json) 固定部署验收、单会话优先、正式重复和 PD 候选策略。版本字段在实际兼容预检后锁定；空字段不代表已经部署。
 
+[两卡短回放配置](minicpmo/two_gpu_smoke.yaml) 已在两张 RTX 3090 上通过一份官方音视频回放：Thinker 在逻辑卡 0，Talker/Code2Wav 在逻辑卡 1；单会话、Thinker eager、8192 上下文上限。这是有限容量的部署配置，不是并发压力测试或 PD 分离配置；NPU 平台段从上游保留，未经本次测试。
+
 ## Venus：历史固定实验计划
 
 | 配置 | 用途 | 运行入口 |

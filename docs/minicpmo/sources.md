@@ -19,3 +19,7 @@
 最新安装文档显示 main 目标为 vLLM 0.34 / Torch 2.14 / CUDA 13，而实验节点现有驱动为 560.35.03。先验证兼容版本/构建，不修改全局驱动来迁就源码。
 
 本地按 `archpaper-evaluation-design` 工作流检索了论文/KG，报告保存在语料库的 `reports/writing_skill/minicpmo_eval_20261121/`。自动分类误落到传统缓存/预取方向，其 MPKI、SPEC 等通用模板不适用于本任务，未纳入本计划；召回论文也不作为已核验的新颖性证据。本计划采用实际双工负载、软件/GPU 计时、资源对齐与正确性验收。
+
+## 实际安装版本的语音依赖
+
+部署版本已固定到 Omni `5917730a4b02aedb44d374173cdc1b10484ccd52`。该版本 recipe 仍提到旧包 `stepaudio2-minicpmo`，但[实际 Token2Wav 适配代码](https://github.com/vllm-project/vllm-omni/blob/5917730a4b02aedb44d374173cdc1b10484ccd52/vllm_omni/model_executor/models/minicpmo_4_5/minicpmo_4_5_token2wav.py)已经委托给内置 StepAudio2 实现；其 [pyproject.toml](https://github.com/vllm-project/vllm-omni/blob/5917730a4b02aedb44d374173cdc1b10484ccd52/pyproject.toml) 声明 `step-audio2==1.0.0`，并明确避免两个包共装。当前按固定版本源码补装后者和所需依赖，不照搬旧 recipe 的依赖提示，也不安装全部开发依赖。

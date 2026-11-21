@@ -54,7 +54,13 @@ def check(args):
         lines = ansi.sub("", path.read_text(errors="replace")).splitlines()
         selected = [line[:600] for line in lines if any(word in line for word in
                     ("OutOfMemoryError", "nvcc fatal", "Application startup complete", "ERROR", "RuntimeError:"))]
-        report["startup_log_excerpts"][path.name] = selected[-10:]
+        root_errors = [line[:600] for line in lines if any(word in line for word in
+                       ("OutOfMemoryError:", "nvcc fatal", "ModuleNotFoundError:",
+                        "ImportError:", "ValueError:", "AssertionError:"))]
+        report["startup_log_excerpts"][path.name] = {
+            "root_error_candidates": root_errors[-6:],
+            "initialization_summary": selected[-4:],
+        }
     integrity = root / "evidence" / "model-integrity.json"
     try:
         report["integrity_status"] = json.loads(integrity.read_text())["status"]

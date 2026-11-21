@@ -7,8 +7,9 @@
   "vllm_version": "0.32.0+cu129",
   "vllm_revision": "5df63a7203cdb9328d824a27b682e77c7b9928be",
   "runtime_candidate": "official_cuda129_release_wheel",
-  "model_execution_validated": false,
-  "status": "runtime_installed_duplex_deployment_pending",
+  "model_execution_validated": true,
+  "full_duplex_acceptance_validated": false,
+  "status": "official_av_smoke_pass_full_acceptance_pending",
   "session_mode": "duplex",
   "policy": {
     "reuse_upstream_session_and_scheduler": true,
@@ -19,7 +20,7 @@
     "instrumentation_runs_separate": true,
     "stop_on_foreign_gpu_process": true
   },
-  "deployment_candidate": "minicpmo_4_5_2gpu.yaml",
+  "deployment_candidate": "configs/minicpmo/two_gpu_smoke.yaml",
   "probe_session_seconds": 30,
   "baseline_session_seconds": 180,
   "long_session_seconds": 600,
