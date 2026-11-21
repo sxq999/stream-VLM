@@ -1,0 +1,198 @@
+{
+  "scope": "single instrumented capture, not capacity or interference causality",
+  "stages": [
+    {
+      "stage": "0",
+      "configured_physical_gpu": 0,
+      "kernel_count": 104862,
+      "graph_node_kernel_count": 0,
+      "kernel_sum_ms": 4221.305052,
+      "kernel_union_ms": 4221.305052,
+      "top_kernels": [
+        {
+          "name": "void cutlass::Kernel2<cutlass_80_tensorop_bf16_s16816gemm_relu_bf16_256x128_32x3_tn_align8>(T1::Params)",
+          "sum_ms": 1011.448483,
+          "count": 2434
+        },
+        {
+          "name": "ampere_bf16_s16816gemm_bf16_64x64_ldg8_f2f_stages_64x5_tn",
+          "sum_ms": 611.030527,
+          "count": 2556
+        },
+        {
+          "name": "ampere_bf16_s16816gemm_bf16_256x128_ldg8_f2f_stages_32x3_tn",
+          "sum_ms": 525.00098,
+          "count": 2702
+        },
+        {
+          "name": "ampere_bf16_s16816gemm_bf16_64x64_sliced1x2_ldg8_f2f_stages_64x5_tn",
+          "sum_ms": 458.144314,
+          "count": 5112
+        },
+        {
+          "name": "ampere_bf16_s16816gemm_bf16_128x128_ldg8_relu_f2f_stages_32x5_tn",
+          "sum_ms": 198.973731,
+          "count": 4105
+        }
+      ]
+    },
+    {
+      "stage": "1",
+      "configured_physical_gpu": 1,
+      "kernel_count": 39110,
+      "graph_node_kernel_count": 33165,
+      "kernel_sum_ms": 197.228703,
+      "kernel_union_ms": 197.228703,
+      "top_kernels": [
+        {
+          "name": "std::enable_if<!T7, void>::type internal::gemvx::kernel<int, int, __nv_bfloat16, __nv_bfloat16, __nv_bfloat16, float, (bool)0, (bool)1, (bool)1, (bool)0, (int)7, (bool)0, cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<const __nv_bfloat16>, cublasGemvTensorStridedBatched<const __nv_bfloat16>, cublasGemvTensorStridedBatched<__nv_bfloat16>, float>>(T13)",
+          "sum_ms": 60.252903,
+          "count": 9366
+        },
+        {
+          "name": "void cutlass::Kernel2<cutlass_80_wmma_tensorop_bf16_s161616gemm_bf16_16x16_128x1_tn_align8>(T1::Params)",
+          "sum_ms": 42.416439,
+          "count": 3120
+        },
+        {
+          "name": "void flash::flash_fwd_splitkv_kernel<Flash_fwd_kernel_traits<(int)64, (int)64, (int)256, (int)4, (bool)0, (bool)0, cutlass::bfloat16_t, Flash_kernel_traits<(int)64, (int)64, (int)256, (int)4, cutlass::bfloat16_t>>, (bool)0, (bool)0, (bool)0, (bool)0, (bool)1, (bool)0, (bool)0, (bool)0>(flash::Flash_fwd_params)",
+          "sum_ms": 32.378077,
+          "count": 3120
+        },
+        {
+          "name": "void vllm::reshape_and_cache_flash_kernel<__nv_bfloat16, __nv_bfloat16, (vllm::Fp8KVCacheDataType)0>(const T1 *, const T1 *, T2 *, T2 *, const long *, long, long, long, long, long, int, int, int, const float *, const float *, int)",
+          "sum_ms": 7.864119,
+          "count": 3300
+        },
+        {
+          "name": "triton_per_fused_fused_add_rms_norm_2",
+          "sum_ms": 6.643525,
+          "count": 3300
+        }
+      ]
+    },
+    {
+      "stage": "2",
+      "configured_physical_gpu": 1,
+      "kernel_count": 39493,
+      "graph_node_kernel_count": 32009,
+      "kernel_sum_ms": 308.402414,
+      "kernel_union_ms": 308.402414,
+      "top_kernels": [
+        {
+          "name": "void cutlass::Kernel2<cutlass_80_tensorop_s1688gemm_64x64_32x6_tn_align4>(T1::Params)",
+          "sum_ms": 122.010632,
+          "count": 8340
+        },
+        {
+          "name": "_attention",
+          "sum_ms": 36.945906,
+          "count": 1440
+        },
+        {
+          "name": "void at::native::elementwise_kernel<(int)128, (int)2, void at::native::gpu_kernel_impl_nocast<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase &)::[lambda() (instance 3)]::operator ()() const::[lambda() (instance 7)]::operator ()() const::[lambda(float) (instance 1)]>(at::TensorIteratorBase &, const T1 &)::[lambda(int) (instance 1)]>(int, T3)",
+          "sum_ms": 30.014513,
+          "count": 6116
+        },
+        {
+          "name": "_residual_layer_norm_kernel",
+          "sum_ms": 19.838553,
+          "count": 5850
+        },
+        {
+          "name": "void at::native::_scatter_gather_elementwise_kernel<(int)128, (int)8, void at::native::_cuda_scatter_gather_internal_kernel<(bool)0, at::native::OpaqueType<(int)4>, long>::operator ()<at::native::TensorAssign>(at::TensorIterator &, long, long, long, const T1 &)::[lambda(int) (instance 1)]>(int, T3)",
+          "sum_ms": 14.922875,
+          "count": 2880
+        }
+      ]
+    }
+  ],
+  "configured_cards": [
+    {
+      "physical_gpu": 0,
+      "kernel_union_ms": 4221.305052
+    },
+    {
+      "physical_gpu": 1,
+      "kernel_union_ms": 505.631117
+    }
+  ],
+  "shared_card_overlap": [
+    {
+      "stages": [
+        "1",
+        "2"
+      ],
+      "kernel_overlap_ms": 0.0
+    }
+  ],
+  "observed_first_to_last_kernel_span_s": 41.413060792,
+  "unmapped_kernel_process_count": 0,
+  "errors": [],
+  "limitations": [
+    "kernel sums double-count overlap; union and intersection are separate",
+    "CUDA copies, idle time, CPU scheduling, encoding/attention/PD subphases are not decomposed here",
+    "first-to-last kernel span is not capture duration, user TTFT or utilization denominator",
+    "graph-node profiling has overhead; do not use these times as uninstrumented baseline timings",
+    "overlap does not prove interference; controlled replay/isolation comparisons remain necessary",
+    "client media clock target not met during profiling; do not reuse this run for pressure/latency or interference conclusions"
+  ],
+  "date": "2026-11-21",
+  "model_revision": "fb09628e98b1f55d8d5b863e0eccfcdd11bff499",
+  "omni_revision": "5917730a4b02aedb44d374173cdc1b10484ccd52",
+  "profiler": {
+    "version": "2024.5.1.113",
+    "trace": "cuda,nvtx",
+    "cuda_graph_trace": "node",
+    "cpu_sampling": "none",
+    "preflight": "10 real SGEMM kernels recorded before final model capture",
+    "capture_setup_retries": 2
+  },
+  "workload": {
+    "source": "pinned model assets/omni_duplex1.mp4 and original audio",
+    "repeats": 1,
+    "sessions": 1,
+    "prewarm_runs": 1,
+    "speed": 1.0,
+    "fps": 1,
+    "audio_packet_ms": 200,
+    "tail_silence_s": 5,
+    "reference_audio": "HT_ref_audio.wav",
+    "window": "basic high=8000 low=6000"
+  },
+  "config_sha256": "021a2bca71f77a578fa8d70d705918ebeb7b36bf7fa921b133a4a86eb0244027",
+  "profiler_report_sha256": "45eaf953e1da06399b0bfb25cff831ca3cab47be04d8481002b51fe74f377c36",
+  "stage_pid_mapping": "verified against startup stage names and nvidia-smi PID/UUID physical placement; raw IDs private",
+  "role_names": {
+    "0": "Thinker",
+    "1": "Talker",
+    "2": "Code2Wav"
+  },
+  "client": {
+    "official_ok": true,
+    "input_span_s": 42.15356421400793,
+    "audio_chunks": 9,
+    "audio_seconds": 6.24,
+    "responses": 3,
+    "completed_responses": 3,
+    "unterminated_responses": 0,
+    "sender_relative_drift_ms": {
+      "p50": 0.9039659984395598,
+      "p95": 2930.763550056142,
+      "max": 4906.8987101316425
+    },
+    "send_block_ms_max": 367.7400869783014,
+    "send_block_scope": "whole client wrapper, including local audit I/O; not just transport",
+    "wire_timing_packets": 205,
+    "wire_send_block_ms_max": 17.431071028113365,
+    "audit_before_send_ms_max": 366.523833014071,
+    "wire_sender_relative_drift_ms": {
+      "p50": 0.974763045087812,
+      "p95": 2930.5867589544478,
+      "max": 4906.907299021256
+    }
+  },
+  "scope_note": "different physical 3090 pair from uninstrumented scan; stage kernel attribution only, not a direct speed comparison",
+  "is_valid_pressure_measurement": false,
+  "capture_use": "kernel attribution only; input pacing was perturbed (p95 wire-send relative drift about 2931ms)"
+}

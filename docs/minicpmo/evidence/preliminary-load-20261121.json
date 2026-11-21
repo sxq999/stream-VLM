@@ -553,19 +553,91 @@
   "measurement_findings": [
     "stage0 prompt_tokens_total increased only 147 per session, including the 600s run; it does not cover all incremental input",
     "response.created is emitted late; 2-12ms response.created-to-audio values are not user TTFT",
-    "one final response lacked response.done at client close; report separately rather than count as completed"
+    "one final response lacked response.done at client close; report separately rather than count as completed",
+    "send_block_ms_max includes local audit logging and serialization; pure underlying-send duration is unavailable in these original logs"
   ],
   "unavailable": {
     "source_separated_model_input_tokens": "requires worker-side embedding/token mapping",
     "gpu_phase_durations": "separate profiler trace required",
     "actual_media_freshness": "server consumption correlation missing",
     "saturated_capacity": "no stable overload boundary yet",
-    "speech_interference": "controlled isolated/replay comparisons pending"
+    "speech_interference": "controlled isolated/replay comparisons pending",
+    "underlying_send_call_timing": "original logs predate separate wire_start_s/wire_end_s stamps"
   },
   "limitations": [
     "one clip repeated across users; no independent content diversity",
     "600s input loops the same clip; no long-video understanding claim",
     "sampled GPU memory can miss transient peaks and is not per-session KV",
     "same-GPU-number budget and configuration must be controlled in future layout comparisons"
-  ]
+  ],
+  "sender_timing_calibration": {
+    "scope": "no profiler; original baseline pair and same short asset; client timestamp calibration only",
+    "sessions": 1,
+    "repeats": [
+      {
+        "repeat": "repeat-1",
+        "official_ok": true,
+        "input_span_s": 40.81984848482534,
+        "completed_responses": 3,
+        "unterminated_responses": 0,
+        "wire_timing_packets": 205,
+        "sender_relative_drift_ms": {
+          "p50": 0.9553730022169304,
+          "p95": 2.1043760236381104,
+          "max": 2.5244319811434934
+        },
+        "wire_sender_relative_drift_ms": {
+          "p50": 1.0365209076553805,
+          "p95": 2.1437800023704767,
+          "max": 2.6465710252523422
+        },
+        "send_block_ms_max": 17.634084913879633,
+        "wire_send_block_ms_max": 17.284063855186105,
+        "audit_before_send_ms_max": 0.4735251422971487
+      },
+      {
+        "repeat": "repeat-2",
+        "official_ok": true,
+        "input_span_s": 40.81633974215947,
+        "completed_responses": 3,
+        "unterminated_responses": 0,
+        "wire_timing_packets": 205,
+        "sender_relative_drift_ms": {
+          "p50": 0.9187111165367412,
+          "p95": 2.2187160328002165,
+          "max": 2.78132911771678
+        },
+        "wire_sender_relative_drift_ms": {
+          "p50": 0.9829119779176665,
+          "p95": 2.3297189734847734,
+          "max": 2.877643005923858
+        },
+        "send_block_ms_max": 26.957915863022208,
+        "wire_send_block_ms_max": 26.61671000532806,
+        "audit_before_send_ms_max": 0.4768799990415573
+      },
+      {
+        "repeat": "repeat-3",
+        "official_ok": true,
+        "input_span_s": 40.81891219690442,
+        "completed_responses": 3,
+        "unterminated_responses": 0,
+        "wire_timing_packets": 205,
+        "sender_relative_drift_ms": {
+          "p50": 0.927039049564371,
+          "p95": 2.5085420347750187,
+          "max": 4.0525269694624555
+        },
+        "wire_sender_relative_drift_ms": {
+          "p50": 0.9869709610939026,
+          "p95": 2.5801531039206793,
+          "max": 4.375986009836019
+        },
+        "send_block_ms_max": 19.15038307197392,
+        "wire_send_block_ms_max": 18.78240890800953,
+        "audit_before_send_ms_max": 0.5759689956903458
+      }
+    ],
+    "script_sha256": "bf46f7fb2357b77293ed3dbe9359118ae75920eccd78c83decca3e72767be300"
+  }
 }

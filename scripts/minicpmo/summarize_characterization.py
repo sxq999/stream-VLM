@@ -31,17 +31,34 @@ def summarize(directory):
     counters = []
     for key in sorted(set(before) | set(after)):
         name, stage, replica = key
-        if name not in ('vllm:prompt_tokens_total', 'vllm:generation_tokens_total'):
+        if name not in ('vllm:prompt_tokens_total', 'vllm:generation_tokens_total', 'vllm:num_preemptions_total'):
             continue
         a, b = before.get(key), after.get(key)
         delta = b - a if a is not None and b is not None and b >= a else None
         counters.append({'metric': name, 'stage': stage, 'replica': replica, 'before': a, 'after': b,
-                         'reported_delta': delta, 'semantics': 'engine-reported; not yet verified as all incremental duplex input/codec positions'})
+                         'reported_delta': delta, 'semantics':
+                         'engine-reported preemption events; not distinct sessions or input tokens' if name == 'vllm:num_preemptions_total' else
+                         'engine-reported; not yet verified as all incremental duplex input/codec positions'})
+    kv_peaks = {}
+    # Gauges can retain a previous run's occupancy while an engine is idle.
+    # Require both the input barrier and observed new generation in this run.
+    go_path = directory / 'go.json'
+    start_s = json.loads(go_path.read_text())['start_s'] if go_path.exists() else None
     peaks = {}
     resources = directory / 'resources.jsonl'
     if resources.exists():
         for line in resources.read_text().splitlines():
             row = json.loads(line)
+            metric_path = directory / row.get('metrics_file', '__missing__')
+            if start_s is not None and row['at_s'] >= start_s and metric_path.is_file():
+                metrics = prometheus(metric_path.read_text())
+                for (name, stage, replica), value in metrics.items():
+                    generation_key = ('vllm:generation_tokens_total', stage, replica)
+                    baseline_count, current_count = before.get(generation_key), metrics.get(generation_key)
+                    if (name == 'vllm:kv_cache_usage_perc' and baseline_count is not None and
+                            current_count is not None and current_count > baseline_count):
+                        key = (stage, replica)
+                        kv_peaks[key] = max(kv_peaks.get(key, value), value)
             for gpu in row.get('gpus', '').splitlines():
                 values = [v.strip() for v in gpu.split(',')]
                 if len(values) >= 6:
@@ -86,6 +103,14 @@ def summarize(directory):
             'event_counts': analysis['event_counts'], 'input_span_s': analysis['input_span_s'],
             'sender_relative_drift_ms': analysis['sender_relative_drift_ms'],
             'send_block_ms_max': analysis['send_block_ms_max'], 'audio_chunks': sum(x['audio_chunks'] for x in turns),
+            'send_block_scope': analysis['send_block_scope'],
+            'wire_timing_packets': analysis['wire_timing_packets'],
+            'wire_sender_relative_drift_ms': analysis['wire_sender_relative_drift_ms'],
+            'wire_send_block_ms_max': analysis['wire_send_block_ms_max'],
+            'audit_before_send_ms_max': analysis['audit_before_send_ms_max'],
+            'observable_progress': analysis['observable_progress'],
+            'audit_writer': json.loads((session / 'audit-writer.json').read_text()) if (session / 'audit-writer.json').exists() else None,
+            'failure': json.loads((session / 'failure.json').read_text()) if (session / 'failure.json').exists() else None,
             'audio_seconds': sum(x['audio_seconds'] for x in turns), 'responses': len(turns),
             'completed_responses': analysis['completed_responses'],
             'unterminated_responses': analysis['unterminated_responses'],
@@ -98,6 +123,9 @@ def summarize(directory):
     return {'repeat': directory.name, 'sessions': sessions,
         'common_input_overlap_s': max(0, min(x[1] for x in intervals) - max(x[0] for x in intervals)) if intervals else None,
         'sampled_gpu_peaks': peaks, 'engine_reported_counters': counters,
+        'sampled_peak_kv_pool_fraction': [{'stage': stage, 'replica': replica, 'fraction': value}
+                                         for (stage, replica), value in sorted(kv_peaks.items())],
+        'kv_pool_peak_scope': 'post-input-barrier samples after stage generation counter increased; idle/pre-run gauges excluded; stages without verified activity omitted',
         'limitations': ['sampled peaks can miss transients', 'response.created may be emitted late; this is not question-end TTFT',
             'offline playback ACK follows upstream demo, not a physical player', 'same-clip measurement validation is not saturation or diverse workload evaluation',
             'lifecycle success does not guarantee every response reached response.done; unterminated responses are reported separately',

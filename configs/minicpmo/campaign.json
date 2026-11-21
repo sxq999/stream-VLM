@@ -28,7 +28,7 @@
   "single_session_first": true,
   "current_max_sessions": 4,
   "requested_target_max_sessions": 4,
-  "four_session_validation": "admission_and_short_av_pass_long_run_pending",
+  "four_session_validation": "short_pass_but_two_gpu_long_stall_reproduced_with_threaded_audit",
   "concurrency_scan": [
     1,
     2,
@@ -73,7 +73,7 @@
   },
   "stress_guide": "docs/minicpmo/stress-guide.md",
   "gpu_budget": 4,
-  "measurement_phase": "preliminary_scan_and_long_lifecycle_recorded_engine_window_verified_gpu_trace_running",
+  "measurement_phase": "two_gpu_long_stall_reproduced_three_gpu_thinker_tp2_capacity_validation_running",
   "thinker_experiments": [
     "T1",
     "T2",
@@ -110,8 +110,12 @@
       "status": "lifecycle_pass_single_600s_loop_one_unterminated_response_drain_pending"
     },
     {
+      "id": "E3-multi",
+      "status": "two_gpu_four_stream_stall_reproduced_two_stream_control_pass_three_gpu_capacity_validation_running"
+    },
+    {
       "id": "E4",
-      "status": "partial_ar_metadata_and_four_reclaims_verified_gpu_trace_running"
+      "status": "partial_ar_metadata_and_stage_cuda_attribution_pass_modalities_freshness_and_drain_pending"
     },
     {
       "id": "E5",
@@ -128,5 +132,25 @@
     "session_created_is_not_user_question_end": true,
     "same_clip_is_not_diverse_workload": true,
     "cross_hardware_requires_remeasurement": true
+  },
+  "measurement_coverage": {
+    "input_output_client_audit": "verified_with_separate_wire_and_local_audit_timing",
+    "thinker_talker_scheduler_positions": "verified_positions_not_source_separated_tokens",
+    "thinker_window_reclaim": "single_session_four_reclaims_with_block_decreases",
+    "stage_cuda_kernel_attribution": "single_diagnostic_pass_pacing_perturbed_not_pressure",
+    "code2wav_state_and_activation_bytes": "pending",
+    "input_consumption_freshness_and_complete_drain": "pending",
+    "encoding_prefill_decode_gpu_subphases": "pending",
+    "speech_isolated_replay_and_colocation_comparisons": "pending",
+    "saturated_capacity": "not_established_two_gpu_KV_pool_capacity_failure_observed",
+    "sender_timing_calibration": "three_threaded_audit_short_repeats_pass_four_stream_failure_has_p95_send_drift_1_15_to_1_36_ms",
+    "no_progress_failure_detection": "verified_60s_continuing_input_without_listen_output_done"
+  },
+  "capacity_configuration_candidate": {
+    "thinker_tp": 2,
+    "total_gpus": 3,
+    "speech_placement": "one_shared_gpu",
+    "preserve_window": true,
+    "status": "running_not_PD_or_method_benefit"
   }
 }

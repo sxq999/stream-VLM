@@ -1,0 +1,1753 @@
+{
+  "date": "2026-11-21",
+  "scope": "mechanical long-session concurrency diagnostic; no general capacity claim",
+  "model_revision": "fb09628e98b1f55d8d5b863e0eccfcdd11bff499",
+  "omni_revision": "5917730a4b02aedb44d374173cdc1b10484ccd52",
+  "baseline": "same two RTX3090 configuration, Thinker one GPU, Talker/W one GPU, basic 8000/6000",
+  "thinker_kv_pool_capacity_positions": 18140,
+  "n4": {
+    "status": "aborted_no_progress",
+    "planned_media_s": 240,
+    "planned_repeats": 3,
+    "completed_repeats": 0,
+    "clients": [
+      {
+        "stream": "session-1",
+        "sent_audio_packets": 811,
+        "last_sent_source_end_ms": 162200,
+        "last_send_relative_s": 162.0053300638683,
+        "last_model_result_relative_s": 55.24097125092521,
+        "observed_no_result_until_last_send_s": 106.7643588129431,
+        "model_result_events": 45
+      },
+      {
+        "stream": "session-2",
+        "sent_audio_packets": 811,
+        "last_sent_source_end_ms": 162200,
+        "last_send_relative_s": 162.00560659798793,
+        "last_model_result_relative_s": 56.17388750100508,
+        "observed_no_result_until_last_send_s": 105.83171909698285,
+        "model_result_events": 46
+      },
+      {
+        "stream": "session-3",
+        "sent_audio_packets": 811,
+        "last_sent_source_end_ms": 162200,
+        "last_send_relative_s": 162.00642138393596,
+        "last_model_result_relative_s": 56.17299968795851,
+        "observed_no_result_until_last_send_s": 105.83342169597745,
+        "model_result_events": 46
+      },
+      {
+        "stream": "session-4",
+        "sent_audio_packets": 811,
+        "last_sent_source_end_ms": 162200,
+        "last_send_relative_s": 162.00594259495847,
+        "last_model_result_relative_s": 56.1072336898651,
+        "observed_no_result_until_last_send_s": 105.89870890509337,
+        "model_result_events": 47
+      }
+    ],
+    "stage0_timeline": [
+      {
+        "relative_s": -22.548429856076837,
+        "num_requests_running": 0.0,
+        "num_requests_waiting": 1.0,
+        "kv_cache_usage_perc": 0.1841409691629956,
+        "num_preemptions_total": 0.0,
+        "generation_tokens_total": 3681.0
+      },
+      {
+        "relative_s": -3.1444213250651956,
+        "num_requests_running": 0.0,
+        "num_requests_waiting": 1.0,
+        "kv_cache_usage_perc": 0.1841409691629956,
+        "num_preemptions_total": 0.0,
+        "generation_tokens_total": 3681.0
+      },
+      {
+        "relative_s": 19.194144039880484,
+        "num_requests_running": 2.0,
+        "num_requests_waiting": 2.0,
+        "kv_cache_usage_perc": 0.35242290748898675,
+        "num_preemptions_total": 0.0,
+        "generation_tokens_total": 3833.0
+      },
+      {
+        "relative_s": 40.189475101884454,
+        "num_requests_running": 0.0,
+        "num_requests_waiting": 4.0,
+        "kv_cache_usage_perc": 0.7022026431718061,
+        "num_preemptions_total": 0.0,
+        "generation_tokens_total": 3974.0
+      },
+      {
+        "relative_s": 61.20704518794082,
+        "num_requests_running": 0.0,
+        "num_requests_waiting": 4.0,
+        "kv_cache_usage_perc": 0.9973568281938326,
+        "num_preemptions_total": 0.0,
+        "generation_tokens_total": 4113.0
+      },
+      {
+        "relative_s": 82.24697712203488,
+        "num_requests_running": 0.0,
+        "num_requests_waiting": 4.0,
+        "kv_cache_usage_perc": 0.9973568281938326,
+        "num_preemptions_total": 0.0,
+        "generation_tokens_total": 4113.0
+      },
+      {
+        "relative_s": 103.28782187099569,
+        "num_requests_running": 0.0,
+        "num_requests_waiting": 4.0,
+        "kv_cache_usage_perc": 0.9973568281938326,
+        "num_preemptions_total": 0.0,
+        "generation_tokens_total": 4113.0
+      },
+      {
+        "relative_s": 124.34392617107369,
+        "num_requests_running": 0.0,
+        "num_requests_waiting": 4.0,
+        "kv_cache_usage_perc": 0.9973568281938326,
+        "num_preemptions_total": 0.0,
+        "generation_tokens_total": 4113.0
+      },
+      {
+        "relative_s": 145.4118996670004,
+        "num_requests_running": 0.0,
+        "num_requests_waiting": 4.0,
+        "kv_cache_usage_perc": 0.9973568281938326,
+        "num_preemptions_total": 0.0,
+        "generation_tokens_total": 4113.0
+      },
+      {
+        "relative_s": 160.20680163102224,
+        "num_requests_running": 0.0,
+        "num_requests_waiting": 4.0,
+        "kv_cache_usage_perc": 0.9973568281938326,
+        "num_preemptions_total": 0.0,
+        "generation_tokens_total": 4113.0
+      }
+    ],
+    "observed_peak_kv_pool_fraction": 0.9973568281938326,
+    "preemption_counter_delta_during_observation": 0.0,
+    "backend_healthy_after_stop": true,
+    "stop_reason": "continuing input with all four model-result streams silent >60s, stage0 generation counter flat, KV pool ~99.7%",
+    "hardware_inference": "consistent with KV capacity blocking progress before per-session window threshold; root cause needs scheduler/allocator confirmation"
+  },
+  "limitations": [
+    "one initial diagnostic, manually stopped after sustained lack of progress",
+    "model result event is not exact latest consumed input timestamp",
+    "no OOM or GPU compute-saturation claim",
+    "vLLM idle running/waiting gauges may be stale; conclusion uses continuing input plus output-counter plateau and KV occupancy",
+    "3090-specific pool budget; do not extrapolate threshold to H200",
+    "N2 sync logger input pauses invalidate strict constant-rate/SLO claims; separate background-writer validation required"
+  ],
+  "n2_control": {
+    "status": "lifecycle_pass_no_observed_stall",
+    "repeats": 1,
+    "source_media_s": 240,
+    "clients": [
+      {
+        "session": "session-1",
+        "official_ok": true,
+        "errors": [],
+        "input_span_s": 245.81630182103254,
+        "sender_relative_drift_ms": {
+          "p50": 0.8296899031847715,
+          "p95": 2.0544419065089414,
+          "max": 2328.4186608623827
+        },
+        "wire_sender_relative_drift_ms": {
+          "p50": 0.8709091693219762,
+          "p95": 2.314999187362332,
+          "max": 2527.132980991155
+        },
+        "wire_send_block_ms_max": 24.5777340605855,
+        "audit_before_send_ms_max": 2526.482990011573,
+        "audio_chunks": 61,
+        "audio_seconds": 47.36,
+        "responses": 20,
+        "completed_responses": 20,
+        "unterminated_responses": 0,
+        "last_sent_source_end_ms": 246000,
+        "last_model_result_relative_to_first_send_s": 240.13620563503355
+      },
+      {
+        "session": "session-2",
+        "official_ok": true,
+        "errors": [],
+        "input_span_s": 245.8171674250625,
+        "sender_relative_drift_ms": {
+          "p50": 0.8547190111123371,
+          "p95": 1.4498490374421635,
+          "max": 1335.5901259463278
+        },
+        "wire_sender_relative_drift_ms": {
+          "p50": 0.9435639251016426,
+          "p95": 1.6193021554613551,
+          "max": 1533.0646359361708
+        },
+        "wire_send_block_ms_max": 19.124453887343407,
+        "audit_before_send_ms_max": 1532.9685078468174,
+        "audio_chunks": 73,
+        "audio_seconds": 54.919999999999995,
+        "responses": 21,
+        "completed_responses": 21,
+        "unterminated_responses": 0,
+        "last_sent_source_end_ms": 246000,
+        "last_model_result_relative_to_first_send_s": 256.7335925879888
+      }
+    ],
+    "sampled_peak_kv_pool_fraction": [
+      {
+        "stage": "0",
+        "replica": "0",
+        "fraction": 0.8810572687224669
+      },
+      {
+        "stage": "1",
+        "replica": "0",
+        "fraction": 0.0030948479883488034
+      }
+    ],
+    "engine_preemptions": [
+      {
+        "metric": "vllm:num_preemptions_total",
+        "stage": "0",
+        "replica": "0",
+        "before": 0.0,
+        "after": 0.0,
+        "reported_delta": 0.0,
+        "semantics": "engine-reported preemption events; not distinct sessions or input tokens"
+      },
+      {
+        "metric": "vllm:num_preemptions_total",
+        "stage": "1",
+        "replica": "0",
+        "before": 0.0,
+        "after": 0.0,
+        "reported_delta": 0.0,
+        "semantics": "engine-reported preemption events; not distinct sessions or input tokens"
+      },
+      {
+        "metric": "vllm:num_preemptions_total",
+        "stage": "2",
+        "replica": "0",
+        "before": 0.0,
+        "after": 0.0,
+        "reported_delta": 0.0,
+        "semantics": "engine-reported preemption events; not distinct sessions or input tokens"
+      }
+    ],
+    "sampled_gpu_peaks": {
+      "5": {
+        "sampled_peak_memory_mib": 21944.0,
+        "sampled_peak_utilization_percent": 69.0
+      },
+      "6": {
+        "sampled_peak_memory_mib": 17335.0,
+        "sampled_peak_utilization_percent": 62.0
+      }
+    },
+    "backend_healthy_after": true,
+    "kv_pool_peak_scope": "post-input-barrier samples after stage generation counter increased; idle/pre-run gauges excluded; stages without verified activity omitted",
+    "is_verified_constant_rate_or_realtime_measurement": false,
+    "timing_limitation": "synchronous audit writes caused 1.5-2.5 second input gaps; progression control only"
+  },
+  "async_audit_validation": {
+    "scope": "background audit writer validation and long-concurrency diagnostic, same frozen two-GPU configuration",
+    "cases": [
+      {
+        "sessions": 1,
+        "repeats": 3,
+        "video_sha256": "31622e1efd9a7b197a340266037b45aeec13b3b27f010f1ea1d22d9c6e69405f",
+        "window": {
+          "mode": "basic",
+          "high": 8000,
+          "low": 6000
+        },
+        "audit_mode": "thread",
+        "no_progress_timeout_s": 60,
+        "measurement_script_sha256": "419497c4715f58944bb7f919fe3ae2ce29aa22db69b577f57477bb3be89cbe3f",
+        "upstream_replay_sha256": "c9640f334472646a7fd4e0b8310e25070f9570f79b3f66d83e85ba7c02c47377",
+        "runs": [
+          {
+            "repeat": 1,
+            "returncodes": [
+              0
+            ],
+            "status": "pass"
+          },
+          {
+            "repeat": 2,
+            "returncodes": [
+              0
+            ],
+            "status": "pass"
+          },
+          {
+            "repeat": 3,
+            "returncodes": [
+              0
+            ],
+            "status": "pass"
+          }
+        ],
+        "case": "async-send-calibration",
+        "measurements": [
+          {
+            "repeat": "repeat-1",
+            "sessions": [
+              {
+                "session": "session-1",
+                "official_ok": true,
+                "errors": [],
+                "event_counts": {
+                  "session.created": 1,
+                  "input_audio_buffer.speech_started": 1,
+                  "response.listen": 32,
+                  "response.created": 3,
+                  "conversation.item.added": 4,
+                  "conversation.item.created": 4,
+                  "response.output_item.added": 3,
+                  "response.content_part.added": 3,
+                  "response.speak": 3,
+                  "response.output_audio.delta": 9,
+                  "response.output_audio_transcript.delta": 9,
+                  "response.output_audio.done": 3,
+                  "response.output_audio_transcript.done": 3,
+                  "response.content_part.done": 3,
+                  "response.output_item.done": 3,
+                  "conversation.item.done": 4,
+                  "response.done": 3,
+                  "rate_limits.updated": 3,
+                  "playback.acknowledged": 9,
+                  "input_audio_buffer.speech_stopped": 1,
+                  "input_audio_buffer.committed": 1,
+                  "session.closed": 1
+                },
+                "input_span_s": 40.81392814894207,
+                "sender_relative_drift_ms": {
+                  "p50": 0.8747669402495717,
+                  "p95": 1.6655359417203641,
+                  "max": 2.802335051818261
+                },
+                "send_block_ms_max": 21.018014987930655,
+                "audio_chunks": 9,
+                "send_block_scope": "whole client wrapper, including local audit I/O; not just transport",
+                "wire_timing_packets": 205,
+                "wire_sender_relative_drift_ms": {
+                  "p50": 0.859537161886692,
+                  "p95": 1.588825136423111,
+                  "max": 6.557288020848873
+                },
+                "wire_send_block_ms_max": 20.77580406330526,
+                "audit_before_send_ms_max": 6.230521947145462,
+                "observable_progress": {
+                  "last_sent_source_end_ms": 41000,
+                  "last_model_progress_relative_s": 41.005207976093516,
+                  "no_progress_at_input_end_s": 0.8061480848118663,
+                  "max_no_progress_within_input_span_s": 1.5326002719812095,
+                  "scope": "observable listen/output/done events, not exact input consumption; input pacing must be validated separately"
+                },
+                "audit_writer": {
+                  "enqueued": 540,
+                  "written": 540,
+                  "queue_peak_approx": 8,
+                  "flush_complete": true
+                },
+                "failure": null,
+                "audio_seconds": 6.24,
+                "responses": 3,
+                "completed_responses": 3,
+                "unterminated_responses": 0,
+                "response_created_to_first_audio_ms": {
+                  "p50": 4.000390879809856,
+                  "p95": 8.14880896359682
+                },
+                "simulated_playback": [
+                  {
+                    "startup_buffer_ms": 0,
+                    "completed_responses_only": true,
+                    "gaps": 3,
+                    "total_gap_ms": 2944.458978017792
+                  },
+                  {
+                    "startup_buffer_ms": 100,
+                    "completed_responses_only": true,
+                    "gaps": 3,
+                    "total_gap_ms": 2644.4589777383953
+                  },
+                  {
+                    "startup_buffer_ms": 300,
+                    "completed_responses_only": true,
+                    "gaps": 3,
+                    "total_gap_ms": 2044.4589778780937
+                  }
+                ],
+                "engine_snapshot_count": 35
+              }
+            ],
+            "common_input_overlap_s": 40.81392814894207,
+            "sampled_gpu_peaks": {
+              "thinker_gpu": {
+                "sampled_peak_memory_mib": 21944.0,
+                "sampled_peak_utilization_percent": 44.0
+              },
+              "speech_gpu": {
+                "sampled_peak_memory_mib": 17335.0,
+                "sampled_peak_utilization_percent": 19.0
+              }
+            },
+            "engine_reported_counters": [
+              {
+                "metric": "vllm:generation_tokens_total",
+                "stage": "0",
+                "replica": "0",
+                "before": 5169.0,
+                "after": 5244.0,
+                "reported_delta": 75.0,
+                "semantics": "engine-reported; not yet verified as all incremental duplex input/codec positions"
+              },
+              {
+                "metric": "vllm:generation_tokens_total",
+                "stage": "1",
+                "replica": "0",
+                "before": 12064.0,
+                "after": 12220.0,
+                "reported_delta": 156.0,
+                "semantics": "engine-reported; not yet verified as all incremental duplex input/codec positions"
+              },
+              {
+                "metric": "vllm:generation_tokens_total",
+                "stage": "2",
+                "replica": "0",
+                "before": 0.0,
+                "after": 0.0,
+                "reported_delta": 0.0,
+                "semantics": "engine-reported; not yet verified as all incremental duplex input/codec positions"
+              },
+              {
+                "metric": "vllm:num_preemptions_total",
+                "stage": "0",
+                "replica": "0",
+                "before": 0.0,
+                "after": 0.0,
+                "reported_delta": 0.0,
+                "semantics": "engine-reported preemption events; not distinct sessions or input tokens"
+              },
+              {
+                "metric": "vllm:num_preemptions_total",
+                "stage": "1",
+                "replica": "0",
+                "before": 0.0,
+                "after": 0.0,
+                "reported_delta": 0.0,
+                "semantics": "engine-reported preemption events; not distinct sessions or input tokens"
+              },
+              {
+                "metric": "vllm:num_preemptions_total",
+                "stage": "2",
+                "replica": "0",
+                "before": 0.0,
+                "after": 0.0,
+                "reported_delta": 0.0,
+                "semantics": "engine-reported preemption events; not distinct sessions or input tokens"
+              },
+              {
+                "metric": "vllm:prompt_tokens_total",
+                "stage": "0",
+                "replica": "0",
+                "before": 5586.0,
+                "after": 5733.0,
+                "reported_delta": 147.0,
+                "semantics": "engine-reported; not yet verified as all incremental duplex input/codec positions"
+              },
+              {
+                "metric": "vllm:prompt_tokens_total",
+                "stage": "1",
+                "replica": "0",
+                "before": 114.0,
+                "after": 117.0,
+                "reported_delta": 3.0,
+                "semantics": "engine-reported; not yet verified as all incremental duplex input/codec positions"
+              },
+              {
+                "metric": "vllm:prompt_tokens_total",
+                "stage": "2",
+                "replica": "0",
+                "before": 380.0,
+                "after": 390.0,
+                "reported_delta": 10.0,
+                "semantics": "engine-reported; not yet verified as all incremental duplex input/codec positions"
+              }
+            ],
+            "sampled_peak_kv_pool_fraction": [
+              {
+                "stage": "0",
+                "replica": "0",
+                "fraction": 0.1841409691629956
+              },
+              {
+                "stage": "1",
+                "replica": "0",
+                "fraction": 0.0005461496450027692
+              }
+            ],
+            "kv_pool_peak_scope": "post-input-barrier samples after stage generation counter increased; idle/pre-run gauges excluded; stages without verified activity omitted",
+            "limitations": [
+              "sampled peaks can miss transients",
+              "response.created may be emitted late; this is not question-end TTFT",
+              "offline playback ACK follows upstream demo, not a physical player",
+              "same-clip measurement validation is not saturation or diverse workload evaluation",
+              "lifecycle success does not guarantee every response reached response.done; unterminated responses are reported separately",
+              "kernel timing, actual input freshness, per-session KV and source-separated token counts remain unavailable"
+            ]
+          },
+          {
+            "repeat": "repeat-2",
+            "sessions": [
+              {
+                "session": "session-1",
+                "official_ok": true,
+                "errors": [],
+                "event_counts": {
+                  "session.created": 1,
+                  "input_audio_buffer.speech_started": 1,
+                  "response.listen": 32,
+                  "response.created": 3,
+                  "conversation.item.added": 4,
+                  "conversation.item.created": 4,
+                  "response.output_item.added": 3,
+                  "response.content_part.added": 3,
+                  "response.speak": 3,
+                  "response.output_audio.delta": 9,
+                  "response.output_audio_transcript.delta": 9,
+                  "response.output_audio.done": 3,
+                  "response.output_audio_transcript.done": 3,
+                  "response.content_part.done": 3,
+                  "response.output_item.done": 3,
+                  "conversation.item.done": 4,
+                  "response.done": 3,
+                  "rate_limits.updated": 3,
+                  "playback.acknowledged": 9,
+                  "input_audio_buffer.speech_stopped": 1,
+                  "input_audio_buffer.committed": 1,
+                  "session.closed": 1
+                },
+                "input_span_s": 40.817375188926235,
+                "sender_relative_drift_ms": {
+                  "p50": 0.885110860689764,
+                  "p95": 1.6334319021567012,
+                  "max": 2.5775978807374145
+                },
+                "send_block_ms_max": 17.646322026848793,
+                "audio_chunks": 9,
+                "send_block_scope": "whole client wrapper, including local audit I/O; not just transport",
+                "wire_timing_packets": 205,
+                "wire_sender_relative_drift_ms": {
+                  "p50": 0.8567878976464272,
+                  "p95": 1.6189659014358426,
+                  "max": 2.571476995946398
+                },
+                "wire_send_block_ms_max": 17.440747004002333,
+                "audit_before_send_ms_max": 0.2536419779062271,
+                "observable_progress": {
+                  "last_sent_source_end_ms": 41000,
+                  "last_model_progress_relative_s": 40.99953926191665,
+                  "no_progress_at_input_end_s": 0.8098715299274772,
+                  "max_no_progress_within_input_span_s": 1.449539734981954,
+                  "scope": "observable listen/output/done events, not exact input consumption; input pacing must be validated separately"
+                },
+                "audit_writer": {
+                  "enqueued": 540,
+                  "written": 540,
+                  "queue_peak_approx": 8,
+                  "flush_complete": true
+                },
+                "failure": null,
+                "audio_seconds": 6.24,
+                "responses": 3,
+                "completed_responses": 3,
+                "unterminated_responses": 0,
+                "response_created_to_first_audio_ms": {
+                  "p50": 4.772743908688426,
+                  "p95": 6.106056040152907
+                },
+                "simulated_playback": [
+                  {
+                    "startup_buffer_ms": 0,
+                    "completed_responses_only": true,
+                    "gaps": 3,
+                    "total_gap_ms": 3050.1021759118885
+                  },
+                  {
+                    "startup_buffer_ms": 100,
+                    "completed_responses_only": true,
+                    "gaps": 3,
+                    "total_gap_ms": 2750.1021756324917
+                  },
+                  {
+                    "startup_buffer_ms": 300,
+                    "completed_responses_only": true,
+                    "gaps": 3,
+                    "total_gap_ms": 2150.10217577219
+                  }
+                ],
+                "engine_snapshot_count": 35
+              }
+            ],
+            "common_input_overlap_s": 40.817375188926235,
+            "sampled_gpu_peaks": {
+              "thinker_gpu": {
+                "sampled_peak_memory_mib": 21944.0,
+                "sampled_peak_utilization_percent": 44.0
+              },
+              "speech_gpu": {
+                "sampled_peak_memory_mib": 17335.0,
+                "sampled_peak_utilization_percent": 21.0
+              }
+            },
+            "engine_reported_counters": [
+              {
+                "metric": "vllm:generation_tokens_total",
+                "stage": "0",
+                "replica": "0",
+                "before": 5244.0,
+                "after": 5319.0,
+                "reported_delta": 75.0,
+                "semantics": "engine-reported; not yet verified as all incremental duplex input/codec positions"
+              },
+              {
+                "metric": "vllm:generation_tokens_total",
+                "stage": "1",
+                "replica": "0",
+                "before": 12220.0,
+                "after": 12376.0,
+                "reported_delta": 156.0,
+                "semantics": "engine-reported; not yet verified as all incremental duplex input/codec positions"
+              },
+              {
+                "metric": "vllm:generation_tokens_total",
+                "stage": "2",
+                "replica": "0",
+                "before": 0.0,
+                "after": 0.0,
+                "reported_delta": 0.0,
+                "semantics": "engine-reported; not yet verified as all incremental duplex input/codec positions"
+              },
+              {
+                "metric": "vllm:num_preemptions_total",
+                "stage": "0",
+                "replica": "0",
+                "before": 0.0,
+                "after": 0.0,
+                "reported_delta": 0.0,
+                "semantics": "engine-reported preemption events; not distinct sessions or input tokens"
+              },
+              {
+                "metric": "vllm:num_preemptions_total",
+                "stage": "1",
+                "replica": "0",
+                "before": 0.0,
+                "after": 0.0,
+                "reported_delta": 0.0,
+                "semantics": "engine-reported preemption events; not distinct sessions or input tokens"
+              },
+              {
+                "metric": "vllm:num_preemptions_total",
+                "stage": "2",
+                "replica": "0",
+                "before": 0.0,
+                "after": 0.0,
+                "reported_delta": 0.0,
+                "semantics": "engine-reported preemption events; not distinct sessions or input tokens"
+              },
+              {
+                "metric": "vllm:prompt_tokens_total",
+                "stage": "0",
+                "replica": "0",
+                "before": 5733.0,
+                "after": 5880.0,
+                "reported_delta": 147.0,
+                "semantics": "engine-reported; not yet verified as all incremental duplex input/codec positions"
+              },
+              {
+                "metric": "vllm:prompt_tokens_total",
+                "stage": "1",
+                "replica": "0",
+                "before": 117.0,
+                "after": 120.0,
+                "reported_delta": 3.0,
+                "semantics": "engine-reported; not yet verified as all incremental duplex input/codec positions"
+              },
+              {
+                "metric": "vllm:prompt_tokens_total",
+                "stage": "2",
+                "replica": "0",
+                "before": 390.0,
+                "after": 400.0,
+                "reported_delta": 10.0,
+                "semantics": "engine-reported; not yet verified as all incremental duplex input/codec positions"
+              }
+            ],
+            "sampled_peak_kv_pool_fraction": [
+              {
+                "stage": "0",
+                "replica": "0",
+                "fraction": 0.17533039647577098
+              },
+              {
+                "stage": "1",
+                "replica": "0",
+                "fraction": 0.00036409976333517946
+              }
+            ],
+            "kv_pool_peak_scope": "post-input-barrier samples after stage generation counter increased; idle/pre-run gauges excluded; stages without verified activity omitted",
+            "limitations": [
+              "sampled peaks can miss transients",
+              "response.created may be emitted late; this is not question-end TTFT",
+              "offline playback ACK follows upstream demo, not a physical player",
+              "same-clip measurement validation is not saturation or diverse workload evaluation",
+              "lifecycle success does not guarantee every response reached response.done; unterminated responses are reported separately",
+              "kernel timing, actual input freshness, per-session KV and source-separated token counts remain unavailable"
+            ]
+          },
+          {
+            "repeat": "repeat-3",
+            "sessions": [
+              {
+                "session": "session-1",
+                "official_ok": true,
+                "errors": [],
+                "event_counts": {
+                  "session.created": 1,
+                  "input_audio_buffer.speech_started": 1,
+                  "response.listen": 32,
+                  "response.created": 3,
+                  "conversation.item.added": 4,
+                  "conversation.item.created": 4,
+                  "response.output_item.added": 3,
+                  "response.content_part.added": 3,
+                  "response.speak": 3,
+                  "response.output_audio.delta": 9,
+                  "response.output_audio_transcript.delta": 9,
+                  "response.output_audio.done": 3,
+                  "response.output_audio_transcript.done": 3,
+                  "response.content_part.done": 3,
+                  "response.output_item.done": 3,
+                  "conversation.item.done": 4,
+                  "response.done": 3,
+                  "rate_limits.updated": 3,
+                  "playback.acknowledged": 9,
+                  "input_audio_buffer.speech_stopped": 1,
+                  "input_audio_buffer.committed": 1,
+                  "session.closed": 1
+                },
+                "input_span_s": 40.81720205396414,
+                "sender_relative_drift_ms": {
+                  "p50": 0.9223729372025424,
+                  "p95": 1.571543095632677,
+                  "max": 1.9248700700700283
+                },
+                "send_block_ms_max": 22.703003138303757,
+                "audio_chunks": 9,
+                "send_block_scope": "whole client wrapper, including local audit I/O; not just transport",
+                "wire_timing_packets": 205,
+                "wire_sender_relative_drift_ms": {
+                  "p50": 0.9326760657124566,
+                  "p95": 1.5598850324742841,
+                  "max": 1.9638871308416128
+                },
+                "wire_send_block_ms_max": 22.494308883324265,
+                "audit_before_send_ms_max": 0.2499979455024004,
+                "observable_progress": {
+                  "last_sent_source_end_ms": 41000,
+                  "last_model_progress_relative_s": 41.01295752613805,
+                  "no_progress_at_input_end_s": 0.8065051480662078,
+                  "max_no_progress_within_input_span_s": 5.0585382101126015,
+                  "scope": "observable listen/output/done events, not exact input consumption; input pacing must be validated separately"
+                },
+                "audit_writer": {
+                  "enqueued": 540,
+                  "written": 540,
+                  "queue_peak_approx": 58,
+                  "flush_complete": true
+                },
+                "failure": null,
+                "audio_seconds": 6.24,
+                "responses": 3,
+                "completed_responses": 3,
+                "unterminated_responses": 0,
+                "response_created_to_first_audio_ms": {
+                  "p50": 4.959178157150745,
+                  "p95": 6.949022877961397
+                },
+                "simulated_playback": [
+                  {
+                    "startup_buffer_ms": 0,
+                    "completed_responses_only": true,
+                    "gaps": 3,
+                    "total_gap_ms": 2326.442475663498
+                  },
+                  {
+                    "startup_buffer_ms": 100,
+                    "completed_responses_only": true,
+                    "gaps": 3,
+                    "total_gap_ms": 2026.4424753841013
+                  },
+                  {
+                    "startup_buffer_ms": 300,
+                    "completed_responses_only": true,
+                    "gaps": 3,
+                    "total_gap_ms": 1426.4424755237997
+                  }
+                ],
+                "engine_snapshot_count": 35
+              }
+            ],
+            "common_input_overlap_s": 40.81720205396414,
+            "sampled_gpu_peaks": {
+              "thinker_gpu": {
+                "sampled_peak_memory_mib": 21944.0,
+                "sampled_peak_utilization_percent": 47.0
+              },
+              "speech_gpu": {
+                "sampled_peak_memory_mib": 17335.0,
+                "sampled_peak_utilization_percent": 29.0
+              }
+            },
+            "engine_reported_counters": [
+              {
+                "metric": "vllm:generation_tokens_total",
+                "stage": "0",
+                "replica": "0",
+                "before": 5319.0,
+                "after": 5394.0,
+                "reported_delta": 75.0,
+                "semantics": "engine-reported; not yet verified as all incremental duplex input/codec positions"
+              },
+              {
+                "metric": "vllm:generation_tokens_total",
+                "stage": "1",
+                "replica": "0",
+                "before": 12376.0,
+                "after": 12532.0,
+                "reported_delta": 156.0,
+                "semantics": "engine-reported; not yet verified as all incremental duplex input/codec positions"
+              },
+              {
+                "metric": "vllm:generation_tokens_total",
+                "stage": "2",
+                "replica": "0",
+                "before": 0.0,
+                "after": 0.0,
+                "reported_delta": 0.0,
+                "semantics": "engine-reported; not yet verified as all incremental duplex input/codec positions"
+              },
+              {
+                "metric": "vllm:num_preemptions_total",
+                "stage": "0",
+                "replica": "0",
+                "before": 0.0,
+                "after": 0.0,
+                "reported_delta": 0.0,
+                "semantics": "engine-reported preemption events; not distinct sessions or input tokens"
+              },
+              {
+                "metric": "vllm:num_preemptions_total",
+                "stage": "1",
+                "replica": "0",
+                "before": 0.0,
+                "after": 0.0,
+                "reported_delta": 0.0,
+                "semantics": "engine-reported preemption events; not distinct sessions or input tokens"
+              },
+              {
+                "metric": "vllm:num_preemptions_total",
+                "stage": "2",
+                "replica": "0",
+                "before": 0.0,
+                "after": 0.0,
+                "reported_delta": 0.0,
+                "semantics": "engine-reported preemption events; not distinct sessions or input tokens"
+              },
+              {
+                "metric": "vllm:prompt_tokens_total",
+                "stage": "0",
+                "replica": "0",
+                "before": 5880.0,
+                "after": 6027.0,
+                "reported_delta": 147.0,
+                "semantics": "engine-reported; not yet verified as all incremental duplex input/codec positions"
+              },
+              {
+                "metric": "vllm:prompt_tokens_total",
+                "stage": "1",
+                "replica": "0",
+                "before": 120.0,
+                "after": 123.0,
+                "reported_delta": 3.0,
+                "semantics": "engine-reported; not yet verified as all incremental duplex input/codec positions"
+              },
+              {
+                "metric": "vllm:prompt_tokens_total",
+                "stage": "2",
+                "replica": "0",
+                "before": 400.0,
+                "after": 410.0,
+                "reported_delta": 10.0,
+                "semantics": "engine-reported; not yet verified as all incremental duplex input/codec positions"
+              }
+            ],
+            "sampled_peak_kv_pool_fraction": [
+              {
+                "stage": "0",
+                "replica": "0",
+                "fraction": 0.17533039647577098
+              },
+              {
+                "stage": "1",
+                "replica": "0",
+                "fraction": 0.00036409976333517946
+              }
+            ],
+            "kv_pool_peak_scope": "post-input-barrier samples after stage generation counter increased; idle/pre-run gauges excluded; stages without verified activity omitted",
+            "limitations": [
+              "sampled peaks can miss transients",
+              "response.created may be emitted late; this is not question-end TTFT",
+              "offline playback ACK follows upstream demo, not a physical player",
+              "same-clip measurement validation is not saturation or diverse workload evaluation",
+              "lifecycle success does not guarantee every response reached response.done; unterminated responses are reported separately",
+              "kernel timing, actual input freshness, per-session KV and source-separated token counts remain unavailable"
+            ]
+          }
+        ]
+      },
+      {
+        "sessions": 4,
+        "repeats": 1,
+        "video_sha256": "677195d80c31878535619b728a34d974780267460beddfd03531d24a355ce8a5",
+        "window": {
+          "mode": "basic",
+          "high": 8000,
+          "low": 6000
+        },
+        "audit_mode": "thread",
+        "no_progress_timeout_s": 60,
+        "measurement_script_sha256": "419497c4715f58944bb7f919fe3ae2ce29aa22db69b577f57477bb3be89cbe3f",
+        "upstream_replay_sha256": "c9640f334472646a7fd4e0b8310e25070f9570f79b3f66d83e85ba7c02c47377",
+        "runs": [
+          {
+            "repeat": 1,
+            "status": "fail",
+            "error": "a session failed; stop peer sessions and preserve partial evidence"
+          }
+        ],
+        "case": "n4-long-async",
+        "measurements": [
+          {
+            "repeat": "repeat-1",
+            "sessions": [
+              {
+                "session": "session-1",
+                "official_ok": null,
+                "errors": null,
+                "event_counts": {
+                  "session.created": 1,
+                  "input_audio_buffer.speech_started": 1,
+                  "response.listen": 41,
+                  "response.created": 5,
+                  "conversation.item.added": 5,
+                  "conversation.item.created": 5,
+                  "response.output_item.added": 5,
+                  "response.content_part.added": 5,
+                  "response.speak": 5,
+                  "response.output_audio.delta": 15,
+                  "response.output_audio_transcript.delta": 15,
+                  "response.output_audio.done": 5,
+                  "response.output_audio_transcript.done": 5,
+                  "response.content_part.done": 5,
+                  "response.output_item.done": 5,
+                  "conversation.item.done": 5,
+                  "response.done": 5,
+                  "rate_limits.updated": 5,
+                  "playback.acknowledged": 5
+                },
+                "input_span_s": 116.4020523368381,
+                "sender_relative_drift_ms": {
+                  "p50": 0.8503058925271034,
+                  "p95": 1.336889853700285,
+                  "max": 2.2350619547069073
+                },
+                "send_block_ms_max": 21.323683904483914,
+                "audio_chunks": 15,
+                "send_block_scope": "whole client wrapper, including local audit I/O; not just transport",
+                "wire_timing_packets": 583,
+                "wire_sender_relative_drift_ms": {
+                  "p50": 0.8635539561510086,
+                  "p95": 1.3631459325580408,
+                  "max": 2.2754839155822992
+                },
+                "wire_send_block_ms_max": 21.094790194183588,
+                "audit_before_send_ms_max": 0.3061979077756405,
+                "observable_progress": {
+                  "last_sent_source_end_ms": 116600,
+                  "last_model_progress_relative_s": 56.169136848067865,
+                  "no_progress_at_input_end_s": 60.23271086299792,
+                  "max_no_progress_within_input_span_s": 60.23271086299792,
+                  "scope": "observable listen/output/done events, not exact input consumption; input pacing must be validated separately"
+                },
+                "audit_writer": {
+                  "enqueued": 1324,
+                  "written": 1324,
+                  "queue_peak_approx": 123,
+                  "flush_complete": true
+                },
+                "failure": {
+                  "error": "TimeoutError: continuing input but no observable model progress for 60.0 seconds"
+                },
+                "audio_seconds": 10.120000000000001,
+                "responses": 5,
+                "completed_responses": 5,
+                "unterminated_responses": 0,
+                "response_created_to_first_audio_ms": {
+                  "p50": 6.640553008764982,
+                  "p95": 11.759157991036773
+                },
+                "simulated_playback": [
+                  {
+                    "startup_buffer_ms": 0,
+                    "completed_responses_only": true,
+                    "gaps": 4,
+                    "total_gap_ms": 3504.6882377937436
+                  },
+                  {
+                    "startup_buffer_ms": 100,
+                    "completed_responses_only": true,
+                    "gaps": 4,
+                    "total_gap_ms": 3104.6882374212146
+                  },
+                  {
+                    "startup_buffer_ms": 300,
+                    "completed_responses_only": true,
+                    "gaps": 4,
+                    "total_gap_ms": 2304.688237607479
+                  }
+                ],
+                "engine_snapshot_count": 46
+              },
+              {
+                "session": "session-2",
+                "official_ok": null,
+                "errors": null,
+                "event_counts": {
+                  "session.created": 1,
+                  "input_audio_buffer.speech_started": 1,
+                  "response.listen": 41,
+                  "response.created": 5,
+                  "conversation.item.added": 5,
+                  "conversation.item.created": 5,
+                  "response.output_item.added": 5,
+                  "response.content_part.added": 5,
+                  "response.speak": 5,
+                  "response.output_audio.delta": 15,
+                  "response.output_audio_transcript.delta": 15,
+                  "response.output_audio.done": 5,
+                  "response.output_audio_transcript.done": 5,
+                  "response.content_part.done": 5,
+                  "response.output_item.done": 5,
+                  "conversation.item.done": 5,
+                  "response.done": 5,
+                  "rate_limits.updated": 5,
+                  "playback.acknowledged": 5
+                },
+                "input_span_s": 116.20286439498886,
+                "sender_relative_drift_ms": {
+                  "p50": 0.8351549971834515,
+                  "p95": 1.3384021353033404,
+                  "max": 2.8029050212339257
+                },
+                "send_block_ms_max": 19.948974950239062,
+                "audio_chunks": 15,
+                "send_block_scope": "whole client wrapper, including local audit I/O; not just transport",
+                "wire_timing_packets": 582,
+                "wire_sender_relative_drift_ms": {
+                  "p50": 0.6230911239981651,
+                  "p95": 1.151754008603234,
+                  "max": 2.5751871056840514
+                },
+                "wire_send_block_ms_max": 19.609787967056036,
+                "audit_before_send_ms_max": 0.3799849655479193,
+                "observable_progress": {
+                  "last_sent_source_end_ms": 116400,
+                  "last_model_progress_relative_s": 56.24864470399916,
+                  "no_progress_at_input_end_s": 59.95375370513648,
+                  "max_no_progress_within_input_span_s": 59.95375370513648,
+                  "scope": "observable listen/output/done events, not exact input consumption; input pacing must be validated separately"
+                },
+                "audit_writer": {
+                  "enqueued": 1322,
+                  "written": 1322,
+                  "queue_peak_approx": 123,
+                  "flush_complete": true
+                },
+                "failure": {
+                  "error": "TimeoutError: continuing input but no observable model progress for 60.0 seconds"
+                },
+                "audio_seconds": 10.24,
+                "responses": 5,
+                "completed_responses": 5,
+                "unterminated_responses": 0,
+                "response_created_to_first_audio_ms": {
+                  "p50": 6.022220943123102,
+                  "p95": 9.39632998779416
+                },
+                "simulated_playback": [
+                  {
+                    "startup_buffer_ms": 0,
+                    "completed_responses_only": true,
+                    "gaps": 4,
+                    "total_gap_ms": 3250.7416009902954
+                  },
+                  {
+                    "startup_buffer_ms": 100,
+                    "completed_responses_only": true,
+                    "gaps": 4,
+                    "total_gap_ms": 2850.7416006177664
+                  },
+                  {
+                    "startup_buffer_ms": 300,
+                    "completed_responses_only": true,
+                    "gaps": 4,
+                    "total_gap_ms": 2050.741600804031
+                  }
+                ],
+                "engine_snapshot_count": 46
+              },
+              {
+                "session": "session-3",
+                "official_ok": null,
+                "errors": null,
+                "event_counts": {
+                  "session.created": 1,
+                  "input_audio_buffer.speech_started": 1,
+                  "response.listen": 38,
+                  "response.created": 5,
+                  "conversation.item.added": 5,
+                  "conversation.item.created": 5,
+                  "response.output_item.added": 5,
+                  "response.content_part.added": 5,
+                  "response.speak": 5,
+                  "response.output_audio.delta": 16,
+                  "response.output_audio_transcript.delta": 16,
+                  "response.output_audio.done": 5,
+                  "response.output_audio_transcript.done": 5,
+                  "response.content_part.done": 5,
+                  "response.output_item.done": 5,
+                  "conversation.item.done": 5,
+                  "response.done": 5,
+                  "rate_limits.updated": 5,
+                  "playback.acknowledged": 5
+                },
+                "input_span_s": 116.0031286100857,
+                "sender_relative_drift_ms": {
+                  "p50": 0.8286430500419328,
+                  "p95": 1.31787802092731,
+                  "max": 2.282412210479201
+                },
+                "send_block_ms_max": 21.141519071534276,
+                "audio_chunks": 16,
+                "send_block_scope": "whole client wrapper, including local audit I/O; not just transport",
+                "wire_timing_packets": 581,
+                "wire_sender_relative_drift_ms": {
+                  "p50": 0.7136259227991104,
+                  "p95": 1.221745042130351,
+                  "max": 2.201014850288452
+                },
+                "wire_send_block_ms_max": 20.922726020216942,
+                "audit_before_send_ms_max": 0.28147315606474876,
+                "observable_progress": {
+                  "last_sent_source_end_ms": 116200,
+                  "last_model_progress_relative_s": 55.25463525089435,
+                  "no_progress_at_input_end_s": 60.74811689509079,
+                  "max_no_progress_within_input_span_s": 60.74811689509079,
+                  "scope": "observable listen/output/done events, not exact input consumption; input pacing must be validated separately"
+                },
+                "audit_writer": {
+                  "enqueued": 1319,
+                  "written": 1319,
+                  "queue_peak_approx": 123,
+                  "flush_complete": true
+                },
+                "failure": {
+                  "error": "TimeoutError: continuing input but no observable model progress for 60.0 seconds"
+                },
+                "audio_seconds": 12.28,
+                "responses": 5,
+                "completed_responses": 5,
+                "unterminated_responses": 0,
+                "response_created_to_first_audio_ms": {
+                  "p50": 6.151916924864054,
+                  "p95": 8.328943978995085
+                },
+                "simulated_playback": [
+                  {
+                    "startup_buffer_ms": 0,
+                    "completed_responses_only": true,
+                    "gaps": 4,
+                    "total_gap_ms": 4106.648102868348
+                  },
+                  {
+                    "startup_buffer_ms": 100,
+                    "completed_responses_only": true,
+                    "gaps": 4,
+                    "total_gap_ms": 3706.6481024958193
+                  },
+                  {
+                    "startup_buffer_ms": 300,
+                    "completed_responses_only": true,
+                    "gaps": 4,
+                    "total_gap_ms": 2906.648102682084
+                  }
+                ],
+                "engine_snapshot_count": 43
+              },
+              {
+                "session": "session-4",
+                "official_ok": null,
+                "errors": null,
+                "event_counts": {
+                  "session.created": 1,
+                  "input_audio_buffer.speech_started": 1,
+                  "response.listen": 40,
+                  "response.created": 5,
+                  "conversation.item.added": 5,
+                  "conversation.item.created": 5,
+                  "response.output_item.added": 5,
+                  "response.content_part.added": 5,
+                  "response.speak": 5,
+                  "response.output_audio.delta": 15,
+                  "response.output_audio_transcript.delta": 15,
+                  "response.output_audio.done": 5,
+                  "response.output_audio_transcript.done": 5,
+                  "response.content_part.done": 5,
+                  "response.output_item.done": 5,
+                  "conversation.item.done": 5,
+                  "response.done": 5,
+                  "rate_limits.updated": 5,
+                  "playback.acknowledged": 5
+                },
+                "input_span_s": 116.20261057699099,
+                "sender_relative_drift_ms": {
+                  "p50": 0.866561895236373,
+                  "p95": 1.3107498642028759,
+                  "max": 2.2449608892145534
+                },
+                "send_block_ms_max": 19.915424985811114,
+                "audio_chunks": 15,
+                "send_block_scope": "whole client wrapper, including local audit I/O; not just transport",
+                "wire_timing_packets": 582,
+                "wire_sender_relative_drift_ms": {
+                  "p50": 0.8797369897379781,
+                  "p95": 1.3289249967840533,
+                  "max": 2.249695966014542
+                },
+                "wire_send_block_ms_max": 19.675761926919222,
+                "audit_before_send_ms_max": 0.3746149595826864,
+                "observable_progress": {
+                  "last_sent_source_end_ms": 116400,
+                  "last_model_progress_relative_s": 56.24907092307694,
+                  "no_progress_at_input_end_s": 59.95331580284983,
+                  "max_no_progress_within_input_span_s": 59.95331580284983,
+                  "scope": "observable listen/output/done events, not exact input consumption; input pacing must be validated separately"
+                },
+                "audit_writer": {
+                  "enqueued": 1321,
+                  "written": 1321,
+                  "queue_peak_approx": 123,
+                  "flush_complete": true
+                },
+                "failure": {
+                  "error": "TimeoutError: continuing input but no observable model progress for 60.0 seconds"
+                },
+                "audio_seconds": 11.88,
+                "responses": 5,
+                "completed_responses": 5,
+                "unterminated_responses": 0,
+                "response_created_to_first_audio_ms": {
+                  "p50": 9.083834942430258,
+                  "p95": 12.481393991038203
+                },
+                "simulated_playback": [
+                  {
+                    "startup_buffer_ms": 0,
+                    "completed_responses_only": true,
+                    "gaps": 5,
+                    "total_gap_ms": 3248.1358544901013
+                  },
+                  {
+                    "startup_buffer_ms": 100,
+                    "completed_responses_only": true,
+                    "gaps": 5,
+                    "total_gap_ms": 2748.13585402444
+                  },
+                  {
+                    "startup_buffer_ms": 300,
+                    "completed_responses_only": true,
+                    "gaps": 4,
+                    "total_gap_ms": 1872.4972533527762
+                  }
+                ],
+                "engine_snapshot_count": 45
+              }
+            ],
+            "common_input_overlap_s": 116.00211356091313,
+            "sampled_gpu_peaks": {
+              "thinker_gpu": {
+                "sampled_peak_memory_mib": 21944.0,
+                "sampled_peak_utilization_percent": 84.0
+              },
+              "speech_gpu": {
+                "sampled_peak_memory_mib": 17337.0,
+                "sampled_peak_utilization_percent": 73.0
+              }
+            },
+            "engine_reported_counters": [
+              {
+                "metric": "vllm:generation_tokens_total",
+                "stage": "0",
+                "replica": "0",
+                "before": 5394.0,
+                "after": null,
+                "reported_delta": null,
+                "semantics": "engine-reported; not yet verified as all incremental duplex input/codec positions"
+              },
+              {
+                "metric": "vllm:generation_tokens_total",
+                "stage": "1",
+                "replica": "0",
+                "before": 12532.0,
+                "after": null,
+                "reported_delta": null,
+                "semantics": "engine-reported; not yet verified as all incremental duplex input/codec positions"
+              },
+              {
+                "metric": "vllm:generation_tokens_total",
+                "stage": "2",
+                "replica": "0",
+                "before": 0.0,
+                "after": null,
+                "reported_delta": null,
+                "semantics": "engine-reported; not yet verified as all incremental duplex input/codec positions"
+              },
+              {
+                "metric": "vllm:num_preemptions_total",
+                "stage": "0",
+                "replica": "0",
+                "before": 0.0,
+                "after": null,
+                "reported_delta": null,
+                "semantics": "engine-reported preemption events; not distinct sessions or input tokens"
+              },
+              {
+                "metric": "vllm:num_preemptions_total",
+                "stage": "1",
+                "replica": "0",
+                "before": 0.0,
+                "after": null,
+                "reported_delta": null,
+                "semantics": "engine-reported preemption events; not distinct sessions or input tokens"
+              },
+              {
+                "metric": "vllm:num_preemptions_total",
+                "stage": "2",
+                "replica": "0",
+                "before": 0.0,
+                "after": null,
+                "reported_delta": null,
+                "semantics": "engine-reported preemption events; not distinct sessions or input tokens"
+              },
+              {
+                "metric": "vllm:prompt_tokens_total",
+                "stage": "0",
+                "replica": "0",
+                "before": 6027.0,
+                "after": null,
+                "reported_delta": null,
+                "semantics": "engine-reported; not yet verified as all incremental duplex input/codec positions"
+              },
+              {
+                "metric": "vllm:prompt_tokens_total",
+                "stage": "1",
+                "replica": "0",
+                "before": 123.0,
+                "after": null,
+                "reported_delta": null,
+                "semantics": "engine-reported; not yet verified as all incremental duplex input/codec positions"
+              },
+              {
+                "metric": "vllm:prompt_tokens_total",
+                "stage": "2",
+                "replica": "0",
+                "before": 410.0,
+                "after": null,
+                "reported_delta": null,
+                "semantics": "engine-reported; not yet verified as all incremental duplex input/codec positions"
+              }
+            ],
+            "sampled_peak_kv_pool_fraction": [
+              {
+                "stage": "0",
+                "replica": "0",
+                "fraction": 0.9991189427312775
+              },
+              {
+                "stage": "1",
+                "replica": "0",
+                "fraction": 0.0043691971600218205
+              }
+            ],
+            "kv_pool_peak_scope": "post-input-barrier samples after stage generation counter increased; idle/pre-run gauges excluded; stages without verified activity omitted",
+            "limitations": [
+              "sampled peaks can miss transients",
+              "response.created may be emitted late; this is not question-end TTFT",
+              "offline playback ACK follows upstream demo, not a physical player",
+              "same-clip measurement validation is not saturation or diverse workload evaluation",
+              "lifecycle success does not guarantee every response reached response.done; unterminated responses are reported separately",
+              "kernel timing, actual input freshness, per-session KV and source-separated token counts remain unavailable"
+            ]
+          }
+        ]
+      },
+      {
+        "sessions": 2,
+        "repeats": 1,
+        "video_sha256": "677195d80c31878535619b728a34d974780267460beddfd03531d24a355ce8a5",
+        "window": {
+          "mode": "basic",
+          "high": 8000,
+          "low": 6000
+        },
+        "audit_mode": "thread",
+        "no_progress_timeout_s": 60,
+        "measurement_script_sha256": "419497c4715f58944bb7f919fe3ae2ce29aa22db69b577f57477bb3be89cbe3f",
+        "upstream_replay_sha256": "c9640f334472646a7fd4e0b8310e25070f9570f79b3f66d83e85ba7c02c47377",
+        "runs": [
+          {
+            "repeat": 1,
+            "returncodes": [
+              0,
+              0
+            ],
+            "status": "pass"
+          }
+        ],
+        "case": "n2-long-async",
+        "measurements": [
+          {
+            "repeat": "repeat-1",
+            "sessions": [
+              {
+                "session": "session-1",
+                "official_ok": true,
+                "errors": [],
+                "event_counts": {
+                  "session.created": 1,
+                  "input_audio_buffer.speech_started": 1,
+                  "response.listen": 153,
+                  "response.created": 20,
+                  "conversation.item.added": 21,
+                  "conversation.item.created": 21,
+                  "response.output_item.added": 20,
+                  "response.content_part.added": 20,
+                  "response.speak": 20,
+                  "response.output_audio.delta": 68,
+                  "response.output_audio_transcript.delta": 68,
+                  "response.output_audio.done": 20,
+                  "response.output_audio_transcript.done": 20,
+                  "response.content_part.done": 20,
+                  "response.output_item.done": 20,
+                  "conversation.item.done": 21,
+                  "response.done": 20,
+                  "rate_limits.updated": 20,
+                  "playback.acknowledged": 60,
+                  "input_audio_buffer.speech_stopped": 1,
+                  "input_audio_buffer.committed": 1,
+                  "session.closed": 1
+                },
+                "input_span_s": 245.818521827925,
+                "sender_relative_drift_ms": {
+                  "p50": 0.8568418678009948,
+                  "p95": 1.4135889709052663,
+                  "max": 160.40487186982944
+                },
+                "send_block_ms_max": 20.01597103662789,
+                "audio_chunks": 68,
+                "send_block_scope": "whole client wrapper, including local audit I/O; not just transport",
+                "wire_timing_packets": 1230,
+                "wire_sender_relative_drift_ms": {
+                  "p50": 0.8941711857914925,
+                  "p95": 1.4968481380464027,
+                  "max": 160.3197981137754
+                },
+                "wire_send_block_ms_max": 19.315816927701235,
+                "audit_before_send_ms_max": 2.68589798361063,
+                "observable_progress": {
+                  "last_sent_source_end_ms": 246000,
+                  "last_model_progress_relative_s": 245.12387184309773,
+                  "no_progress_at_input_end_s": 0.6944767779204994,
+                  "max_no_progress_within_input_span_s": 4.256139725912362,
+                  "scope": "observable listen/output/done events, not exact input consumption; input pacing must be validated separately"
+                },
+                "audit_writer": {
+                  "enqueued": 3203,
+                  "written": 3203,
+                  "queue_peak_approx": 35,
+                  "flush_complete": true
+                },
+                "failure": null,
+                "audio_seconds": 52.27999999999999,
+                "responses": 20,
+                "completed_responses": 20,
+                "unterminated_responses": 0,
+                "response_created_to_first_audio_ms": {
+                  "p50": 5.363855976611376,
+                  "p95": 12.298530898988247
+                },
+                "simulated_playback": [
+                  {
+                    "startup_buffer_ms": 0,
+                    "completed_responses_only": true,
+                    "gaps": 35,
+                    "total_gap_ms": 23876.5330768656
+                  },
+                  {
+                    "startup_buffer_ms": 100,
+                    "completed_responses_only": true,
+                    "gaps": 33,
+                    "total_gap_ms": 22270.032189553604
+                  },
+                  {
+                    "startup_buffer_ms": 300,
+                    "completed_responses_only": true,
+                    "gaps": 31,
+                    "total_gap_ms": 19653.29980617389
+                  }
+                ],
+                "engine_snapshot_count": 173
+              },
+              {
+                "session": "session-2",
+                "official_ok": true,
+                "errors": [],
+                "event_counts": {
+                  "session.created": 1,
+                  "input_audio_buffer.speech_started": 1,
+                  "response.listen": 149,
+                  "response.created": 20,
+                  "conversation.item.added": 21,
+                  "conversation.item.created": 21,
+                  "response.output_item.added": 20,
+                  "response.content_part.added": 20,
+                  "response.speak": 20,
+                  "response.output_audio.delta": 68,
+                  "response.output_audio_transcript.delta": 68,
+                  "response.output_audio.done": 20,
+                  "response.output_audio_transcript.done": 20,
+                  "response.content_part.done": 20,
+                  "response.output_item.done": 20,
+                  "conversation.item.done": 21,
+                  "response.done": 20,
+                  "rate_limits.updated": 20,
+                  "playback.acknowledged": 60,
+                  "input_audio_buffer.speech_stopped": 1,
+                  "input_audio_buffer.committed": 1,
+                  "session.closed": 1
+                },
+                "input_span_s": 245.81733523705043,
+                "sender_relative_drift_ms": {
+                  "p50": 0.8733449038231811,
+                  "p95": 1.7196900211331467,
+                  "max": 3514.8413920775
+                },
+                "send_block_ms_max": 24.831526912748814,
+                "audio_chunks": 68,
+                "send_block_scope": "whole client wrapper, including local audit I/O; not just transport",
+                "wire_timing_packets": 1230,
+                "wire_sender_relative_drift_ms": {
+                  "p50": 0.84105897695963,
+                  "p95": 1.6820569988453826,
+                  "max": 3514.7802619263475
+                },
+                "wire_send_block_ms_max": 24.61800491437316,
+                "audit_before_send_ms_max": 0.3577829338610172,
+                "observable_progress": {
+                  "last_sent_source_end_ms": 246000,
+                  "last_model_progress_relative_s": 245.12330337497406,
+                  "no_progress_at_input_end_s": 0.6937968980055302,
+                  "max_no_progress_within_input_span_s": 4.498934386996552,
+                  "scope": "observable listen/output/done events, not exact input consumption; input pacing must be validated separately"
+                },
+                "audit_writer": {
+                  "enqueued": 3199,
+                  "written": 3199,
+                  "queue_peak_approx": 8,
+                  "flush_complete": true
+                },
+                "failure": null,
+                "audio_seconds": 50.88,
+                "responses": 20,
+                "completed_responses": 20,
+                "unterminated_responses": 0,
+                "response_created_to_first_audio_ms": {
+                  "p50": 6.742216879501939,
+                  "p95": 9.344770107418299
+                },
+                "simulated_playback": [
+                  {
+                    "startup_buffer_ms": 0,
+                    "completed_responses_only": true,
+                    "gaps": 28,
+                    "total_gap_ms": 22927.901067538187
+                  },
+                  {
+                    "startup_buffer_ms": 100,
+                    "completed_responses_only": true,
+                    "gaps": 26,
+                    "total_gap_ms": 21146.940795704722
+                  },
+                  {
+                    "startup_buffer_ms": 300,
+                    "completed_responses_only": true,
+                    "gaps": 25,
+                    "total_gap_ms": 17833.085759542882
+                  }
+                ],
+                "engine_snapshot_count": 169
+              }
+            ],
+            "common_input_overlap_s": 245.81733523705043,
+            "sampled_gpu_peaks": {
+              "thinker_gpu": {
+                "sampled_peak_memory_mib": 21944.0,
+                "sampled_peak_utilization_percent": 68.0
+              },
+              "speech_gpu": {
+                "sampled_peak_memory_mib": 17337.0,
+                "sampled_peak_utilization_percent": 43.0
+              }
+            },
+            "engine_reported_counters": [
+              {
+                "metric": "vllm:generation_tokens_total",
+                "stage": "0",
+                "replica": "0",
+                "before": 5846.0,
+                "after": 6875.0,
+                "reported_delta": 1029.0,
+                "semantics": "engine-reported; not yet verified as all incremental duplex input/codec positions"
+              },
+              {
+                "metric": "vllm:generation_tokens_total",
+                "stage": "1",
+                "replica": "0",
+                "before": 13641.0,
+                "after": 16236.0,
+                "reported_delta": 2595.0,
+                "semantics": "engine-reported; not yet verified as all incremental duplex input/codec positions"
+              },
+              {
+                "metric": "vllm:generation_tokens_total",
+                "stage": "2",
+                "replica": "0",
+                "before": 0.0,
+                "after": 0.0,
+                "reported_delta": 0.0,
+                "semantics": "engine-reported; not yet verified as all incremental duplex input/codec positions"
+              },
+              {
+                "metric": "vllm:num_preemptions_total",
+                "stage": "0",
+                "replica": "0",
+                "before": 0.0,
+                "after": 0.0,
+                "reported_delta": 0.0,
+                "semantics": "engine-reported preemption events; not distinct sessions or input tokens"
+              },
+              {
+                "metric": "vllm:num_preemptions_total",
+                "stage": "1",
+                "replica": "0",
+                "before": 0.0,
+                "after": 0.0,
+                "reported_delta": 0.0,
+                "semantics": "engine-reported preemption events; not distinct sessions or input tokens"
+              },
+              {
+                "metric": "vllm:num_preemptions_total",
+                "stage": "2",
+                "replica": "0",
+                "before": 0.0,
+                "after": 0.0,
+                "reported_delta": 0.0,
+                "semantics": "engine-reported preemption events; not distinct sessions or input tokens"
+              },
+              {
+                "metric": "vllm:prompt_tokens_total",
+                "stage": "0",
+                "replica": "0",
+                "before": 6615.0,
+                "after": 6909.0,
+                "reported_delta": 294.0,
+                "semantics": "engine-reported; not yet verified as all incremental duplex input/codec positions"
+              },
+              {
+                "metric": "vllm:prompt_tokens_total",
+                "stage": "1",
+                "replica": "0",
+                "before": 135.0,
+                "after": 141.0,
+                "reported_delta": 6.0,
+                "semantics": "engine-reported; not yet verified as all incremental duplex input/codec positions"
+              },
+              {
+                "metric": "vllm:prompt_tokens_total",
+                "stage": "2",
+                "replica": "0",
+                "before": 450.0,
+                "after": 470.0,
+                "reported_delta": 20.0,
+                "semantics": "engine-reported; not yet verified as all incremental duplex input/codec positions"
+              }
+            ],
+            "sampled_peak_kv_pool_fraction": [
+              {
+                "stage": "0",
+                "replica": "0",
+                "fraction": 0.8757709251101322
+              },
+              {
+                "stage": "1",
+                "replica": "0",
+                "fraction": 0.002548698343346034
+              }
+            ],
+            "kv_pool_peak_scope": "post-input-barrier samples after stage generation counter increased; idle/pre-run gauges excluded; stages without verified activity omitted",
+            "limitations": [
+              "sampled peaks can miss transients",
+              "response.created may be emitted late; this is not question-end TTFT",
+              "offline playback ACK follows upstream demo, not a physical player",
+              "same-clip measurement validation is not saturation or diverse workload evaluation",
+              "lifecycle success does not guarantee every response reached response.done; unterminated responses are reported separately",
+              "kernel timing, actual input freshness, per-session KV and source-separated token counts remain unavailable"
+            ]
+          }
+        ]
+      }
+    ],
+    "summary_script_sha256": "a3bfe0ac6494c56dc1486496e2b2e6fbbbaf0fbf9d9e90607392a5f4a18e9b27"
+  }
+}
