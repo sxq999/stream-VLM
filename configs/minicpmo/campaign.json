@@ -34,7 +34,6 @@
     2,
     4
   ],
-  "finer_concurrency_only_after_capacity_gate": true,
   "arrival_mode": "open_loop_media_clock",
   "arrival_speed_factors": [
     1.0
@@ -73,7 +72,7 @@
   },
   "stress_guide": "docs/minicpmo/stress-guide.md",
   "gpu_budget": 4,
-  "measurement_phase": "two_gpu_long_stall_reproduced_thinker_tp2_long_results_await_remote_verification",
+  "measurement_phase": "fixed_configuration_stress_and_bottleneck_report_only",
   "thinker_experiments": [
     "T1",
     "T2",
@@ -111,7 +110,7 @@
     },
     {
       "id": "E3-multi",
-      "status": "two_gpu_four_stream_stall_reproduced_two_stream_control_pass_three_gpu_capacity_validation_running"
+      "status": "two_gpu_four_stream_stall_reproduced_two_stream_control_pass_failure_retained"
     },
     {
       "id": "E4",
@@ -119,11 +118,7 @@
     },
     {
       "id": "E5",
-      "status": "pending"
-    },
-    {
-      "id": "E6",
-      "status": "pending"
+      "status": "pending_finite_fixed_configuration_stress_cases_and_report"
     }
   ],
   "metric_policy": {
@@ -152,6 +147,76 @@
     "total_gpus": 3,
     "speech_placement": "one_shared_gpu",
     "preserve_window": true,
-    "status": "last_observed_warmup_and_four_short_pass_long_repeats_submitted_remote_status_unverified_after_ssh_timeout"
+    "status": "last_observed_warmup_and_four_short_pass_long_repeats_submitted_remote_status_unverified_after_ssh_timeout",
+    "classification": "already_submitted_resource_control_outside_current_stress_scope",
+    "next_action": "retrieve_existing_results_verify_service_and_archive_only_no_new_conditions",
+    "part_of_current_completion_gate": false
+  },
+  "finer_concurrency_scan_deferred": true,
+  "current_task_scope": {
+    "deliverable": "fixed_configuration_workload_pressure_failure_and_bottleneck_report",
+    "frozen_config": "configs/minicpmo/two_gpu_four_sessions.yaml",
+    "frozen_config_sha256": "021a2bca71f77a578fa8d70d705918ebeb7b36bf7fa921b133a4a86eb0244027",
+    "gpu_count": 2,
+    "window": {
+      "mode": "basic",
+      "high": 8000,
+      "low": 6000
+    },
+    "allowed_changes": [
+      "input_workload",
+      "bounded_observational_instrumentation",
+      "measurement_error_correction_with_provenance"
+    ],
+    "excluded_changes": [
+      "window_threshold",
+      "cache_budget",
+      "scheduler_policy",
+      "model",
+      "batch_or_chunk_tuning",
+      "gpu_count_or_placement",
+      "TP_or_replicas",
+      "PD_or_KV_transfer_policy"
+    ],
+    "concurrency_levels": [
+      1,
+      2,
+      4
+    ],
+    "max_media_duration_s": 600,
+    "normal_condition_planned_repeats": 3,
+    "max_additional_same_condition_failure_confirmations": 1,
+    "finite_case_list_required_before_batch": true,
+    "automatically_expand_conditions": false,
+    "failure_is_a_valid_result": true,
+    "completion_requires_all_conditions_to_pass": false,
+    "completion_requires_unique_root_cause": false,
+    "completion_requires_all_instruments_implemented": false,
+    "completion": "each_frozen_case_has_pass_fail_or_unmeasurable_with_evidence_and_reason_then_report_observed_bounds_and_uncertainty",
+    "restore_service": "same_frozen_configuration_after_checking_actual_deployment_and_ownership"
+  },
+  "deferred_work": {
+    "configuration_controls": [
+      "window_threshold",
+      "cache_budget",
+      "batch_or_chunk_size"
+    ],
+    "resource_controls": [
+      "TP2",
+      "replicas",
+      "additional_gpus"
+    ],
+    "speech_comparisons": [
+      "S1_isolated_colocated_split",
+      "S4_same_budget_placement",
+      "S5_codec_chunk_tuning"
+    ],
+    "methods": [
+      "E6_strict_PD",
+      "batched_KV_transfer",
+      "new_scheduling_or_history_policy"
+    ],
+    "automatically_execute": false,
+    "part_of_current_completion_gate": false
   }
 }
