@@ -72,7 +72,7 @@
   },
   "stress_guide": "docs/minicpmo/stress-guide.md",
   "gpu_budget": 4,
-  "measurement_phase": "running_frozen_finite_stress_cases",
+  "measurement_phase": "frozen_finite_stress_report_complete_optimizations_deferred",
   "thinker_experiments": [
     "T1",
     "T2",
@@ -118,7 +118,7 @@
     },
     {
       "id": "E5",
-      "status": "running_nine_frozen_input_cases_three_rounds_no_tuning"
+      "status": "complete_fixed_nine_cases_and_report_with_limits"
     }
   ],
   "metric_policy": {
@@ -134,22 +134,24 @@
     "thinker_window_reclaim": "single_session_four_reclaims_with_block_decreases",
     "stage_cuda_kernel_attribution": "single_diagnostic_pass_pacing_perturbed_not_pressure",
     "code2wav_state_and_activation_bytes": "pending",
-    "input_consumption_freshness_and_complete_drain": "pending",
+    "input_consumption_freshness_and_complete_drain": "new_batch_all_261_responses_completed_consumption_freshness_still_unverified_old_600s_incomplete_retained",
     "encoding_prefill_decode_gpu_subphases": "pending",
     "speech_isolated_replay_and_colocation_comparisons": "pending",
-    "saturated_capacity": "not_established_two_gpu_KV_pool_capacity_failure_observed",
+    "saturated_capacity": "not_established_fixed_two_gpu_four_stream_KV_related_stall_retained",
     "sender_timing_calibration": "three_threaded_audit_short_repeats_pass_four_stream_failure_has_p95_send_drift_1_15_to_1_36_ms",
     "no_progress_failure_detection": "verified_60s_continuing_input_without_listen_output_done",
-    "upstream_receive_callback_timing": "offline_contract_pass_real_model_validation_running_in_frozen_campaign"
+    "upstream_receive_callback_timing": "verified_in_27_real_model_runs_max_4_93_ms",
+    "fixed_input_campaign": "nine_conditions_three_rounds_39_sessions_protocol_clock_and_drain_pass",
+    "speech_pressure_scope": "full_chain_actual_audio_and_simulated_gaps_only_independent_capacity_not_established"
   },
   "capacity_configuration_candidate": {
     "thinker_tp": 2,
     "total_gpus": 3,
     "speech_placement": "one_shared_gpu",
     "preserve_window": true,
-    "status": "three_four_stream_240s_repeats_protocol_pass_detailed_timing_review_pending",
+    "status": "archived_three_protocol_and_drain_pass_two_clock_valid_one_clock_invalid_no_rerun",
     "classification": "already_submitted_resource_control_outside_current_stress_scope",
-    "next_action": "archive_existing_results_only_two_gpu_baseline_restored",
+    "next_action": "none_archived_original_two_gpu_service_active",
     "part_of_current_completion_gate": false
   },
   "finer_concurrency_scan_deferred": true,
@@ -193,7 +195,8 @@
     "completion_requires_unique_root_cause": false,
     "completion_requires_all_instruments_implemented": false,
     "completion": "each_frozen_case_has_pass_fail_or_unmeasurable_with_evidence_and_reason_then_report_observed_bounds_and_uncertainty",
-    "restore_service": "same_frozen_configuration_after_checking_actual_deployment_and_ownership"
+    "restore_service": "same_frozen_configuration_after_checking_actual_deployment_and_ownership",
+    "status": "complete_for_frozen_case_list_with_explicit_coverage_limits"
   },
   "deferred_work": {
     "configuration_controls": [
@@ -224,6 +227,9 @@
     "config": "configs/minicpmo/two_gpu_four_sessions.yaml",
     "gpu_count": 2,
     "config_sha256": "021a2bca71f77a578fa8d70d705918ebeb7b36bf7fa921b133a4a86eb0244027",
-    "restored_and_health_verified": true
-  }
+    "restored_and_health_verified": true,
+    "health_verified_after_campaign": true,
+    "web_experiment_lock_released": true
+  },
+  "current_results": "docs/minicpmo/evidence/fixed-campaign-20261122.json"
 }

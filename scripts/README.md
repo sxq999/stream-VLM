@@ -35,7 +35,7 @@ Linux示例（先把 `$ROOT` 设置为实验根目录；`$OUT` 是尚不存在�
 
 `observable_progress`记录最后一次可见推进和输入期间最长结果空隙，不能当作最新帧已计算的证明。`official_collector_work_ms`另计官方接收回调（包括其输出处理）的同步耗时，用来排查剩余客户端停顿；旧日志无该事件时为null，不补造。后台审计不代表官方客户端全部I/O已异步化。
 
-接收回调耗时记录目前仅通过离线契约测试，尚未完成真实模型回放验证；已归档实验没有这项记录，不能用它解释既有停顿的具体原因。
+接收回调耗时记录已在本轮27次真实回放验证，具体数据见结果；此前旧日志没有该事件，不能反推旧停顿原因。
 
 ### 有限输入清单与执行
 
@@ -64,6 +64,10 @@ python scripts/minicpmo/experiment_access.py --lock-file "$ROOT/control/web-expe
 ```
 
 执行器核对配置/脚本哈希、素材哈希、服务所属用户和选中GPU的进程身份；发生外部进程、服务不健康或配置变化就停，不调参或重启模型。每个条件最多确认2次失败；完整清单结束记为`finished_with_observations`，不等于所有条件或实时性通过。预先指定的200ms最大发送迟到是客户端施压时钟检查，不是用户延迟SLO。
+
+`export_stress_results.py --campaign "$OUT" --out "$PUBLIC_JSON"` 从已结束清单导出匿名数值：保留全部重复、时钟与排空结果、首个完整回答的音频块示例；移除绝对路径、会话标识和私有错误文本。原始记录不改动。`plot_stall_evidence.py --input docs/minicpmo/evidence/long-concurrency-20261121.json --out "$FIGURE.svg"` 重建历史四路停滞图；采样连线不补造观测，不把相关性当根因证明。
+
+作图工具额外需要Matplotlib；它不参与GPU推理或压力测试。
 
 指标限制：`response.created→首音频`不是用户提问结束→首音频；发送漂移不是服务端积压；模拟缺口不是实测播放器断音；Prometheus计数必须核验双工路径覆盖后才能作token/KV结论。详见[实验执行指导](../docs/minicpmo/stress-guide.md)。
 

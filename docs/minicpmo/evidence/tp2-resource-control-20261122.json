@@ -1,0 +1,1643 @@
+{
+  "date": "2026-11-22",
+  "scope": "previously submitted three-GPU resource control, not part of current fixed-two-GPU campaign or a PD method",
+  "gpu_model": "RTX 3090",
+  "gpu_count": 3,
+  "thinker_tensor_parallel_size": 2,
+  "speech_placement": "Talker and Code2Wav share third GPU",
+  "model_revision": "fb09628e98b1f55d8d5b863e0eccfcdd11bff499",
+  "omni_revision": "5917730a4b02aedb44d374173cdc1b10484ccd52",
+  "config_sha256": "7fd1d8613ac14fe5da46a1730f6e43dc926eb7429c189b3982003c5b48a4ae9c",
+  "window": {
+    "mode": "basic",
+    "high": 8000,
+    "low": 6000
+  },
+  "measurement_script_sha256": "9ac4e74d30e30c829ac15e27cb056f223250d210b01ecf0d1d659671d197385d",
+  "source_media_sha256": "677195d80c31878535619b728a34d974780267460beddfd03531d24a355ce8a5",
+  "stage0_kv_pool_capacity_positions": 148014,
+  "runs": [
+    {
+      "repeat": "repeat-1",
+      "common_input_overlap_s": 245.8166596929077,
+      "engine_reported_counters": [
+        {
+          "metric": "vllm:generation_tokens_total",
+          "stage": "0",
+          "replica": "0",
+          "before": 393.0,
+          "after": 2279.0,
+          "reported_delta": 1886.0,
+          "semantics": "engine-reported; not yet verified as all incremental duplex input/codec positions"
+        },
+        {
+          "metric": "vllm:generation_tokens_total",
+          "stage": "1",
+          "replica": "0",
+          "before": 890.0,
+          "after": 4907.0,
+          "reported_delta": 4017.0,
+          "semantics": "engine-reported; not yet verified as all incremental duplex input/codec positions"
+        },
+        {
+          "metric": "vllm:generation_tokens_total",
+          "stage": "2",
+          "replica": "0",
+          "before": 0.0,
+          "after": 0.0,
+          "reported_delta": 0.0,
+          "semantics": "engine-reported; not yet verified as all incremental duplex input/codec positions"
+        },
+        {
+          "metric": "vllm:num_preemptions_total",
+          "stage": "0",
+          "replica": "0",
+          "before": 0.0,
+          "after": 0.0,
+          "reported_delta": 0.0,
+          "semantics": "engine-reported preemption events; not distinct sessions or input tokens"
+        },
+        {
+          "metric": "vllm:num_preemptions_total",
+          "stage": "1",
+          "replica": "0",
+          "before": 0.0,
+          "after": 0.0,
+          "reported_delta": 0.0,
+          "semantics": "engine-reported preemption events; not distinct sessions or input tokens"
+        },
+        {
+          "metric": "vllm:num_preemptions_total",
+          "stage": "2",
+          "replica": "0",
+          "before": 0.0,
+          "after": 0.0,
+          "reported_delta": 0.0,
+          "semantics": "engine-reported preemption events; not distinct sessions or input tokens"
+        },
+        {
+          "metric": "vllm:prompt_tokens_total",
+          "stage": "0",
+          "replica": "0",
+          "before": 735.0,
+          "after": 1323.0,
+          "reported_delta": 588.0,
+          "semantics": "engine-reported; not yet verified as all incremental duplex input/codec positions"
+        },
+        {
+          "metric": "vllm:prompt_tokens_total",
+          "stage": "1",
+          "replica": "0",
+          "before": 15.0,
+          "after": 27.0,
+          "reported_delta": 12.0,
+          "semantics": "engine-reported; not yet verified as all incremental duplex input/codec positions"
+        },
+        {
+          "metric": "vllm:prompt_tokens_total",
+          "stage": "2",
+          "replica": "0",
+          "before": 50.0,
+          "after": 90.0,
+          "reported_delta": 40.0,
+          "semantics": "engine-reported; not yet verified as all incremental duplex input/codec positions"
+        }
+      ],
+      "sampled_peak_kv_pool_fraction": [
+        {
+          "stage": "0",
+          "replica": "0",
+          "fraction": 0.2132067328441951
+        },
+        {
+          "stage": "1",
+          "replica": "0",
+          "fraction": 0.0038230475150191623
+        }
+      ],
+      "kv_pool_peak_scope": "post-input-barrier samples after stage generation counter increased; idle/pre-run gauges excluded; stages without verified activity omitted",
+      "sessions": [
+        {
+          "session": "session-1",
+          "official_ok": true,
+          "event_counts": {
+            "session.created": 1,
+            "input_audio_buffer.speech_started": 1,
+            "response.listen": 140,
+            "response.created": 19,
+            "conversation.item.added": 20,
+            "conversation.item.created": 20,
+            "response.output_item.added": 19,
+            "response.content_part.added": 19,
+            "response.speak": 19,
+            "response.output_audio.delta": 58,
+            "response.output_audio_transcript.delta": 58,
+            "response.output_audio.done": 19,
+            "response.output_audio_transcript.done": 19,
+            "response.content_part.done": 19,
+            "response.output_item.done": 19,
+            "conversation.item.done": 20,
+            "response.done": 19,
+            "rate_limits.updated": 19,
+            "playback.acknowledged": 57,
+            "input_audio_buffer.speech_stopped": 1,
+            "input_audio_buffer.committed": 1,
+            "session.closed": 1
+          },
+          "sent_audio_packets": 1230,
+          "sent_video_only_packets": 0,
+          "sent_pcm_seconds": 246.0,
+          "sent_wire_video_images": 246,
+          "input_span_s": 245.8180965699721,
+          "sender_relative_drift_ms": {
+            "p50": 0.8658990263938904,
+            "p95": 1.6101819928735495,
+            "max": 3.7562509067470273
+          },
+          "send_block_ms_max": 21.619225153699517,
+          "audio_chunks": 58,
+          "send_block_scope": "whole client wrapper, including local audit I/O; not just transport",
+          "wire_timing_packets": 1230,
+          "wire_sender_relative_drift_ms": {
+            "p50": 0.8842659648564677,
+            "p95": 1.6569209285108855,
+            "max": 4.561279993504197
+          },
+          "wire_send_block_ms_max": 21.31431014277041,
+          "audit_before_send_ms_max": 3.820139914751053,
+          "observable_progress": {
+            "last_sent_source_end_ms": 246000,
+            "last_model_progress_relative_s": 246.1466522619594,
+            "no_progress_at_input_end_s": 0.15491005894728005,
+            "max_no_progress_within_input_span_s": 9.001944223884493,
+            "scope": "observable listen/output/done events, not exact input consumption; input pacing must be validated separately"
+          },
+          "official_collector_work_ms": {
+            "samples": 0,
+            "p95": null,
+            "max": null,
+            "missing_reason": "no callback intervals recorded; legacy log or no callbacks",
+            "scope": "upstream synchronous receive callback including output handling; not model compute"
+          },
+          "audit_writer": {
+            "enqueued": 3148,
+            "written": 3148,
+            "queue_peak_approx": 51,
+            "flush_complete": true
+          },
+          "audio_seconds": 42.8,
+          "responses": 19,
+          "completed_responses": 19,
+          "unterminated_responses": 0,
+          "response_created_to_first_audio_ms": {
+            "p50": 6.443828111514449,
+            "p95": 11.258830083534122
+          },
+          "simulated_playback": [
+            {
+              "startup_buffer_ms": 0,
+              "completed_responses_only": true,
+              "gaps": 21,
+              "total_gap_ms": 34906.22394741513
+            },
+            {
+              "startup_buffer_ms": 100,
+              "completed_responses_only": true,
+              "gaps": 21,
+              "total_gap_ms": 33406.223946018144
+            },
+            {
+              "startup_buffer_ms": 300,
+              "completed_responses_only": true,
+              "gaps": 20,
+              "total_gap_ms": 30562.94607766904
+            }
+          ],
+          "engine_snapshot_count": 159,
+          "error_count": 0,
+          "actual_input_start_from_barrier_s": 0.0018193789292126894,
+          "actual_session_open_from_barrier_s": null,
+          "first_input_to_first_audio_ms": 5719.506122870371,
+          "first_audio_scope": "from first client input, includes question duration; NOT question-end TTFT"
+        },
+        {
+          "session": "session-2",
+          "official_ok": true,
+          "event_counts": {
+            "session.created": 1,
+            "input_audio_buffer.speech_started": 1,
+            "response.listen": 171,
+            "response.created": 20,
+            "conversation.item.added": 21,
+            "conversation.item.created": 21,
+            "response.output_item.added": 20,
+            "response.content_part.added": 20,
+            "response.speak": 20,
+            "response.output_audio.delta": 49,
+            "response.output_audio_transcript.delta": 49,
+            "response.output_audio.done": 20,
+            "response.output_audio_transcript.done": 20,
+            "response.content_part.done": 20,
+            "response.output_item.done": 20,
+            "conversation.item.done": 21,
+            "response.done": 20,
+            "rate_limits.updated": 20,
+            "playback.acknowledged": 60,
+            "input_audio_buffer.speech_stopped": 1,
+            "input_audio_buffer.committed": 1,
+            "session.closed": 1
+          },
+          "sent_audio_packets": 1230,
+          "sent_video_only_packets": 0,
+          "sent_pcm_seconds": 246.0,
+          "sent_wire_video_images": 246,
+          "input_span_s": 245.81789403315634,
+          "sender_relative_drift_ms": {
+            "p50": 0.8614511229154687,
+            "p95": 1.647810032579855,
+            "max": 4.291317192837596
+          },
+          "send_block_ms_max": 25.08751186542213,
+          "audio_chunks": 49,
+          "send_block_scope": "whole client wrapper, including local audit I/O; not just transport",
+          "wire_timing_packets": 1230,
+          "wire_sender_relative_drift_ms": {
+            "p50": 0.8842950221037427,
+            "p95": 1.7301549669355154,
+            "max": 4.327512066808481
+          },
+          "wire_send_block_ms_max": 24.864603066816926,
+          "audit_before_send_ms_max": 2.6934631168842316,
+          "observable_progress": {
+            "last_sent_source_end_ms": 246000,
+            "last_model_progress_relative_s": 245.67110847402364,
+            "no_progress_at_input_end_s": 0.14659876399673522,
+            "max_no_progress_within_input_span_s": 7.8426565860863775,
+            "scope": "observable listen/output/done events, not exact input consumption; input pacing must be validated separately"
+          },
+          "official_collector_work_ms": {
+            "samples": 0,
+            "p95": null,
+            "max": null,
+            "missing_reason": "no callback intervals recorded; legacy log or no callbacks",
+            "scope": "upstream synchronous receive callback including output handling; not model compute"
+          },
+          "audit_writer": {
+            "enqueued": 3183,
+            "written": 3183,
+            "queue_peak_approx": 55,
+            "flush_complete": true
+          },
+          "audio_seconds": 38.480000000000004,
+          "responses": 20,
+          "completed_responses": 20,
+          "unterminated_responses": 0,
+          "response_created_to_first_audio_ms": {
+            "p50": 6.002241047099233,
+            "p95": 11.121924966573715
+          },
+          "simulated_playback": [
+            {
+              "startup_buffer_ms": 0,
+              "completed_responses_only": true,
+              "gaps": 16,
+              "total_gap_ms": 23596.89739672467
+            },
+            {
+              "startup_buffer_ms": 100,
+              "completed_responses_only": true,
+              "gaps": 16,
+              "total_gap_ms": 22396.897395607084
+            },
+            {
+              "startup_buffer_ms": 300,
+              "completed_responses_only": true,
+              "gaps": 16,
+              "total_gap_ms": 19996.897396165878
+            }
+          ],
+          "engine_snapshot_count": 191,
+          "error_count": 0,
+          "actual_input_start_from_barrier_s": 0.0022217528894543648,
+          "actual_session_open_from_barrier_s": null,
+          "first_input_to_first_audio_ms": 5739.805978024378,
+          "first_audio_scope": "from first client input, includes question duration; NOT question-end TTFT"
+        },
+        {
+          "session": "session-3",
+          "official_ok": true,
+          "event_counts": {
+            "session.created": 1,
+            "input_audio_buffer.speech_started": 1,
+            "response.listen": 145,
+            "response.created": 20,
+            "conversation.item.added": 21,
+            "conversation.item.created": 21,
+            "response.output_item.added": 20,
+            "response.content_part.added": 20,
+            "response.speak": 20,
+            "response.output_audio.delta": 53,
+            "response.output_audio_transcript.delta": 53,
+            "response.output_audio.done": 20,
+            "response.output_audio_transcript.done": 20,
+            "response.content_part.done": 20,
+            "response.output_item.done": 20,
+            "conversation.item.done": 21,
+            "response.done": 20,
+            "rate_limits.updated": 20,
+            "playback.acknowledged": 60,
+            "input_audio_buffer.speech_stopped": 1,
+            "input_audio_buffer.committed": 1,
+            "session.closed": 1
+          },
+          "sent_audio_packets": 1230,
+          "sent_video_only_packets": 0,
+          "sent_pcm_seconds": 246.0,
+          "sent_wire_video_images": 246,
+          "input_span_s": 245.81818988802843,
+          "sender_relative_drift_ms": {
+            "p50": 0.872192066168509,
+            "p95": 1.4178588986339946,
+            "max": 5.552593013270268
+          },
+          "send_block_ms_max": 24.519111961126328,
+          "audio_chunks": 53,
+          "send_block_scope": "whole client wrapper, including local audit I/O; not just transport",
+          "wire_timing_packets": 1230,
+          "wire_sender_relative_drift_ms": {
+            "p50": 0.9095510002339324,
+            "p95": 1.4779638964625974,
+            "max": 5.553639819844136
+          },
+          "wire_send_block_ms_max": 24.298917036503553,
+          "audit_before_send_ms_max": 3.4637858625501394,
+          "observable_progress": {
+            "last_sent_source_end_ms": 246000,
+            "last_model_progress_relative_s": 240.9551658858545,
+            "no_progress_at_input_end_s": 4.862833398161456,
+            "max_no_progress_within_input_span_s": 8.36789735686034,
+            "scope": "observable listen/output/done events, not exact input consumption; input pacing must be validated separately"
+          },
+          "official_collector_work_ms": {
+            "samples": 0,
+            "p95": null,
+            "max": null,
+            "missing_reason": "no callback intervals recorded; legacy log or no callbacks",
+            "scope": "upstream synchronous receive callback including output handling; not model compute"
+          },
+          "audit_writer": {
+            "enqueued": 3165,
+            "written": 3165,
+            "queue_peak_approx": 51,
+            "flush_complete": true
+          },
+          "audio_seconds": 37.36000000000001,
+          "responses": 20,
+          "completed_responses": 20,
+          "unterminated_responses": 0,
+          "response_created_to_first_audio_ms": {
+            "p50": 6.6866399720311165,
+            "p95": 9.554238989949226
+          },
+          "simulated_playback": [
+            {
+              "startup_buffer_ms": 0,
+              "completed_responses_only": true,
+              "gaps": 25,
+              "total_gap_ms": 41597.42135182023
+            },
+            {
+              "startup_buffer_ms": 100,
+              "completed_responses_only": true,
+              "gaps": 24,
+              "total_gap_ms": 39745.719923172146
+            },
+            {
+              "startup_buffer_ms": 300,
+              "completed_responses_only": true,
+              "gaps": 24,
+              "total_gap_ms": 36145.71992401034
+            }
+          ],
+          "engine_snapshot_count": 165,
+          "error_count": 0,
+          "actual_input_start_from_barrier_s": 0.0019776399713009596,
+          "actual_session_open_from_barrier_s": null,
+          "first_input_to_first_audio_ms": 5624.885187949985,
+          "first_audio_scope": "from first client input, includes question duration; NOT question-end TTFT"
+        },
+        {
+          "session": "session-4",
+          "official_ok": true,
+          "event_counts": {
+            "session.created": 1,
+            "input_audio_buffer.speech_started": 1,
+            "response.listen": 139,
+            "response.created": 20,
+            "conversation.item.added": 21,
+            "conversation.item.created": 21,
+            "response.output_item.added": 20,
+            "response.content_part.added": 20,
+            "response.speak": 20,
+            "response.output_audio.delta": 59,
+            "response.output_audio_transcript.delta": 59,
+            "response.output_audio.done": 20,
+            "response.output_audio_transcript.done": 20,
+            "response.content_part.done": 20,
+            "response.output_item.done": 20,
+            "conversation.item.done": 21,
+            "response.done": 20,
+            "rate_limits.updated": 20,
+            "playback.acknowledged": 60,
+            "input_audio_buffer.speech_stopped": 1,
+            "input_audio_buffer.committed": 1,
+            "session.closed": 1
+          },
+          "sent_audio_packets": 1230,
+          "sent_video_only_packets": 0,
+          "sent_pcm_seconds": 246.0,
+          "sent_wire_video_images": 246,
+          "input_span_s": 245.81720132683404,
+          "sender_relative_drift_ms": {
+            "p50": 0.8596738334745169,
+            "p95": 1.4418638777016213,
+            "max": 4.243825003506174
+          },
+          "send_block_ms_max": 24.484962923452258,
+          "audio_chunks": 59,
+          "send_block_scope": "whole client wrapper, including local audit I/O; not just transport",
+          "wire_timing_packets": 1230,
+          "wire_sender_relative_drift_ms": {
+            "p50": 0.50592194311605,
+            "p95": 1.1078929994283726,
+            "max": 3.839763952420583
+          },
+          "wire_send_block_ms_max": 24.234015960246325,
+          "audit_before_send_ms_max": 0.5281639751046896,
+          "observable_progress": {
+            "last_sent_source_end_ms": 246000,
+            "last_model_progress_relative_s": 240.25967571185902,
+            "no_progress_at_input_end_s": 5.556958930101246,
+            "max_no_progress_within_input_span_s": 8.375871114898473,
+            "scope": "observable listen/output/done events, not exact input consumption; input pacing must be validated separately"
+          },
+          "official_collector_work_ms": {
+            "samples": 0,
+            "p95": null,
+            "max": null,
+            "missing_reason": "no callback intervals recorded; legacy log or no callbacks",
+            "scope": "upstream synchronous receive callback including output handling; not model compute"
+          },
+          "audit_writer": {
+            "enqueued": 3171,
+            "written": 3171,
+            "queue_peak_approx": 51,
+            "flush_complete": true
+          },
+          "audio_seconds": 43.239999999999995,
+          "responses": 20,
+          "completed_responses": 20,
+          "unterminated_responses": 0,
+          "response_created_to_first_audio_ms": {
+            "p50": 4.66725998558104,
+            "p95": 8.652443997561932
+          },
+          "simulated_playback": [
+            {
+              "startup_buffer_ms": 0,
+              "completed_responses_only": true,
+              "gaps": 26,
+              "total_gap_ms": 44364.17129379697
+            },
+            {
+              "startup_buffer_ms": 100,
+              "completed_responses_only": true,
+              "gaps": 26,
+              "total_gap_ms": 42564.17129212059
+            },
+            {
+              "startup_buffer_ms": 300,
+              "completed_responses_only": true,
+              "gaps": 26,
+              "total_gap_ms": 38964.17129295878
+            }
+          ],
+          "engine_snapshot_count": 159,
+          "error_count": 0,
+          "actual_input_start_from_barrier_s": 0.0036314779426902533,
+          "actual_session_open_from_barrier_s": null,
+          "first_input_to_first_audio_ms": 5734.526094049215,
+          "first_audio_scope": "from first client input, includes question duration; NOT question-end TTFT"
+        }
+      ],
+      "protocol_ok": true,
+      "complete_response_drain": true,
+      "input_clock_valid_at_200ms": true,
+      "sampled_gpu_peaks": {
+        "thinker_shard_0": {
+          "sampled_peak_memory_mib": 22372.0,
+          "sampled_peak_utilization_percent": 97.0
+        },
+        "thinker_shard_1": {
+          "sampled_peak_memory_mib": 22372.0,
+          "sampled_peak_utilization_percent": 100.0
+        },
+        "speech_gpu": {
+          "sampled_peak_memory_mib": 17335.0,
+          "sampled_peak_utilization_percent": 61.0
+        }
+      }
+    },
+    {
+      "repeat": "repeat-2",
+      "common_input_overlap_s": 245.8117871079594,
+      "engine_reported_counters": [
+        {
+          "metric": "vllm:generation_tokens_total",
+          "stage": "0",
+          "replica": "0",
+          "before": 2279.0,
+          "after": 4336.0,
+          "reported_delta": 2057.0,
+          "semantics": "engine-reported; not yet verified as all incremental duplex input/codec positions"
+        },
+        {
+          "metric": "vllm:generation_tokens_total",
+          "stage": "1",
+          "replica": "0",
+          "before": 4907.0,
+          "after": 9828.0,
+          "reported_delta": 4921.0,
+          "semantics": "engine-reported; not yet verified as all incremental duplex input/codec positions"
+        },
+        {
+          "metric": "vllm:generation_tokens_total",
+          "stage": "2",
+          "replica": "0",
+          "before": 0.0,
+          "after": 0.0,
+          "reported_delta": 0.0,
+          "semantics": "engine-reported; not yet verified as all incremental duplex input/codec positions"
+        },
+        {
+          "metric": "vllm:num_preemptions_total",
+          "stage": "0",
+          "replica": "0",
+          "before": 0.0,
+          "after": 0.0,
+          "reported_delta": 0.0,
+          "semantics": "engine-reported preemption events; not distinct sessions or input tokens"
+        },
+        {
+          "metric": "vllm:num_preemptions_total",
+          "stage": "1",
+          "replica": "0",
+          "before": 0.0,
+          "after": 0.0,
+          "reported_delta": 0.0,
+          "semantics": "engine-reported preemption events; not distinct sessions or input tokens"
+        },
+        {
+          "metric": "vllm:num_preemptions_total",
+          "stage": "2",
+          "replica": "0",
+          "before": 0.0,
+          "after": 0.0,
+          "reported_delta": 0.0,
+          "semantics": "engine-reported preemption events; not distinct sessions or input tokens"
+        },
+        {
+          "metric": "vllm:prompt_tokens_total",
+          "stage": "0",
+          "replica": "0",
+          "before": 1323.0,
+          "after": 1911.0,
+          "reported_delta": 588.0,
+          "semantics": "engine-reported; not yet verified as all incremental duplex input/codec positions"
+        },
+        {
+          "metric": "vllm:prompt_tokens_total",
+          "stage": "1",
+          "replica": "0",
+          "before": 27.0,
+          "after": 39.0,
+          "reported_delta": 12.0,
+          "semantics": "engine-reported; not yet verified as all incremental duplex input/codec positions"
+        },
+        {
+          "metric": "vllm:prompt_tokens_total",
+          "stage": "2",
+          "replica": "0",
+          "before": 90.0,
+          "after": 130.0,
+          "reported_delta": 40.0,
+          "semantics": "engine-reported; not yet verified as all incremental duplex input/codec positions"
+        }
+      ],
+      "sampled_peak_kv_pool_fraction": [
+        {
+          "stage": "0",
+          "replica": "0",
+          "fraction": 0.21374622356495465
+        },
+        {
+          "stage": "1",
+          "replica": "0",
+          "fraction": 0.004733296923357
+        }
+      ],
+      "kv_pool_peak_scope": "post-input-barrier samples after stage generation counter increased; idle/pre-run gauges excluded; stages without verified activity omitted",
+      "sessions": [
+        {
+          "session": "session-1",
+          "official_ok": true,
+          "event_counts": {
+            "session.created": 1,
+            "input_audio_buffer.speech_started": 1,
+            "response.listen": 152,
+            "response.created": 20,
+            "conversation.item.added": 21,
+            "conversation.item.created": 21,
+            "response.output_item.added": 20,
+            "response.content_part.added": 20,
+            "response.speak": 20,
+            "response.output_audio.delta": 51,
+            "response.output_audio_transcript.delta": 51,
+            "response.output_audio.done": 20,
+            "response.output_audio_transcript.done": 20,
+            "response.content_part.done": 20,
+            "response.output_item.done": 20,
+            "conversation.item.done": 21,
+            "response.done": 20,
+            "rate_limits.updated": 20,
+            "playback.acknowledged": 60,
+            "input_audio_buffer.speech_stopped": 1,
+            "input_audio_buffer.committed": 1,
+            "session.closed": 1
+          },
+          "sent_audio_packets": 1230,
+          "sent_video_only_packets": 0,
+          "sent_pcm_seconds": 246.0,
+          "sent_wire_video_images": 246,
+          "input_span_s": 245.81845298502594,
+          "sender_relative_drift_ms": {
+            "p50": 0.9220829233527184,
+            "p95": 2.8471879660969535,
+            "max": 8413.621590007097
+          },
+          "send_block_ms_max": 23.365681990981102,
+          "audio_chunks": 51,
+          "send_block_scope": "whole client wrapper, including local audit I/O; not just transport",
+          "wire_timing_packets": 1230,
+          "wire_sender_relative_drift_ms": {
+            "p50": 0.9554158430660209,
+            "p95": 2.8126899618712287,
+            "max": 8413.548597833142
+          },
+          "wire_send_block_ms_max": 23.131623165681958,
+          "audit_before_send_ms_max": 0.40795886889100075,
+          "observable_progress": {
+            "last_sent_source_end_ms": 246000,
+            "last_model_progress_relative_s": 245.6809469780419,
+            "no_progress_at_input_end_s": 0.13732586591504514,
+            "max_no_progress_within_input_span_s": 8.5925498357974,
+            "scope": "observable listen/output/done events, not exact input consumption; input pacing must be validated separately"
+          },
+          "official_collector_work_ms": {
+            "samples": 0,
+            "p95": null,
+            "max": null,
+            "missing_reason": "no callback intervals recorded; legacy log or no callbacks",
+            "scope": "upstream synchronous receive callback including output handling; not model compute"
+          },
+          "audit_writer": {
+            "enqueued": 3168,
+            "written": 3168,
+            "queue_peak_approx": 54,
+            "flush_complete": true
+          },
+          "audio_seconds": 37.32,
+          "responses": 20,
+          "completed_responses": 20,
+          "unterminated_responses": 0,
+          "response_created_to_first_audio_ms": {
+            "p50": 6.814233958721161,
+            "p95": 9.959473041817546
+          },
+          "simulated_playback": [
+            {
+              "startup_buffer_ms": 0,
+              "completed_responses_only": true,
+              "gaps": 18,
+              "total_gap_ms": 33924.66504336335
+            },
+            {
+              "startup_buffer_ms": 100,
+              "completed_responses_only": true,
+              "gaps": 18,
+              "total_gap_ms": 32524.665042059496
+            },
+            {
+              "startup_buffer_ms": 300,
+              "completed_responses_only": true,
+              "gaps": 17,
+              "total_gap_ms": 29845.47407273203
+            }
+          ],
+          "engine_snapshot_count": 172,
+          "error_count": 0,
+          "actual_input_start_from_barrier_s": 0.0020981619600206614,
+          "actual_session_open_from_barrier_s": null,
+          "first_input_to_first_audio_ms": 6004.421774996445,
+          "first_audio_scope": "from first client input, includes question duration; NOT question-end TTFT"
+        },
+        {
+          "session": "session-2",
+          "official_ok": true,
+          "event_counts": {
+            "session.created": 1,
+            "input_audio_buffer.speech_started": 1,
+            "response.listen": 120,
+            "response.created": 17,
+            "conversation.item.added": 18,
+            "conversation.item.created": 18,
+            "response.output_item.added": 17,
+            "response.content_part.added": 17,
+            "response.speak": 17,
+            "response.output_audio.delta": 59,
+            "response.output_audio_transcript.delta": 59,
+            "response.output_audio.done": 17,
+            "response.output_audio_transcript.done": 17,
+            "response.content_part.done": 17,
+            "response.output_item.done": 17,
+            "conversation.item.done": 18,
+            "response.done": 17,
+            "rate_limits.updated": 17,
+            "playback.acknowledged": 51,
+            "input_audio_buffer.speech_stopped": 1,
+            "input_audio_buffer.committed": 1,
+            "session.closed": 1
+          },
+          "sent_audio_packets": 1230,
+          "sent_video_only_packets": 0,
+          "sent_pcm_seconds": 246.0,
+          "sent_wire_video_images": 246,
+          "input_span_s": 245.81232906109653,
+          "sender_relative_drift_ms": {
+            "p50": 0.8691491559140729,
+            "p95": 77.86069805733575,
+            "max": 8611.934040021151
+          },
+          "send_block_ms_max": 23.061148123815656,
+          "audio_chunks": 59,
+          "send_block_scope": "whole client wrapper, including local audit I/O; not just transport",
+          "wire_timing_packets": 1230,
+          "wire_sender_relative_drift_ms": {
+            "p50": 0.8608560077902894,
+            "p95": 77.7356801088871,
+            "max": 8611.85985202901
+          },
+          "wire_send_block_ms_max": 22.800762904807925,
+          "audit_before_send_ms_max": 0.5659321323037148,
+          "observable_progress": {
+            "last_sent_source_end_ms": 246000,
+            "last_model_progress_relative_s": 241.5915087480098,
+            "no_progress_at_input_end_s": 4.220587474992499,
+            "max_no_progress_within_input_span_s": 11.012497970135882,
+            "scope": "observable listen/output/done events, not exact input consumption; input pacing must be validated separately"
+          },
+          "official_collector_work_ms": {
+            "samples": 0,
+            "p95": null,
+            "max": null,
+            "missing_reason": "no callback intervals recorded; legacy log or no callbacks",
+            "scope": "upstream synchronous receive callback including output handling; not model compute"
+          },
+          "audit_writer": {
+            "enqueued": 3086,
+            "written": 3086,
+            "queue_peak_approx": 53,
+            "flush_complete": true
+          },
+          "audio_seconds": 47.63999999999999,
+          "responses": 17,
+          "completed_responses": 17,
+          "unterminated_responses": 0,
+          "response_created_to_first_audio_ms": {
+            "p50": 6.9633531384170055,
+            "p95": 10.14479692094028
+          },
+          "simulated_playback": [
+            {
+              "startup_buffer_ms": 0,
+              "completed_responses_only": true,
+              "gaps": 29,
+              "total_gap_ms": 59800.172003917396
+            },
+            {
+              "startup_buffer_ms": 100,
+              "completed_responses_only": true,
+              "gaps": 28,
+              "total_gap_ms": 58393.14890955575
+            },
+            {
+              "startup_buffer_ms": 300,
+              "completed_responses_only": true,
+              "gaps": 26,
+              "total_gap_ms": 55741.9316181913
+            }
+          ],
+          "engine_snapshot_count": 137,
+          "error_count": 0,
+          "actual_input_start_from_barrier_s": 0.0024366287980228662,
+          "actual_session_open_from_barrier_s": null,
+          "first_input_to_first_audio_ms": 6010.7439120765775,
+          "first_audio_scope": "from first client input, includes question duration; NOT question-end TTFT"
+        },
+        {
+          "session": "session-3",
+          "official_ok": true,
+          "event_counts": {
+            "session.created": 1,
+            "input_audio_buffer.speech_started": 1,
+            "response.listen": 111,
+            "response.created": 20,
+            "conversation.item.added": 21,
+            "conversation.item.created": 21,
+            "response.output_item.added": 20,
+            "response.content_part.added": 20,
+            "response.speak": 20,
+            "response.output_audio.delta": 76,
+            "response.output_audio_transcript.delta": 76,
+            "response.output_audio.done": 20,
+            "response.output_audio_transcript.done": 20,
+            "response.content_part.done": 20,
+            "response.output_item.done": 20,
+            "conversation.item.done": 21,
+            "response.done": 20,
+            "rate_limits.updated": 20,
+            "playback.acknowledged": 60,
+            "input_audio_buffer.speech_stopped": 1,
+            "input_audio_buffer.committed": 1,
+            "session.closed": 1
+          },
+          "sent_audio_packets": 1230,
+          "sent_video_only_packets": 0,
+          "sent_pcm_seconds": 246.0,
+          "sent_wire_video_images": 246,
+          "input_span_s": 245.814440832939,
+          "sender_relative_drift_ms": {
+            "p50": 0.8673329837591837,
+            "p95": 1.9254029262754102,
+            "max": 7611.426539998501
+          },
+          "send_block_ms_max": 26.295359013602138,
+          "audio_chunks": 76,
+          "send_block_scope": "whole client wrapper, including local audit I/O; not just transport",
+          "wire_timing_packets": 1230,
+          "wire_sender_relative_drift_ms": {
+            "p50": 0.8970840834088278,
+            "p95": 1.9583979621415892,
+            "max": 7611.3541028928
+          },
+          "wire_send_block_ms_max": 26.00826183333993,
+          "audit_before_send_ms_max": 1.7199108842760324,
+          "observable_progress": {
+            "last_sent_source_end_ms": 246000,
+            "last_model_progress_relative_s": 249.35017975606024,
+            "no_progress_at_input_end_s": 0.10287666111253202,
+            "max_no_progress_within_input_span_s": 9.161032512784004,
+            "scope": "observable listen/output/done events, not exact input consumption; input pacing must be validated separately"
+          },
+          "official_collector_work_ms": {
+            "samples": 0,
+            "p95": null,
+            "max": null,
+            "missing_reason": "no callback intervals recorded; legacy log or no callbacks",
+            "scope": "upstream synchronous receive callback including output handling; not model compute"
+          },
+          "audit_writer": {
+            "enqueued": 3177,
+            "written": 3177,
+            "queue_peak_approx": 53,
+            "flush_complete": true
+          },
+          "audio_seconds": 58.4,
+          "responses": 20,
+          "completed_responses": 20,
+          "unterminated_responses": 0,
+          "response_created_to_first_audio_ms": {
+            "p50": 6.058396073058248,
+            "p95": 11.593437986448407
+          },
+          "simulated_playback": [
+            {
+              "startup_buffer_ms": 0,
+              "completed_responses_only": true,
+              "gaps": 34,
+              "total_gap_ms": 67905.28089157306
+            },
+            {
+              "startup_buffer_ms": 100,
+              "completed_responses_only": true,
+              "gaps": 34,
+              "total_gap_ms": 66005.28088980354
+            },
+            {
+              "startup_buffer_ms": 300,
+              "completed_responses_only": true,
+              "gaps": 33,
+              "total_gap_ms": 62211.82630280964
+            }
+          ],
+          "engine_snapshot_count": 131,
+          "error_count": 0,
+          "actual_input_start_from_barrier_s": 0.0029241458978503942,
+          "actual_session_open_from_barrier_s": null,
+          "first_input_to_first_audio_ms": 6006.068286951631,
+          "first_audio_scope": "from first client input, includes question duration; NOT question-end TTFT"
+        },
+        {
+          "session": "session-4",
+          "official_ok": true,
+          "event_counts": {
+            "session.created": 1,
+            "input_audio_buffer.speech_started": 1,
+            "response.listen": 117,
+            "response.created": 20,
+            "conversation.item.added": 21,
+            "conversation.item.created": 21,
+            "response.output_item.added": 20,
+            "response.content_part.added": 20,
+            "response.speak": 20,
+            "response.output_audio.delta": 68,
+            "response.output_audio_transcript.delta": 68,
+            "response.output_audio.done": 20,
+            "response.output_audio_transcript.done": 20,
+            "response.content_part.done": 20,
+            "response.output_item.done": 20,
+            "conversation.item.done": 21,
+            "response.done": 20,
+            "rate_limits.updated": 20,
+            "playback.acknowledged": 60,
+            "input_audio_buffer.speech_stopped": 1,
+            "input_audio_buffer.committed": 1,
+            "session.closed": 1
+          },
+          "sent_audio_packets": 1230,
+          "sent_video_only_packets": 0,
+          "sent_pcm_seconds": 246.0,
+          "sent_wire_video_images": 246,
+          "input_span_s": 245.81630338705145,
+          "sender_relative_drift_ms": {
+            "p50": 0.8817220572439055,
+            "p95": 3.0426719691547532,
+            "max": 8611.90499602817
+          },
+          "send_block_ms_max": 22.22019317559898,
+          "audio_chunks": 68,
+          "send_block_scope": "whole client wrapper, including local audit I/O; not just transport",
+          "wire_timing_packets": 1230,
+          "wire_sender_relative_drift_ms": {
+            "p50": 0.9504959918444911,
+            "p95": 3.1573300249760905,
+            "max": 8611.868237890303
+          },
+          "wire_send_block_ms_max": 21.949250949546695,
+          "audit_before_send_ms_max": 2.511336002498865,
+          "observable_progress": {
+            "last_sent_source_end_ms": 246000,
+            "last_model_progress_relative_s": 248.26578870392404,
+            "no_progress_at_input_end_s": 0.09686515596695244,
+            "max_no_progress_within_input_span_s": 8.610161597840488,
+            "scope": "observable listen/output/done events, not exact input consumption; input pacing must be validated separately"
+          },
+          "official_collector_work_ms": {
+            "samples": 0,
+            "p95": null,
+            "max": null,
+            "missing_reason": "no callback intervals recorded; legacy log or no callbacks",
+            "scope": "upstream synchronous receive callback including output handling; not model compute"
+          },
+          "audit_writer": {
+            "enqueued": 3167,
+            "written": 3167,
+            "queue_peak_approx": 53,
+            "flush_complete": true
+          },
+          "audio_seconds": 52.76000000000001,
+          "responses": 20,
+          "completed_responses": 20,
+          "unterminated_responses": 0,
+          "response_created_to_first_audio_ms": {
+            "p50": 6.974535062909126,
+            "p95": 10.27956698089838
+          },
+          "simulated_playback": [
+            {
+              "startup_buffer_ms": 0,
+              "completed_responses_only": true,
+              "gaps": 31,
+              "total_gap_ms": 57473.05062646046
+            },
+            {
+              "startup_buffer_ms": 100,
+              "completed_responses_only": true,
+              "gaps": 31,
+              "total_gap_ms": 55673.05062478408
+            },
+            {
+              "startup_buffer_ms": 300,
+              "completed_responses_only": true,
+              "gaps": 30,
+              "total_gap_ms": 52220.40364588611
+            }
+          ],
+          "engine_snapshot_count": 137,
+          "error_count": 0,
+          "actual_input_start_from_barrier_s": 0.0023804449010640383,
+          "actual_session_open_from_barrier_s": null,
+          "first_input_to_first_audio_ms": 5994.673043023795,
+          "first_audio_scope": "from first client input, includes question duration; NOT question-end TTFT"
+        }
+      ],
+      "protocol_ok": true,
+      "complete_response_drain": true,
+      "input_clock_valid_at_200ms": false,
+      "sampled_gpu_peaks": {
+        "thinker_shard_0": {
+          "sampled_peak_memory_mib": 22382.0,
+          "sampled_peak_utilization_percent": 100.0
+        },
+        "thinker_shard_1": {
+          "sampled_peak_memory_mib": 22384.0,
+          "sampled_peak_utilization_percent": 100.0
+        },
+        "speech_gpu": {
+          "sampled_peak_memory_mib": 17337.0,
+          "sampled_peak_utilization_percent": 55.0
+        }
+      }
+    },
+    {
+      "repeat": "repeat-3",
+      "common_input_overlap_s": 245.81320925801992,
+      "engine_reported_counters": [
+        {
+          "metric": "vllm:generation_tokens_total",
+          "stage": "0",
+          "replica": "0",
+          "before": 4336.0,
+          "after": 6296.0,
+          "reported_delta": 1960.0,
+          "semantics": "engine-reported; not yet verified as all incremental duplex input/codec positions"
+        },
+        {
+          "metric": "vllm:generation_tokens_total",
+          "stage": "1",
+          "replica": "0",
+          "before": 9828.0,
+          "after": 14409.0,
+          "reported_delta": 4581.0,
+          "semantics": "engine-reported; not yet verified as all incremental duplex input/codec positions"
+        },
+        {
+          "metric": "vllm:generation_tokens_total",
+          "stage": "2",
+          "replica": "0",
+          "before": 0.0,
+          "after": 0.0,
+          "reported_delta": 0.0,
+          "semantics": "engine-reported; not yet verified as all incremental duplex input/codec positions"
+        },
+        {
+          "metric": "vllm:num_preemptions_total",
+          "stage": "0",
+          "replica": "0",
+          "before": 0.0,
+          "after": 0.0,
+          "reported_delta": 0.0,
+          "semantics": "engine-reported preemption events; not distinct sessions or input tokens"
+        },
+        {
+          "metric": "vllm:num_preemptions_total",
+          "stage": "1",
+          "replica": "0",
+          "before": 0.0,
+          "after": 0.0,
+          "reported_delta": 0.0,
+          "semantics": "engine-reported preemption events; not distinct sessions or input tokens"
+        },
+        {
+          "metric": "vllm:num_preemptions_total",
+          "stage": "2",
+          "replica": "0",
+          "before": 0.0,
+          "after": 0.0,
+          "reported_delta": 0.0,
+          "semantics": "engine-reported preemption events; not distinct sessions or input tokens"
+        },
+        {
+          "metric": "vllm:prompt_tokens_total",
+          "stage": "0",
+          "replica": "0",
+          "before": 1911.0,
+          "after": 2499.0,
+          "reported_delta": 588.0,
+          "semantics": "engine-reported; not yet verified as all incremental duplex input/codec positions"
+        },
+        {
+          "metric": "vllm:prompt_tokens_total",
+          "stage": "1",
+          "replica": "0",
+          "before": 39.0,
+          "after": 51.0,
+          "reported_delta": 12.0,
+          "semantics": "engine-reported; not yet verified as all incremental duplex input/codec positions"
+        },
+        {
+          "metric": "vllm:prompt_tokens_total",
+          "stage": "2",
+          "replica": "0",
+          "before": 130.0,
+          "after": 170.0,
+          "reported_delta": 40.0,
+          "semantics": "engine-reported; not yet verified as all incremental duplex input/codec positions"
+        }
+      ],
+      "sampled_peak_kv_pool_fraction": [
+        {
+          "stage": "0",
+          "replica": "0",
+          "fraction": 0.21353042727665084
+        },
+        {
+          "stage": "1",
+          "replica": "0",
+          "fraction": 0.00455124704168941
+        }
+      ],
+      "kv_pool_peak_scope": "post-input-barrier samples after stage generation counter increased; idle/pre-run gauges excluded; stages without verified activity omitted",
+      "sessions": [
+        {
+          "session": "session-1",
+          "official_ok": true,
+          "event_counts": {
+            "session.created": 1,
+            "input_audio_buffer.speech_started": 1,
+            "response.listen": 134,
+            "response.created": 21,
+            "conversation.item.added": 22,
+            "conversation.item.created": 22,
+            "response.output_item.added": 21,
+            "response.content_part.added": 21,
+            "response.speak": 21,
+            "response.output_audio.delta": 62,
+            "response.output_audio_transcript.delta": 62,
+            "response.output_audio.done": 21,
+            "response.output_audio_transcript.done": 21,
+            "response.content_part.done": 21,
+            "response.output_item.done": 21,
+            "conversation.item.done": 22,
+            "response.done": 21,
+            "rate_limits.updated": 21,
+            "playback.acknowledged": 63,
+            "input_audio_buffer.speech_stopped": 1,
+            "input_audio_buffer.committed": 1,
+            "session.closed": 1
+          },
+          "sent_audio_packets": 1230,
+          "sent_video_only_packets": 0,
+          "sent_pcm_seconds": 246.0,
+          "sent_wire_video_images": 246,
+          "input_span_s": 245.81643612496555,
+          "sender_relative_drift_ms": {
+            "p50": 0.8795449975878,
+            "p95": 1.4913219027228308,
+            "max": 5.710393982008455
+          },
+          "send_block_ms_max": 24.304762948304415,
+          "audio_chunks": 62,
+          "send_block_scope": "whole client wrapper, including local audit I/O; not just transport",
+          "wire_timing_packets": 1230,
+          "wire_sender_relative_drift_ms": {
+            "p50": 0.9115219581872225,
+            "p95": 1.5330198686456242,
+            "max": 5.683530913666246
+          },
+          "wire_send_block_ms_max": 24.046750972047448,
+          "audit_before_send_ms_max": 0.2935898955911398,
+          "observable_progress": {
+            "last_sent_source_end_ms": 246000,
+            "last_model_progress_relative_s": 245.28631596686319,
+            "no_progress_at_input_end_s": 0.5299483931157738,
+            "max_no_progress_within_input_span_s": 8.700146392919123,
+            "scope": "observable listen/output/done events, not exact input consumption; input pacing must be validated separately"
+          },
+          "official_collector_work_ms": {
+            "samples": 0,
+            "p95": null,
+            "max": null,
+            "missing_reason": "no callback intervals recorded; legacy log or no callbacks",
+            "scope": "upstream synchronous receive callback including output handling; not model compute"
+          },
+          "audit_writer": {
+            "enqueued": 3194,
+            "written": 3194,
+            "queue_peak_approx": 10,
+            "flush_complete": true
+          },
+          "audio_seconds": 45.28000000000001,
+          "responses": 21,
+          "completed_responses": 21,
+          "unterminated_responses": 0,
+          "response_created_to_first_audio_ms": {
+            "p50": 8.13646987080574,
+            "p95": 10.479027172550559
+          },
+          "simulated_playback": [
+            {
+              "startup_buffer_ms": 0,
+              "completed_responses_only": true,
+              "gaps": 25,
+              "total_gap_ms": 34800.879610702395
+            },
+            {
+              "startup_buffer_ms": 100,
+              "completed_responses_only": true,
+              "gaps": 25,
+              "total_gap_ms": 32800.87960883975
+            },
+            {
+              "startup_buffer_ms": 300,
+              "completed_responses_only": true,
+              "gaps": 24,
+              "total_gap_ms": 28870.077200001106
+            }
+          ],
+          "engine_snapshot_count": 155,
+          "error_count": 0,
+          "actual_input_start_from_barrier_s": 0.002767193131148815,
+          "actual_session_open_from_barrier_s": null,
+          "first_input_to_first_audio_ms": 5800.304759060964,
+          "first_audio_scope": "from first client input, includes question duration; NOT question-end TTFT"
+        },
+        {
+          "session": "session-2",
+          "official_ok": true,
+          "event_counts": {
+            "session.created": 1,
+            "input_audio_buffer.speech_started": 1,
+            "response.listen": 159,
+            "response.created": 20,
+            "conversation.item.added": 21,
+            "conversation.item.created": 21,
+            "response.output_item.added": 20,
+            "response.content_part.added": 20,
+            "response.speak": 20,
+            "response.output_audio.delta": 51,
+            "response.output_audio_transcript.delta": 51,
+            "response.output_audio.done": 20,
+            "response.output_audio_transcript.done": 20,
+            "response.content_part.done": 20,
+            "response.output_item.done": 20,
+            "conversation.item.done": 21,
+            "response.done": 20,
+            "rate_limits.updated": 20,
+            "playback.acknowledged": 60,
+            "input_audio_buffer.speech_stopped": 1,
+            "input_audio_buffer.committed": 1,
+            "session.closed": 1
+          },
+          "sent_audio_packets": 1230,
+          "sent_video_only_packets": 0,
+          "sent_pcm_seconds": 246.0,
+          "sent_wire_video_images": 246,
+          "input_span_s": 245.81729258899577,
+          "sender_relative_drift_ms": {
+            "p50": 0.8605750277581592,
+            "p95": 1.5568211674690247,
+            "max": 4.642004007473943
+          },
+          "send_block_ms_max": 22.443491965532303,
+          "audio_chunks": 51,
+          "send_block_scope": "whole client wrapper, including local audit I/O; not just transport",
+          "wire_timing_packets": 1230,
+          "wire_sender_relative_drift_ms": {
+            "p50": 0.8801259100437164,
+            "p95": 1.58641799352921,
+            "max": 4.599179932847974
+          },
+          "wire_send_block_ms_max": 22.190671181306243,
+          "audit_before_send_ms_max": 0.39262091740965843,
+          "observable_progress": {
+            "last_sent_source_end_ms": 246000,
+            "last_model_progress_relative_s": 245.1051599078346,
+            "no_progress_at_input_end_s": 0.7119521901477128,
+            "max_no_progress_within_input_span_s": 8.096547376131639,
+            "scope": "observable listen/output/done events, not exact input consumption; input pacing must be validated separately"
+          },
+          "official_collector_work_ms": {
+            "samples": 0,
+            "p95": null,
+            "max": null,
+            "missing_reason": "no callback intervals recorded; legacy log or no callbacks",
+            "scope": "upstream synchronous receive callback including output handling; not model compute"
+          },
+          "audit_writer": {
+            "enqueued": 3175,
+            "written": 3175,
+            "queue_peak_approx": 12,
+            "flush_complete": true
+          },
+          "audio_seconds": 38.44,
+          "responses": 20,
+          "completed_responses": 20,
+          "unterminated_responses": 0,
+          "response_created_to_first_audio_ms": {
+            "p50": 7.509857881814241,
+            "p95": 11.264314176514745
+          },
+          "simulated_playback": [
+            {
+              "startup_buffer_ms": 0,
+              "completed_responses_only": true,
+              "gaps": 15,
+              "total_gap_ms": 19726.097954669967
+            },
+            {
+              "startup_buffer_ms": 100,
+              "completed_responses_only": true,
+              "gaps": 15,
+              "total_gap_ms": 18526.09795355238
+            },
+            {
+              "startup_buffer_ms": 300,
+              "completed_responses_only": true,
+              "gaps": 15,
+              "total_gap_ms": 16126.097954111174
+            }
+          ],
+          "engine_snapshot_count": 179,
+          "error_count": 0,
+          "actual_input_start_from_barrier_s": 0.0017746621742844582,
+          "actual_session_open_from_barrier_s": null,
+          "first_input_to_first_audio_ms": 5794.393372023478,
+          "first_audio_scope": "from first client input, includes question duration; NOT question-end TTFT"
+        },
+        {
+          "session": "session-3",
+          "official_ok": true,
+          "event_counts": {
+            "session.created": 1,
+            "input_audio_buffer.speech_started": 1,
+            "response.listen": 158,
+            "response.created": 19,
+            "conversation.item.added": 20,
+            "conversation.item.created": 20,
+            "response.output_item.added": 19,
+            "response.content_part.added": 19,
+            "response.speak": 19,
+            "response.output_audio.delta": 52,
+            "response.output_audio_transcript.delta": 52,
+            "response.output_audio.done": 19,
+            "response.output_audio_transcript.done": 19,
+            "response.content_part.done": 19,
+            "response.output_item.done": 19,
+            "conversation.item.done": 20,
+            "response.done": 19,
+            "rate_limits.updated": 19,
+            "playback.acknowledged": 57,
+            "input_audio_buffer.speech_stopped": 1,
+            "input_audio_buffer.committed": 1,
+            "session.closed": 1
+          },
+          "sent_audio_packets": 1230,
+          "sent_video_only_packets": 0,
+          "sent_pcm_seconds": 246.0,
+          "sent_wire_video_images": 246,
+          "input_span_s": 245.81715869996697,
+          "sender_relative_drift_ms": {
+            "p50": 0.827465066691957,
+            "p95": 1.5148950740666578,
+            "max": 7.64695806429927
+          },
+          "send_block_ms_max": 24.175734957680106,
+          "audio_chunks": 52,
+          "send_block_scope": "whole client wrapper, including local audit I/O; not just transport",
+          "wire_timing_packets": 1230,
+          "wire_sender_relative_drift_ms": {
+            "p50": 0.8529440499955854,
+            "p95": 1.5551309101340394,
+            "max": 7.593573024507805
+          },
+          "wire_send_block_ms_max": 23.906602058559656,
+          "audit_before_send_ms_max": 3.1980639323592186,
+          "observable_progress": {
+            "last_sent_source_end_ms": 246000,
+            "last_model_progress_relative_s": 246.13171418500133,
+            "no_progress_at_input_end_s": 0.5300319271627814,
+            "max_no_progress_within_input_span_s": 8.264605768024921,
+            "scope": "observable listen/output/done events, not exact input consumption; input pacing must be validated separately"
+          },
+          "official_collector_work_ms": {
+            "samples": 0,
+            "p95": null,
+            "max": null,
+            "missing_reason": "no callback intervals recorded; legacy log or no callbacks",
+            "scope": "upstream synchronous receive callback including output handling; not model compute"
+          },
+          "audit_writer": {
+            "enqueued": 3154,
+            "written": 3154,
+            "queue_peak_approx": 8,
+            "flush_complete": true
+          },
+          "audio_seconds": 40.239999999999995,
+          "responses": 19,
+          "completed_responses": 19,
+          "unterminated_responses": 0,
+          "response_created_to_first_audio_ms": {
+            "p50": 6.085803033784032,
+            "p95": 10.845094919204712
+          },
+          "simulated_playback": [
+            {
+              "startup_buffer_ms": 0,
+              "completed_responses_only": true,
+              "gaps": 20,
+              "total_gap_ms": 32132.288735592738
+            },
+            {
+              "startup_buffer_ms": 100,
+              "completed_responses_only": true,
+              "gaps": 20,
+              "total_gap_ms": 30632.288734195754
+            },
+            {
+              "startup_buffer_ms": 300,
+              "completed_responses_only": true,
+              "gaps": 19,
+              "total_gap_ms": 27669.8591937311
+            }
+          ],
+          "engine_snapshot_count": 177,
+          "error_count": 0,
+          "actual_input_start_from_barrier_s": 0.0017708051018416882,
+          "actual_session_open_from_barrier_s": null,
+          "first_input_to_first_audio_ms": 5759.0024310629815,
+          "first_audio_scope": "from first client input, includes question duration; NOT question-end TTFT"
+        },
+        {
+          "session": "session-4",
+          "official_ok": true,
+          "event_counts": {
+            "session.created": 1,
+            "input_audio_buffer.speech_started": 1,
+            "response.listen": 120,
+            "response.created": 20,
+            "conversation.item.added": 21,
+            "conversation.item.created": 21,
+            "response.output_item.added": 20,
+            "response.content_part.added": 20,
+            "response.speak": 20,
+            "response.output_audio.delta": 76,
+            "response.output_audio_transcript.delta": 76,
+            "response.output_audio.done": 20,
+            "response.output_audio_transcript.done": 20,
+            "response.content_part.done": 20,
+            "response.output_item.done": 20,
+            "conversation.item.done": 21,
+            "response.done": 20,
+            "rate_limits.updated": 20,
+            "playback.acknowledged": 60,
+            "input_audio_buffer.speech_stopped": 1,
+            "input_audio_buffer.committed": 1,
+            "session.closed": 1
+          },
+          "sent_audio_packets": 1230,
+          "sent_video_only_packets": 0,
+          "sent_pcm_seconds": 246.0,
+          "sent_wire_video_images": 246,
+          "input_span_s": 245.8147020121105,
+          "sender_relative_drift_ms": {
+            "p50": 0.8832959923950057,
+            "p95": 1.4865020755649994,
+            "max": 3.23505694979076
+          },
+          "send_block_ms_max": 24.495377903804183,
+          "audio_chunks": 76,
+          "send_block_scope": "whole client wrapper, including local audit I/O; not just transport",
+          "wire_timing_packets": 1230,
+          "wire_sender_relative_drift_ms": {
+            "p50": 0.911022862418065,
+            "p95": 1.5173708088696003,
+            "max": 3.2719309441802125
+          },
+          "wire_send_block_ms_max": 24.186807917430997,
+          "audit_before_send_ms_max": 1.3483958318829536,
+          "observable_progress": {
+            "last_sent_source_end_ms": 246000,
+            "last_model_progress_relative_s": 246.13157930690795,
+            "no_progress_at_input_end_s": 0.709322813898325,
+            "max_no_progress_within_input_span_s": 9.715981056913733,
+            "scope": "observable listen/output/done events, not exact input consumption; input pacing must be validated separately"
+          },
+          "official_collector_work_ms": {
+            "samples": 0,
+            "p95": null,
+            "max": null,
+            "missing_reason": "no callback intervals recorded; legacy log or no callbacks",
+            "scope": "upstream synchronous receive callback including output handling; not model compute"
+          },
+          "audit_writer": {
+            "enqueued": 3186,
+            "written": 3186,
+            "queue_peak_approx": 10,
+            "flush_complete": true
+          },
+          "audio_seconds": 59.84000000000001,
+          "responses": 20,
+          "completed_responses": 20,
+          "unterminated_responses": 0,
+          "response_created_to_first_audio_ms": {
+            "p50": 6.803093012422323,
+            "p95": 9.177251951768994
+          },
+          "simulated_playback": [
+            {
+              "startup_buffer_ms": 0,
+              "completed_responses_only": true,
+              "gaps": 29,
+              "total_gap_ms": 46906.864712014794
+            },
+            {
+              "startup_buffer_ms": 100,
+              "completed_responses_only": true,
+              "gaps": 29,
+              "total_gap_ms": 45006.86471024528
+            },
+            {
+              "startup_buffer_ms": 300,
+              "completed_responses_only": true,
+              "gaps": 28,
+              "total_gap_ms": 41345.53743805736
+            }
+          ],
+          "engine_snapshot_count": 140,
+          "error_count": 0,
+          "actual_input_start_from_barrier_s": 0.0012767422012984753,
+          "actual_session_open_from_barrier_s": null,
+          "first_input_to_first_audio_ms": 5799.949483945966,
+          "first_audio_scope": "from first client input, includes question duration; NOT question-end TTFT"
+        }
+      ],
+      "protocol_ok": true,
+      "complete_response_drain": true,
+      "input_clock_valid_at_200ms": true,
+      "sampled_gpu_peaks": {
+        "thinker_shard_0": {
+          "sampled_peak_memory_mib": 22388.0,
+          "sampled_peak_utilization_percent": 91.0
+        },
+        "thinker_shard_1": {
+          "sampled_peak_memory_mib": 22384.0,
+          "sampled_peak_utilization_percent": 100.0
+        },
+        "speech_gpu": {
+          "sampled_peak_memory_mib": 17337.0,
+          "sampled_peak_utilization_percent": 67.0
+        }
+      }
+    }
+  ],
+  "limitations": [
+    "additional GPU and different physical placement; no same-resource speedup claim",
+    "same mechanically repeated source clip; not diverse long-video understanding",
+    "question-end TTFT, full input freshness and quality not established",
+    "AR pool fractions do not describe all model state or Code2Wav activation memory"
+  ],
+  "active_after_review": "original frozen two-GPU baseline restored",
+  "base_config": "configs/minicpmo/two_gpu_four_sessions.yaml",
+  "configuration_delta": {
+    "stage_0.tensor_parallel_size": [
+      1,
+      2
+    ],
+    "stage_0.devices": [
+      "0",
+      "0,1"
+    ],
+    "stage_1.devices": [
+      "1",
+      "2"
+    ],
+    "stage_2.devices": [
+      "1",
+      "2"
+    ],
+    "other_semantic_settings": "unchanged"
+  },
+  "all_three_runs_meet_input_clock_gate": false,
+  "clock_valid_runs": 2
+}
