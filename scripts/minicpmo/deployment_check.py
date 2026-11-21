@@ -81,8 +81,9 @@ def check(args):
             except (OSError, ValueError):
                 continue
         report["matching_server_pids"] = matching
-        if not report["health"]["ready"] or report["integrity_status"] != "pass" or not matching:
-            report["smoke"] = {"status": "not_run", "reason": "health, model-integrity and server-ownership gates must all pass"}
+        guard = root / "scripts/minicpmo/experiment_access.py"
+        if not report["health"]["ready"] or report["integrity_status"] != "pass" or not matching or not guard.is_file():
+            report["smoke"] = {"status": "not_run", "reason": "health, model-integrity, server-ownership and installed access-guard gates must all pass"}
             code = 3
         else:
             demo = root / "sources/vllm-omni/examples/online_serving/minicpmo/realtime_duplex_demo.py"
@@ -93,18 +94,24 @@ def check(args):
                        "--ref-audio", str(root / "model/assets/HT_ref_audio.wav"),
                        "--output-dir", str(smoke_dir), "--video-fps", "1", "--stack-frames", "1",
                        "--sliding-window-mode", "off", "--tail-silence-s", "5", "--timeout-s", "120", "--require-audio"]
+            command = [str(root / "runtime-cu129/bin/python"), str(guard), "--lock-file",
+                       str(root / "control/web-experiment.lock"), "run", "--", *command]
             report["smoke_command"] = command
             try:
                 with (output / "official-demo.log").open("w", encoding="utf-8") as log:
                     run = subprocess.run(command, stdout=log, stderr=subprocess.STDOUT, timeout=480)
-                result = json.loads((smoke_dir / "result.json").read_text())
-                passed = run.returncode == 0 and result.get("ok") is True and result.get("audio_bytes", 0) > 0
-                report["model_execution_validated"] = passed
-                report["smoke"] = {"status": "pass" if passed else "fail", "returncode": run.returncode,
-                                   "result_file": str(smoke_dir / "result.json"),
-                                   "scope": "single_clip_transport_and_lifecycle_only",
-                                   "audio_bytes": result.get("audio_bytes"), "errors": result.get("errors")}
-                code = 0 if passed else 4
+                if run.returncode == 75:
+                    report["smoke"] = {"status": "not_run", "reason": "active web session or another experiment", "returncode": 75}
+                    code = 3
+                else:
+                    result = json.loads((smoke_dir / "result.json").read_text())
+                    passed = run.returncode == 0 and result.get("ok") is True and result.get("audio_bytes", 0) > 0
+                    report["model_execution_validated"] = passed
+                    report["smoke"] = {"status": "pass" if passed else "fail", "returncode": run.returncode,
+                                       "result_file": str(smoke_dir / "result.json"),
+                                       "scope": "single_clip_transport_and_lifecycle_only",
+                                       "audio_bytes": result.get("audio_bytes"), "errors": result.get("errors")}
+                    code = 0 if passed else 4
             except (OSError, ValueError, subprocess.TimeoutExpired) as exc:
                 report["smoke"] = {"status": "fail", "error": f"{type(exc).__name__}: {exc}"}
                 code = 4

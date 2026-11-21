@@ -1,0 +1,19 @@
+{
+  "scope": "web_admission_exclusion_not_gpu_pressure_test",
+  "active_web_rejects_experiment": true,
+  "experiment_rejects_web": true,
+  "rejection_event": {
+    "type": "error",
+    "error": {
+      "type": "server_error",
+      "code": "experiment_exclusive",
+      "message": "实验进行中，暂不接收网页会话。请在实验结束后重试。"
+    }
+  },
+  "page_available_during_experiment": true,
+  "automatic_release_after_command": true,
+  "official_handshake_after_release": true,
+  "status": "pass",
+  "deployment_check_smoke_respects_active_web": true,
+  "linux_unit_tests_passed": 5
+}

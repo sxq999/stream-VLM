@@ -20,13 +20,13 @@
 
 已部署的官方页面提供 `Start session`、`Mute`、`Camera`、文字显示和事件日志。初始 `Offline` 表示还没有开始会话。点击 `Start session` 并允许麦克风后讲话；需要画面时再启用 `Camera`。建议使用耳机。网页已加载和会话握手通过；真人麦克风、摄像头及实际扬声器效果需用户亲自体验。
 
-在服务器已装好的固定环境中，从 vLLM-Omni 源码目录启动官方页面，替换路径为自己的实验路径：
+在服务器已装好的固定环境中，通过网页接入保护包装官方页面，替换路径为自己的实验路径：
 
 ```bash
-python -m examples.online_serving.minicpmo.realtime_web \
-  --host 127.0.0.1 --port 17862 \
-  --ws-backend ws://127.0.0.1:18999 \
-  --model openbmb/MiniCPM-o-4_5 \
+python scripts/minicpmo/experiment_access.py \
+  --lock-file /path/to/experiment/control/web-experiment.lock ui \
+  --source-root /path/to/vllm-omni --port 17862 \
+  --backend ws://127.0.0.1:18999 \
   --ref-audio /path/to/model/assets/HT_ref_audio.wav
 ```
 
@@ -38,6 +38,30 @@ ssh -N -o ExitOnForwardFailure=yes -o ServerAliveInterval=20 \
 ```
 
 浏览器打开 `http://127.0.0.1:17862/`。页面和模型服务均仅监听服务器回环地址，浏览器通过 SSH 转发访问。网络中断后可能需要重建转发。当前容量配置只允许一个活跃会话，体验时不同时开展实验回放。
+
+## 实验期间禁止网页接入
+
+网页服务和实验命令共用同一个 Linux 文件锁，锁文件不能在使用中删除或替换。当前服务器网页入口已经启用保护，模型计算与上游网页源码不变。
+
+```text
+网页会话存续 → 持有共享锁 → 实验启动失败（退出码 75）
+实验命令运行 → 持有独占锁 → 新网页会话收到“实验进行中”并关闭
+实验命令结束 → 释放锁     → 网页恢复接入
+```
+
+实验命令必须从包装入口执行；`deployment_check.py --smoke` 已接入这条路径：
+
+```bash
+python scripts/minicpmo/experiment_access.py \
+  --lock-file /path/to/experiment/control/web-experiment.lock run -- \
+  python your_experiment.py
+```
+
+网页仍可打开，禁止的是 WebSocket 模型交互；被拒绝时返回 `experiment_exclusive` 错误并以 1013 关闭，未调用后端。`/experiment-status` 可查询当前是否处于实验独占状态。已有会话不会被实验包装器强制踢掉，而是阻止实验启动；先结束网页会话再启动实验。
+
+非零退出或正常中断会在实验子进程退出后释放锁。实验应以前台命令运行，不得另起脱离进程组的后台任务。若包装器被 `SIGKILL`、主机崩溃或进程脱离管理，必须确认残留任务和后端请求已经清理后再继续；该锁不是 GPU 资源隔离或用户权限控制。直接调用模型端口、旧的未包装脚本、其他 GPU 任务都不在保护范围。
+
+实际检查见[接入互斥证据](evidence/web-experiment-exclusion.json)：覆盖网页阻止实验、实验阻止网页、页面仍可打开以及释放后官方会话握手恢复。它不是压力测试结果。
 
 ## 与我们旧管线的关系
 

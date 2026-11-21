@@ -10,6 +10,7 @@
 | [minicpmo/download_model.py](minicpmo/download_model.py) | 先记录模型 revision，再下载并检查文件清单/大小 |
 | [minicpmo/verify_download.py](minicpmo/verify_download.py) | 独立复核文件大小与源 LFS SHA256；不会加载模型代码 |
 | [minicpmo/deployment_check.py](minicpmo/deployment_check.py) | 单次 SSH 检查既有部署；服务就绪、权重校验和进程归属均通过后，可选运行官方音视频短回放 |
+| [minicpmo/experiment_access.py](minicpmo/experiment_access.py) | Linux 网页接入／实验互斥；实验独占时拒绝网页新会话，已有网页会话时不启动实验 |
 
 上述工具不是完整双工执行程序。部署与测试验收见[固定计划](../docs/minicpmo/plan.md)。
 

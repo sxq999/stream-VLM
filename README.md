@@ -8,7 +8,8 @@
 |---|---|
 | 当前主线与执行计划 | [MiniCPM-o + vLLM-Omni](docs/minicpmo/README.md) |
 | 旧 Venus 实验、代码与结果 | [Venus 实验](docs/venus/README.md) |
-| 最近测了什么、结论是什么 | [波形线程首次使用隔离](docs/venus/results/worker-isolation.md)、[波形重叠原型验证](docs/venus/results/wave-overlap.md) |
+| 最近测了什么、结论是什么 | [MiniCPM-o 部署、音视频回放与当前边界](docs/minicpmo/progress.md) |
+| 网页交互与实验独占 | [交互入口与接入互斥](docs/minicpmo/interaction.md) |
 | 使用 Qwen3-VL／vLLM 做快照式测试 | [快照测试工具](docs/harness/README.md) |
 | 相关研究与引用 | [论文索引](docs/related-work.md) |
 
@@ -16,7 +17,7 @@
 
 | 路径 | 输入与执行方式 | 引擎 |
 |---|---|---|
-| **MiniCPM-o：当前主线，部署预检中** | 连续音视频 → 官方双工会话 → 语言／语音 token／波形 | vLLM-Omni，尚未通过本机部署验收 |
+| **MiniCPM-o：当前主线，短回放通过** | 连续音视频 → 官方双工会话 → 语言／语音 token／波形 | vLLM-Omni，两张 3090；完整功能验收与压测待完成 |
 | Venus：历史实验 | 连续画面与声音 → 逐单元增量输入／生成 → 保留会话状态 | 官方 Venus 原生接口、PyTorch／CUDA |
 | Qwen：通用测试工具 | 帧与问题 → 冻结查询快照 → 直接调用或经过 Serving 网关 | vLLM 或 Transformers |
 
