@@ -50,11 +50,11 @@ export MAX_JOBS=4
 "$PY" scripts/minicpmo/runtime_probe.py --out "$EXPROOT/evidence/runtime.json" --torch-smoke
 ```
 
-用 [two_gpu_smoke.yaml](../../configs/minicpmo/two_gpu_smoke.yaml) 启动，记录服务 PID 和日志。若已有服务占用该端口，先核对其归属，不重复启动：
+用当前的 [two_gpu_four_sessions.yaml](../../configs/minicpmo/two_gpu_four_sessions.yaml) 启动，记录服务 PID 和日志。它的 4 会话短回放已通过，长会话仍待验证。若已有服务占用该端口，先核对其归属，不重复启动：
 
 ```bash
 "$EXPROOT/runtime-cu129/bin/vllm-omni" serve "$EXPROOT/model" --omni \
-  --deploy-config configs/minicpmo/two_gpu_smoke.yaml --trust-remote-code \
+  --deploy-config configs/minicpmo/two_gpu_four_sessions.yaml --trust-remote-code \
   --served-model-name openbmb/MiniCPM-o-4_5 --host 127.0.0.1 --port 18999 \
   > "$EXPROOT/logs/server-two-gpu-current.log" 2>&1 &
 echo $! > "$EXPROOT/evidence/server-two-gpu-current.pid"
@@ -73,6 +73,17 @@ python scripts/minicpmo/deployment_check.py --ssh-host YOUR_SSH_ALIAS --root /da
 入口只建立一次 SSH 连接，将检查代码经标准输入执行。它要求模型完整性记录、健康接口、服务 PID 归属及已安装的接入保护脚本均有效；满足后，持有实验独占锁调用官方 `realtime_duplex_demo.py`。当前有网页会话时不启动推理。
 
 结果写入服务器 `evidence/recovery-时间戳/`：部署检查 JSON、官方事件/输入时间表、输出 WAV 和客户端日志。退出码 3 表示门槛不满足/存在网页会话，4 表示短回放失败；SSH 连接失败通常返回 255。短回放通过只验证该片段的传输和生命周期，完整验收按[实验计划](plan.md)继续。
+
+多会话功能检查使用同一官方客户端，需在服务器固定环境中，通过实验互斥入口运行；输出目录必须为新目录：
+
+```bash
+"$PY" scripts/minicpmo/experiment_access.py --lock-file "$EXPROOT/control/web-experiment.lock" run -- \
+  "$PY" scripts/minicpmo/session_probe.py --root "$EXPROOT" --out "$EXPROOT/evidence/admission-new" --sessions 4 --mode admission
+"$PY" scripts/minicpmo/experiment_access.py --lock-file "$EXPROOT/control/web-experiment.lock" run -- \
+  "$PY" scripts/minicpmo/session_probe.py --root "$EXPROOT" --out "$EXPROOT/evidence/concurrent-av-new" --sessions 4 --mode av
+```
+
+`admission` 检查配置上限（此例为 4）和超额拒绝；`av` 可分别使用 2、4 会话，记录实际输入重叠和每会话输出。它只做短功能检查，不生成正式延迟/饱和结论。
 
 ## 5. 网页体验与后续实验
 

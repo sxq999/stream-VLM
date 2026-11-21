@@ -1,0 +1,116 @@
+{
+  "date": "2026-11-21",
+  "scope": "four-session admission and short concurrent AV replay; not sustained pressure",
+  "status": "pass",
+  "gpu_model": "RTX 3090",
+  "gpu_count": 2,
+  "active_max_sessions": 4,
+  "profile_sha256": "021a2bca71f77a578fa8d70d705918ebeb7b36bf7fa921b133a4a86eb0244027",
+  "admission": {
+    "four_distinct_sessions": true,
+    "fifth_rejected": true,
+    "reopen_after_close": true
+  },
+  "input": {
+    "media": "assets/omni_duplex1.mp4",
+    "same_clip_per_session": true,
+    "real_time_pacing": true,
+    "video_fps": 1,
+    "audio_packet_ms": 200,
+    "tail_silence_s": 5,
+    "sliding_window_mode": "basic"
+  },
+  "failed_initial_configuration": {
+    "talker_gpu_memory_utilization": 0.55,
+    "admission_pass": true,
+    "two_session_replay_pass": true,
+    "four_session_replay_pass": false,
+    "failure_stage": "Code2Wav on shared speech GPU",
+    "error": "CUDA out of memory",
+    "allocation_attempt_MiB": 500,
+    "free_at_failure_MiB": 81.94,
+    "talker_process_GiB": 13.19,
+    "code2wav_process_GiB": 10.27
+  },
+  "successful_configuration": {
+    "talker_gpu_memory_utilization": 0.25,
+    "thinker_gpu_memory_utilization": 0.9,
+    "code2wav_gpu_memory_utilization": 0.35,
+    "thinker_enforce_eager": true,
+    "max_model_len": 8192
+  },
+  "limits": [
+    "one short replay per concurrency level, same clip across sessions",
+    "not a saturation or real-time SLO result",
+    "no internal KV correctness or full semantic/audio quality proof",
+    "window configured basic; long-run reclamation and total KV budget unverified"
+  ],
+  "2_session_replay": {
+    "status": "pass",
+    "all_input_streams_overlap_s": 40.49380470998585,
+    "overlap_includes_tail": true,
+    "sessions": [
+      {
+        "session": 1,
+        "returncode": 0,
+        "ok": true,
+        "errors": [],
+        "audio_bytes": 295680,
+        "audio_chunks": 9,
+        "video_frames_sent": 36
+      },
+      {
+        "session": 2,
+        "returncode": 0,
+        "ok": true,
+        "errors": [],
+        "audio_bytes": 289920,
+        "audio_chunks": 9,
+        "video_frames_sent": 36
+      }
+    ]
+  },
+  "4_session_replay": {
+    "status": "pass",
+    "all_input_streams_overlap_s": 40.487977379933,
+    "overlap_includes_tail": true,
+    "sessions": [
+      {
+        "session": 1,
+        "returncode": 0,
+        "ok": true,
+        "errors": [],
+        "audio_bytes": 289920,
+        "audio_chunks": 9,
+        "video_frames_sent": 36
+      },
+      {
+        "session": 2,
+        "returncode": 0,
+        "ok": true,
+        "errors": [],
+        "audio_bytes": 301440,
+        "audio_chunks": 9,
+        "video_frames_sent": 36
+      },
+      {
+        "session": 3,
+        "returncode": 0,
+        "ok": true,
+        "errors": [],
+        "audio_bytes": 301440,
+        "audio_chunks": 9,
+        "video_frames_sent": 36
+      },
+      {
+        "session": 4,
+        "returncode": 0,
+        "ok": true,
+        "errors": [],
+        "audio_bytes": 408960,
+        "audio_chunks": 11,
+        "video_frames_sent": 36
+      }
+    ]
+  }
+}
