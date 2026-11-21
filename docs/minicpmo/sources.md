@@ -14,6 +14,7 @@
 - [官方模型卡](https://huggingface.co/openbmb/MiniCPM-o-4_5/tree/fb09628e98b1f55d8d5b863e0eccfcdd11bff499)：全模态流式模型，语言主干基于 Qwen3-8B；本项目不训练新权重。
 - [固定源码](https://github.com/vllm-project/vllm-omni/tree/5917730a4b02aedb44d374173cdc1b10484ccd52)：模型适配、三阶段执行、双工插件、官方回放及网页均来自该版本。
 - [两卡配置来源](https://github.com/vllm-project/vllm-omni/blob/5917730a4b02aedb44d374173cdc1b10484ccd52/vllm_omni/deploy/minicpmo_4_5_2gpu.yaml)：当前配置修改了容量及 Thinker eager，保持采样设置和逻辑放置。Thinker/Talker/Code2Wav 分段不是语言模型 PD 分离。
+- [历史策略默认值](https://github.com/vllm-project/vllm-omni/blob/5917730a4b02aedb44d374173cdc1b10484ccd52/vllm_omni/model_executor/models/minicpmo_4_5/duplex/policy.py)：服务默认 `basic`，水位 8000/6000；客户端可以显式覆盖为 `off`。对应 [KV 回收与位置维护](https://github.com/vllm-project/vllm-omni/blob/5917730a4b02aedb44d374173cdc1b10484ccd52/vllm_omni/model_executor/models/minicpmo_4_5/duplex/window_kv.py)已提供模型专用机制，本项目还未做长会话验证。
 - [Token2Wav 适配代码](https://github.com/vllm-project/vllm-omni/blob/5917730a4b02aedb44d374173cdc1b10484ccd52/vllm_omni/model_executor/models/minicpmo_4_5/minicpmo_4_5_token2wav.py)与 [依赖声明](https://github.com/vllm-project/vllm-omni/blob/5917730a4b02aedb44d374173cdc1b10484ccd52/pyproject.toml)：按该版本安装 `step-audio2==1.0.0`；该版本 recipe 的旧依赖提示不适用，勿与 `stepaudio2-minicpmo` 共装。
 
 ## 后续 PD 的参考入口
